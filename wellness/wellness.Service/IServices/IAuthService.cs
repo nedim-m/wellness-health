@@ -10,7 +10,7 @@ namespace wellness.Service.IServices
 {
     public interface IAuthService
     {
-        Task<User> RegisterUser(UserRegisterRequest request);
+        Task<User?> RegisterUser(UserRegisterRequest request);
         Task<AuthResponse> Login(UserLoginRequest request);
         Task<AuthResponse> RefreshToken();
     }

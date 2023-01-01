@@ -85,8 +85,12 @@ namespace wellness.Service.Services
             };
         }
 
-        public async Task<Models.User.User> RegisterUser(UserRegisterRequest request)
+        public async Task<Models.User.User?> RegisterUser(UserRegisterRequest request)
         {
+            if (request.Password!=request.ConfrimPassword)
+            {
+                return null;
+            }
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
             var user = _mapper.Map<Database.User>(request);
@@ -130,8 +134,9 @@ namespace wellness.Service.Services
 
         private string CreateToken(Database.User user)
         {
-            var userRole = _context.UserRoles.Where(x => x.UserId==user.Id).FirstOrDefault();
-            string roleName = _context.Roles.Find(userRole.RoleId).Name;
+            var userRole = _context.UserRoles.FirstOrDefault(x => x.UserId==user.Id);
+            string roleName = _context.Roles.Find(userRole!.RoleId)!.Name;
+           
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
@@ -139,7 +144,7 @@ namespace wellness.Service.Services
                 new Claim(ClaimTypes.Role,roleName)
             };
 
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
                 _configuration.GetSection("AppSettings:Token").Value));
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);

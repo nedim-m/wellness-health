@@ -25,7 +25,7 @@ namespace wellness.Service.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
 
-        
+
 
         public AuthService(DbWellnessContext context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IMapper mapper)
         {
@@ -96,20 +96,15 @@ namespace wellness.Service.Services
             var user = _mapper.Map<Database.User>(request);
             user.PasswordHash= passwordHash;
             user.PasswordSalt=passwordSalt;
+            user.RoleId=3;
             _context.Users.Add(user);
-          
+
 
 
             await _context.SaveChangesAsync();
 
-            UserRole userRole = new()
-            {
-                UserId=user.Id,
-                RoleId=3,
-                ModifiedDate=DateTime.Now
-            };
-            _context.UserRoles.Add(userRole);
-            await _context.SaveChangesAsync();
+           
+            
 
             return _mapper.Map<Models.User.User>(user);
         }
@@ -134,14 +129,14 @@ namespace wellness.Service.Services
 
         private string CreateToken(Database.User user)
         {
-            var userRole = _context.UserRoles.FirstOrDefault(x => x.UserId==user.Id);
-            string roleName = _context.Roles.Find(userRole!.RoleId)!.Name;
-           
+            var userRole = _context.Roles.Find(user.RoleId)!.Name;
+            
+
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Role,roleName)
+                new Claim(ClaimTypes.Role,userRole)
             };
 
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(

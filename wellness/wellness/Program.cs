@@ -41,11 +41,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         };
     });
 
-/*builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
+builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
     policy =>
     {
         policy.WithOrigins("http://localhost:7081").AllowAnyMethod().AllowAnyHeader();
-    }));*/
+    }));
 
 
 builder.Services.AddTransient<IAuthService, AuthService>();

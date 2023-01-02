@@ -44,7 +44,7 @@ namespace wellness.Controllers
             return BadRequest(response.Message);
         }
 
-        [HttpGet, Authorize(Roles = "Korisnik")]
+        [HttpGet, Authorize(Roles = "Administrator")]
         public ActionResult<string> Aloha()
         {
             return Ok("Aloha! You're authorized!");

@@ -7,7 +7,7 @@ using wellness.Service.IServices;
 
 namespace wellness.Controllers
 {
-    
+
     [Route("api/[controller]")]
     [ApiController]
     public class UserController : ControllerBase
@@ -19,8 +19,8 @@ namespace wellness.Controllers
             _service=service;
         }
 
-        [HttpGet,Authorize(Roles ="Administrator")]
-        public async Task<ActionResult<ServiceResponse<UserResponse>>>Get(int id)
+        [HttpGet, Authorize(Roles = "Administrator")]
+        public async Task<ActionResult<ServiceResponse<UserResponse>>> Get(int id)
         {
             return Ok(await _service.GetUserById(id));
         }

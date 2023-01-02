@@ -41,13 +41,13 @@ namespace wellness.Service.Services
 
         public async Task<ServiceResponse<UserResponse>> GetUserById(int id)
         {
-            var serviceResponse= new ServiceResponse<UserResponse>();
-            var dbUser= await _context.Users.Include(x=>x.UserRoles).FirstOrDefaultAsync(c=>c.Id==id);
-            var userRole =  _context.UserRoles.FirstOrDefault(x => x.UserId==id);
-            string roleName =  _context.Roles.Find(userRole!.RoleId)!.Name;
-
+            var serviceResponse = new ServiceResponse<UserResponse>();
+            var dbUser = await _context.Users.Include("Role").FirstOrDefaultAsync(u => u.Id==id);
             serviceResponse.Data=_mapper.Map<UserResponse>(dbUser);
-            serviceResponse.Data.Role=roleName;
+            serviceResponse.Data.Role=dbUser!.Role.Name;
+
+
+
             return serviceResponse;
         }
 

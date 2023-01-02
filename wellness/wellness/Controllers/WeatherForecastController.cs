@@ -19,7 +19,7 @@ namespace wellness.Controllers
             _logger = logger;
         }
 
-        [HttpGet(Name = "GetWeatherForecast"),Authorize(Roles ="Administrator")]
+        [HttpGet(Name = "GetWeatherForecast"),Authorize(Roles ="Member")]
         public IEnumerable<WeatherForecast> Get()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast

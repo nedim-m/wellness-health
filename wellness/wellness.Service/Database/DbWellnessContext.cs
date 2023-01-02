@@ -17,8 +17,6 @@ public partial class DbWellnessContext : DbContext
 
     public virtual DbSet<Category> Categories { get; set; }
 
-    public virtual DbSet<Member> Members { get; set; }
-
     public virtual DbSet<Membership> Memberships { get; set; }
 
     public virtual DbSet<MembershipType> MembershipTypes { get; set; }
@@ -37,53 +35,46 @@ public partial class DbWellnessContext : DbContext
 
     public virtual DbSet<User> Users { get; set; }
 
-    public virtual DbSet<UserRole> UserRoles { get; set; }
-
-
+  
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Member>(entity =>
-        {
-            entity.HasIndex(e => e.UserId, "IX_Members_UserId").IsUnique();
-
-            entity.HasOne(d => d.User).WithOne(p => p.Member).HasForeignKey<Member>(d => d.UserId);
-        });
-
         modelBuilder.Entity<Membership>(entity =>
         {
-            entity.HasIndex(e => e.MemberId, "IX_Memberships_MemberId");
-
             entity.HasIndex(e => e.MemberShipTypeId, "IX_Memberships_MemberShipTypeId");
 
-            entity.HasOne(d => d.Member).WithMany(p => p.Memberships).HasForeignKey(d => d.MemberId);
+            entity.HasIndex(e => e.UserId, "IX_Memberships_UserId");
 
             entity.HasOne(d => d.MemberShipType).WithMany(p => p.Memberships).HasForeignKey(d => d.MemberShipTypeId);
+
+            entity.HasOne(d => d.User).WithMany(p => p.Memberships).HasForeignKey(d => d.UserId);
         });
 
         modelBuilder.Entity<Rating>(entity =>
         {
-            entity.HasIndex(e => e.MemberId, "IX_Ratings_MemberId");
-
             entity.HasIndex(e => e.TreatmentId, "IX_Ratings_TreatmentId");
 
-            entity.Property(e => e.Rating1).HasColumnName("Rating");
-
-            entity.HasOne(d => d.Member).WithMany(p => p.Ratings).HasForeignKey(d => d.MemberId);
+            entity.HasIndex(e => e.UserId, "IX_Ratings_UserId");
 
             entity.HasOne(d => d.Treatment).WithMany(p => p.Ratings).HasForeignKey(d => d.TreatmentId);
+
+            entity.HasOne(d => d.User).WithMany(p => p.Ratings).HasForeignKey(d => d.UserId);
         });
 
         modelBuilder.Entity<Record>(entity =>
         {
-            entity.HasIndex(e => e.MemberId, "IX_Records_MemberId");
+            entity.HasIndex(e => e.UserId, "IX_Records_UserId");
 
-            entity.HasOne(d => d.Member).WithMany(p => p.Records).HasForeignKey(d => d.MemberId);
+            entity.HasOne(d => d.User).WithMany(p => p.Records).HasForeignKey(d => d.UserId);
         });
 
         modelBuilder.Entity<Reservation>(entity =>
         {
+            entity.HasIndex(e => e.TreatmentId, "IX_Reservations_TreatmentId");
+
             entity.HasIndex(e => e.UserId, "IX_Reservations_UserId");
+
+            entity.HasOne(d => d.Treatment).WithMany(p => p.Reservations).HasForeignKey(d => d.TreatmentId);
 
             entity.HasOne(d => d.User).WithMany(p => p.Reservations).HasForeignKey(d => d.UserId);
         });
@@ -99,15 +90,11 @@ public partial class DbWellnessContext : DbContext
             entity.HasOne(d => d.TreatmentType).WithMany(p => p.Treatments).HasForeignKey(d => d.TreatmentTypeId);
         });
 
-        modelBuilder.Entity<UserRole>(entity =>
+        modelBuilder.Entity<User>(entity =>
         {
-            entity.HasIndex(e => e.RoleId, "IX_UserRoles_RoleId");
+            entity.HasIndex(e => e.RoleId, "IX_Users_RoleId");
 
-            entity.HasIndex(e => e.UserId, "IX_UserRoles_UserId");
-
-            entity.HasOne(d => d.Role).WithMany(p => p.UserRoles).HasForeignKey(d => d.RoleId);
-
-            entity.HasOne(d => d.User).WithMany(p => p.UserRoles).HasForeignKey(d => d.UserId);
+            entity.HasOne(d => d.Role).WithMany(p => p.Users).HasForeignKey(d => d.RoleId);
         });
 
         OnModelCreatingPartial(modelBuilder);

@@ -9,13 +9,14 @@ using wellness.Models.User;
 
 namespace wellness.Service.Services
 {
-    public class MappingProfile:Profile
+    public class MappingProfile : Profile
     {
         public MappingProfile()
         {
             CreateMap<UserRegisterRequest, Database.User>();
             CreateMap<Database.User, User>();
-            CreateMap<Database.User,UserResponse>();
+            CreateMap<Database.User, UserResponse>();
+                
 
         }
     }

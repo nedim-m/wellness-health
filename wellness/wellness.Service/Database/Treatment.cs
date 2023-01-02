@@ -21,5 +21,7 @@ public partial class Treatment
 
     public virtual ICollection<Rating> Ratings { get; } = new List<Rating>();
 
+    public virtual ICollection<Reservation> Reservations { get; } = new List<Reservation>();
+
     public virtual TreatmentType TreatmentType { get; set; } = null!;
 }

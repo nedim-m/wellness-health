@@ -48,7 +48,7 @@ namespace wellness.Service.Services
             }
             string token = CreateToken(user);
             var refreshToken = CreateRefreshToken();
-            SetRefreshToken(refreshToken, user);
+            await SetRefreshToken(refreshToken, user);
 
             return new AuthResponse
             {
@@ -74,7 +74,7 @@ namespace wellness.Service.Services
 
             string token = CreateToken(user);
             var newRefreshToken = CreateRefreshToken();
-            SetRefreshToken(newRefreshToken, user);
+            await SetRefreshToken(newRefreshToken, user);
 
             return new AuthResponse
             {
@@ -168,7 +168,7 @@ namespace wellness.Service.Services
             return refreshToken;
         }
 
-        private async void SetRefreshToken(RefreshToken refreshToken, Database.User user)
+        private async Task SetRefreshToken(RefreshToken refreshToken, Database.User user)
         {
             var cookieOptions = new CookieOptions
             {

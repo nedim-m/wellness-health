@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using wellness.Model.User;
+using wellness.Models.User;
 using static System.Net.WebRequestMethods;
 
 namespace wellness.WinUI
@@ -13,28 +14,31 @@ namespace wellness.WinUI
     public class ApiService
     {
         private string _resourceName = string.Empty;
-        public string _endPoint = "http://localhost:5101/api/Auth/login";
+        public string _endPoint = "https://localhost:7081/api/";
 
-        public static string Username = string.Empty;
-        public static string Password = string.Empty;
+        public static UserLoginRequest request=new();
+        private static string Token = "Bearer ";
 
         public ApiService(string resourceName)
         {
             _resourceName=resourceName;
         }
 
-         
-        //public async Task<string>Authentication(string username, string password)
-        //{
-        //    var user = await _endPoint.PostJsonAsync<UserResponse>(username,password)
-        //        return user.Token;
-        //}
+
+        public async Task Authentication()
+        {
+            var user = await $"{_endPoint}{_resourceName}/login".PostJsonAsync(request).ReceiveJson<AuthResponse>();
+            if (user!=null)
+            {
+                Token+=user.Token;
+            }
+        }
 
 
         //public async Task<T> Get<T>()
         //{
 
-         
+
         //    var list = await _endPoint.WithOAuthBearerToken()
 
 

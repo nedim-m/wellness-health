@@ -22,11 +22,13 @@ namespace wellness.WinUI
 
         private async void BtnLogin_Click(object sender, EventArgs e)
         {
-            ApiService.Username=txtUsernameInput.Text;
-            ApiService.Password=txtPasswordInput.Text;
+            ApiService.request.UserName=txtUsernameInput.Text;
+            ApiService.request.Password=txtPasswordInput.Text;
             try
             {
-                //var result = var list = await _endPoint.WithOAuthBearerToken()
+                 await _api.Authentication();
+                MessageBox.Show("You are authorized");
+
             }
             catch (Exception)
             {

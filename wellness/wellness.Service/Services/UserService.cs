@@ -24,26 +24,26 @@ namespace wellness.Service.Services
             _context=context;
         }
 
-        public Task<ServiceResponse<UserResponse>> AddUserRoles(int id, string role)
+        public Task<ServiceResponse<Models.User.User>> AddUserRoles(int id, string role)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ServiceResponse<UserResponse>> DeleteUser(int id)
+        public Task<ServiceResponse<Models.User.User>> DeleteUser(int id)
         {
             throw new NotImplementedException();
         }
 
-        public Task<ServiceResponse<IEnumerable<UserResponse>>> GetAllUsers(string role)
+        public Task<ServiceResponse<IEnumerable<Models.User.User>>> GetAllUsers(string role)
         {
             throw new NotImplementedException();
         }
 
-        public async Task<ServiceResponse<UserResponse>> GetUserById(int id)
+        public async Task<ServiceResponse<Models.User.User>> GetUserById(int id)
         {
-            var serviceResponse = new ServiceResponse<UserResponse>();
+            var serviceResponse = new ServiceResponse<Models.User.User>();
             var dbUser = await _context.Users.Include("Role").FirstOrDefaultAsync(u => u.Id==id);
-            serviceResponse.Data=_mapper.Map<UserResponse>(dbUser);
+            serviceResponse.Data=_mapper.Map<Models.User.User>(dbUser);
             serviceResponse.Data.Role=dbUser!.Role.Name;
 
 
@@ -51,7 +51,7 @@ namespace wellness.Service.Services
             return serviceResponse;
         }
 
-        public Task<ServiceResponse<UserResponse>> UpdateUser(int id, UserUpdateRequest request)
+        public Task<ServiceResponse<Models.User.User>> UpdateUser(int id, UserUpdateRequest request)
         {
             throw new NotImplementedException();
         }

@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using wellness.Model;
 using wellness.Model.User;
+using wellness.Models.User;
 using wellness.Service.IServices;
 
 namespace wellness.Controllers
@@ -20,7 +21,7 @@ namespace wellness.Controllers
         }
 
         [HttpGet, Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<ServiceResponse<UserResponse>>> Get(int id)
+        public async Task<ActionResult<ServiceResponse<User>>> Get(int id)
         {
             return Ok(await _service.GetUserById(id));
         }

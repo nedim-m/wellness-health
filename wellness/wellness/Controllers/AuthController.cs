@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using wellness.Model.User;
 using wellness.Models.User;
 using wellness.Service.IServices;
 
@@ -25,7 +26,7 @@ namespace wellness.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult<User>> Login(UserLoginRequest request)
+        public async Task<ActionResult<AuthResponse>> Login(UserLoginRequest request)
         {
             var response = await _authService.Login(request);
             if (response.Success)

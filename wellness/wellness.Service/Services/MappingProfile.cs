@@ -15,7 +15,7 @@ namespace wellness.Service.Services
         {
             CreateMap<UserRegisterRequest, Database.User>();
             CreateMap<Database.User, User>();
-            CreateMap<Database.User, UserResponse>();
+            
                 
 
         }

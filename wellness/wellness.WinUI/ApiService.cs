@@ -35,16 +35,16 @@ namespace wellness.WinUI
         }
 
 
-        //public async Task<T> Get<T>()
-        //{
+        public async Task<T> Get<T>()
+        {
 
 
-        //    var list = await _endPoint.WithOAuthBearerToken()
+            var list = await $"{_endPoint}{_resourceName}".WithOAuthBearerToken(Token).GetJsonAsync<T>();
 
 
 
-        //    return list;
-        //}
+            return list;
+        }
 
         //public async Task<T> GetById<T>(object id)
         //{

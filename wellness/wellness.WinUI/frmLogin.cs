@@ -27,7 +27,8 @@ namespace wellness.WinUI
             try
             {
                  await _api.Authentication();
-                MessageBox.Show("You are authorized");
+                mdiMainMenu mdi = new();
+                mdi.Show();
 
             }
             catch (Exception)

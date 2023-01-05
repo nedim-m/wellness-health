@@ -23,6 +23,7 @@ namespace wellness.Models.User
         public bool Status { get; set; }
 
         public byte[]? Picture { get; set; }
-        public string Token { get; set; } = string.Empty;
+        
+        public string Role { get; set; }=string.Empty;
     }
 }

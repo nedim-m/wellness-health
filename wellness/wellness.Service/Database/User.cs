@@ -16,8 +16,11 @@ public partial class User
     public byte[] PasswordHash { get; set; } = null!;
 
     public byte[] PasswordSalt { get; set; } = null!;
-    public string RefreshToken { get; set; } = string.Empty;
+
+    public string? RefreshToken { get; set; } = string.Empty;
+
     public DateTime TokenCreated { get; set; }
+
     public DateTime TokenExpires { get; set; }
 
     public string UserName { get; set; } = null!;
@@ -28,9 +31,15 @@ public partial class User
 
     public byte[]? Picture { get; set; }
 
-    public virtual Member? Member { get; set; }
+    public int RoleId { get; set; }
+
+    public virtual ICollection<Membership> Memberships { get; } = new List<Membership>();
+
+    public virtual ICollection<Rating> Ratings { get; } = new List<Rating>();
+
+    public virtual ICollection<Record> Records { get; } = new List<Record>();
 
     public virtual ICollection<Reservation> Reservations { get; } = new List<Reservation>();
 
-    public virtual ICollection<UserRole> UserRoles { get; } = new List<UserRole>();
+    public virtual Role Role { get; set; } = null!;
 }

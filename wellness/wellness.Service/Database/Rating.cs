@@ -9,13 +9,13 @@ public partial class Rating
 
     public string? Description { get; set; }
 
-    public int Rating1 { get; set; }
+    public int StarRating { get; set; }
 
     public int TreatmentId { get; set; }
 
-    public int MemberId { get; set; }
-
-    public virtual Member Member { get; set; } = null!;
+    public int UserId { get; set; }
 
     public virtual Treatment Treatment { get; set; } = null!;
+
+    public virtual User User { get; set; } = null!;
 }

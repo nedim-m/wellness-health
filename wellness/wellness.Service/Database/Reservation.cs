@@ -15,5 +15,9 @@ public partial class Reservation
 
     public bool Status { get; set; }
 
+    public int TreatmentId { get; set; }
+
+    public virtual Treatment Treatment { get; set; } = null!;
+
     public virtual User User { get; set; } = null!;
 }

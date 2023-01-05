@@ -11,5 +11,7 @@ public partial class Role
 
     public string Description { get; set; } = null!;
 
-    public virtual ICollection<UserRole> UserRoles { get; } = new List<UserRole>();
+    public DateTime ModifiedDate { get; set; }
+
+    public virtual ICollection<User> Users { get; } = new List<User>();
 }

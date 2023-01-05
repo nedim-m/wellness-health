@@ -25,7 +25,7 @@ namespace wellness.Service.Services
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IMapper _mapper;
 
-        
+
 
         public AuthService(DbWellnessContext context, IConfiguration configuration, IHttpContextAccessor httpContextAccessor, IMapper mapper)
         {
@@ -48,7 +48,7 @@ namespace wellness.Service.Services
             }
             string token = CreateToken(user);
             var refreshToken = CreateRefreshToken();
-            SetRefreshToken(refreshToken, user);
+            await SetRefreshToken(refreshToken, user);
 
             return new AuthResponse
             {
@@ -74,7 +74,7 @@ namespace wellness.Service.Services
 
             string token = CreateToken(user);
             var newRefreshToken = CreateRefreshToken();
-            SetRefreshToken(newRefreshToken, user);
+            await SetRefreshToken(newRefreshToken, user);
 
             return new AuthResponse
             {
@@ -96,56 +96,53 @@ namespace wellness.Service.Services
             var user = _mapper.Map<Database.User>(request);
             user.PasswordHash= passwordHash;
             user.PasswordSalt=passwordSalt;
+            user.RoleId=3;
             _context.Users.Add(user);
-          
+
 
 
             await _context.SaveChangesAsync();
 
-            UserRole userRole = new()
-            {
-                UserId=user.Id,
-                RoleId=3,
-                ModifiedDate=DateTime.Now
-            };
-            _context.UserRoles.Add(userRole);
-            await _context.SaveChangesAsync();
+           
+            
 
             return _mapper.Map<Models.User.User>(user);
         }
 
-        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
+        private static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512(passwordSalt))
             {
-                var computedHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                var computedHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
                 return computedHash.SequenceEqual(passwordHash);
             }
         }
 
-        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new HMACSHA512())
             {
                 passwordSalt = hmac.Key;
-                passwordHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
+                passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
             }
         }
 
         private string CreateToken(Database.User user)
         {
-            var userRole = _context.UserRoles.FirstOrDefault(x => x.UserId==user.Id);
-            string roleName = _context.Roles.Find(userRole!.RoleId)!.Name;
-           
-            List<Claim> claims = new List<Claim>
+            var userRole = _context.Roles.Find(user.RoleId)!.Name;
+            
+
+            List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Name, user.UserName),
-                new Claim(ClaimTypes.Role,roleName)
+                new Claim(ClaimTypes.Role,userRole)
             };
 
+#pragma warning disable CS8604 // Possible null reference argument.
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(
                 _configuration.GetSection("AppSettings:Token").Value));
+#pragma warning restore CS8604 // Possible null reference argument.
 
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
 
@@ -159,7 +156,7 @@ namespace wellness.Service.Services
             return jwt;
         }
 
-        private RefreshToken CreateRefreshToken()
+        private static RefreshToken CreateRefreshToken()
         {
             var refreshToken = new RefreshToken
             {
@@ -171,7 +168,7 @@ namespace wellness.Service.Services
             return refreshToken;
         }
 
-        private async void SetRefreshToken(RefreshToken refreshToken, Database.User user)
+        private async Task SetRefreshToken(RefreshToken refreshToken, Database.User user)
         {
             var cookieOptions = new CookieOptions
             {

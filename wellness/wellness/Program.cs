@@ -31,6 +31,7 @@ builder.Services.AddSwaggerGen(options =>
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(opt =>
     {
+#pragma warning disable CS8604 // Possible null reference argument.
         opt.TokenValidationParameters=new TokenValidationParameters
         {
             ValidateIssuerSigningKey=true,
@@ -39,6 +40,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
             ValidateAudience=false
 
         };
+#pragma warning restore CS8604 // Possible null reference argument.
     });
 
 builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
@@ -48,7 +50,8 @@ builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
     }));
 
 
-builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddTransient<IAuthService, AuthService>();
+builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddAutoMapper(typeof(AuthService));
 
 

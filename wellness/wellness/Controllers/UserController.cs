@@ -20,10 +20,19 @@ namespace wellness.Controllers
             _service=service;
         }
 
-        [HttpGet, Authorize(Roles = "Administrator")]
+        [HttpGet,AllowAnonymous]
         public async Task<ActionResult<ServiceResponse<User>>> Get(int id)
         {
             return Ok(await _service.GetUserById(id));
         }
+
+
+        [HttpGet("GetAll"), AllowAnonymous]
+        public async Task<ActionResult<ServiceResponse<IEnumerable<User>>>> GetAllUsers(string? role, string? search)
+        {
+            return Ok(await _service.GetAllUsers(role,search));
+        }
+
+
     }
 }

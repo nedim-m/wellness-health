@@ -29,6 +29,7 @@ namespace wellness.WinUI
                  await _api.Authentication();
                 mdiMainMenu mdi = new();
                 mdi.Show();
+                
 
             }
             catch (Exception)

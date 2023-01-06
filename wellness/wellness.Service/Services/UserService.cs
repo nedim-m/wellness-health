@@ -34,9 +34,27 @@ namespace wellness.Service.Services
             throw new NotImplementedException();
         }
 
-        public Task<ServiceResponse<IEnumerable<Models.User.User>>> GetAllUsers(string role)
+        public async Task<ServiceResponse<IEnumerable<Models.User.User>>> GetAllUsers(string role, string search)
         {
-            throw new NotImplementedException();
+
+            var filteredEntity = _context.Set<Database.User>().AsQueryable().Include("Role");
+            if (!string.IsNullOrWhiteSpace(search))
+            {
+                filteredEntity= filteredEntity.Where(x => x.FirstName.Contains(search)|| x.LastName.Contains(search));
+            }
+
+            filteredEntity=filteredEntity.Where(x => x.Role.Name.Equals(role));
+
+            var list = filteredEntity.ToList();
+            var serviceResponse = new ServiceResponse<IEnumerable<Models.User.User>>
+            {
+                Data=_mapper.Map<IList<Models.User.User>>(list),
+                Success=true
+            };
+
+            return serviceResponse;
+
+
         }
 
         public async Task<ServiceResponse<Models.User.User>> GetUserById(int id)
@@ -44,10 +62,6 @@ namespace wellness.Service.Services
             var serviceResponse = new ServiceResponse<Models.User.User>();
             var dbUser = await _context.Users.Include("Role").FirstOrDefaultAsync(u => u.Id==id);
             serviceResponse.Data=_mapper.Map<Models.User.User>(dbUser);
-            serviceResponse.Data.Role=dbUser!.Role.Name;
-
-
-
             return serviceResponse;
         }
 

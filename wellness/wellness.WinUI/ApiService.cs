@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using wellness.Model;
 using wellness.Model.User;
 using wellness.Models.User;
 using static System.Net.WebRequestMethods;
@@ -17,7 +18,7 @@ namespace wellness.WinUI
         public string _endPoint = "https://localhost:7081/api/";
 
         public static UserLoginRequest request=new();
-        private static string Token = "Bearer ";
+        private static string Token = "";
 
         public ApiService(string resourceName)
         {
@@ -35,13 +36,15 @@ namespace wellness.WinUI
         }
 
 
-        public async Task<T> Get<T>()
+        public async Task<T> Get<T>(object search = null)
         {
+            var query = string.Empty;
+            if (search!=null)
+            {
+                query = await search.ToQueryString();
+            }
 
-
-            var list = await $"{_endPoint}{_resourceName}".WithOAuthBearerToken(Token).GetJsonAsync<T>();
-
-
+            var list = await $"{_endPoint}{_resourceName}?{query}".WithOAuthBearerToken(Token).GetJsonAsync<T>();
 
             return list;
         }

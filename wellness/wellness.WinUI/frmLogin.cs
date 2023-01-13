@@ -27,8 +27,10 @@ namespace wellness.WinUI
             try
             {
                  await _api.Authentication();
-                mdiMainMenu mdi = new();
-                mdi.Show();
+                /*mdiMainMenu mdi = new();
+                mdi.Show();*/
+                frmUser frmUser = new();
+                frmUser.Show();
                 
 
             }

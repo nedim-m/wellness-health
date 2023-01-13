@@ -34,16 +34,16 @@ namespace wellness.Service.Services
             throw new NotImplementedException();
         }
 
-        public async Task<ServiceResponse<IEnumerable<Models.User.User>>> GetAllUsers(string role, string search)
+        public async Task<ServiceResponse<IEnumerable<Models.User.User>>> GetAllUsers(UserSearchObj search)
         {
 
-            var filteredEntity = _context.Set<Database.User>().AsQueryable().Include("Role");
-            if (!string.IsNullOrWhiteSpace(search))
+            var filteredEntity =  _context.Set<Database.User>().AsQueryable().Include("Role");
+            if (!string.IsNullOrWhiteSpace(search.SearchName))
             {
-                filteredEntity= filteredEntity.Where(x => x.FirstName.Contains(search)|| x.LastName.Contains(search));
+                filteredEntity= filteredEntity.Where(x => x.FirstName.Contains(search.SearchName)|| x.LastName.Contains(search.SearchName));
             }
 
-            filteredEntity=filteredEntity.Where(x => x.Role.Name.Equals(role));
+            filteredEntity= filteredEntity.Where(x => x.Role.Name.Equals(search.Role));
 
             var list = filteredEntity.ToList();
             var serviceResponse = new ServiceResponse<IEnumerable<Models.User.User>>
@@ -52,7 +52,7 @@ namespace wellness.Service.Services
                 Success=true
             };
 
-            return serviceResponse;
+            return  serviceResponse;
 
 
         }

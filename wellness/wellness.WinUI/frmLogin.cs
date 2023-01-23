@@ -29,14 +29,17 @@ namespace wellness.WinUI
                  await _api.Authentication();
                 /*mdiMainMenu mdi = new();
                 mdi.Show();*/
-                frmUser frmUser = new();
-                frmUser.Show();
+                //frmUser frmUser = new();
+                //frmUser.Show();
+                frmAddNewMember frm = new();
+                frm.Show();
                 
 
             }
             catch (Exception)
             {
-                MessageBox.Show("Incorrect username or password");
+                MessageBox.Show("Incorrect username or password", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                
             }
 
         }

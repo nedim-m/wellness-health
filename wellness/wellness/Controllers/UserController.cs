@@ -20,10 +20,19 @@ namespace wellness.Controllers
             _service=service;
         }
 
-        [HttpGet, Authorize(Roles = "Administrator")]
+        [HttpGet("{id}"), Authorize(Roles = "Administrator")]
         public async Task<ActionResult<ServiceResponse<User>>> Get(int id)
         {
             return Ok(await _service.GetUserById(id));
         }
+
+
+        [HttpGet,Authorize(Roles ="Administrator")]
+        public async Task<ActionResult<ServiceResponse<IEnumerable<User>>>> GetAllUsers([FromQuery] UserSearchObj search)
+        {
+            return Ok(await _service.GetAllUsers(search));
+        }
+
+
     }
 }

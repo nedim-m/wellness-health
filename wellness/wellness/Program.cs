@@ -8,6 +8,7 @@ using wellness.Service.Database;
 using wellness.Service.IServices;
 using wellness.Service.Services;
 
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -52,6 +53,7 @@ builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
 
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUserService, UserService>();
+
 builder.Services.AddAutoMapper(typeof(AuthService));
 
 

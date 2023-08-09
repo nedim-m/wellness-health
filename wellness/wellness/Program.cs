@@ -53,6 +53,9 @@ builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
 
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUserService, UserService>();
+builder.Services.AddTransient<ICategoryService,CategoryService>();
+
+
 
 builder.Services.AddAutoMapper(typeof(AuthService));
 

@@ -14,9 +14,9 @@ namespace wellness.Service.Services
         public MappingProfile()
         {
             CreateMap<UserRegisterRequest, Database.User>();
-            CreateMap<Database.User, User>();
-            
-                
+            //CreateMap<Database.User, User>();
+            CreateMap<Database.User, User>().ForMember(dest=> dest.Role,opt=>opt.MapFrom(src=>src.Role.Name));
+
 
         }
     }

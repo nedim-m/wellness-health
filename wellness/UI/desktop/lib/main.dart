@@ -1,4 +1,4 @@
-import 'package:desktop/screens/homepage.dart';
+import 'package:desktop/screens/loginpage.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 void main() {
@@ -16,7 +16,7 @@ class MyApp extends StatelessWidget {
       theme: FluentThemeData(
         accentColor: Colors.blue,
       ),
-      home: const HomepageView(),
+      home: const LoginPageView(),
     );
   }
 }

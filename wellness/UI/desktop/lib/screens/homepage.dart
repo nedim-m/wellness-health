@@ -15,7 +15,7 @@ class _HomepageViewState extends State<HomepageView> {
     PaneItem(
       icon: const Icon(FluentIcons.people),
       title: const Text('Korsinici'),
-      body: const Text("Home"),
+      body: const Text('Korsinici'),
     ),
     PaneItem(
       icon: const Icon(FluentIcons.teamwork),
@@ -47,10 +47,22 @@ class _HomepageViewState extends State<HomepageView> {
       title: const Text('Članarina'),
       body: const Text("Home6"),
     ),
-    PaneItem(
-      icon: const Icon(FluentIcons.leave_user),
-      title: const Text('Odjava'),
-      body: const Text("Home6"),
+    PaneItemExpander(
+      title: const Text('Izvjestaj'),
+      icon: const Icon(FluentIcons.report_document),
+      body: const Text("This is text"),
+      items: [
+        PaneItem(
+          icon: const Icon(FluentIcons.mail),
+          title: const Text('Kreiraj'),
+          body: const Text("Kreiraj izvjestaj"),
+        ),
+        PaneItem(
+          icon: const Icon(FluentIcons.calendar),
+          title: const Text('Prikaži'),
+          body: const Text('Prikaži'),
+        ),
+      ],
     ),
   ];
 
@@ -64,11 +76,20 @@ class _HomepageViewState extends State<HomepageView> {
         style: TextStyle(fontSize: 30),
       ))),
       pane: NavigationPane(
-        selected: topIndex,
-        onChanged: (index) => setState(() => topIndex = index),
-        displayMode: displayMode,
-        items: items,
-      ),
+          selected: topIndex,
+          onChanged: (index) => setState(() => topIndex = index),
+          displayMode: displayMode,
+          items: items,
+          footerItems: [
+            PaneItem(
+              icon: const Icon(FluentIcons.leave_user),
+              title: const Text('Odjava'),
+              body: const Text("Home6"),
+              onTap: () {
+                Navigator.pop(context);
+              },
+            ),
+          ]),
     );
   }
 }

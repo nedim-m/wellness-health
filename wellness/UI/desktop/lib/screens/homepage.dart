@@ -1,14 +1,17 @@
 import 'package:fluent_ui/fluent_ui.dart';
 
+
 class HomepageView extends StatefulWidget {
   const HomepageView({super.key});
 
   @override
   State<HomepageView> createState() => _HomepageViewState();
+
 }
 
 class _HomepageViewState extends State<HomepageView> {
   int topIndex = 0;
+  
   PaneDisplayMode displayMode = PaneDisplayMode.top;
 
   List<NavigationPaneItem> items = [
@@ -16,6 +19,7 @@ class _HomepageViewState extends State<HomepageView> {
       icon: const Icon(FluentIcons.people),
       title: const Text('Korsinici'),
       body: const Text('Korsinici'),
+      
     ),
     PaneItem(
       icon: const Icon(FluentIcons.teamwork),

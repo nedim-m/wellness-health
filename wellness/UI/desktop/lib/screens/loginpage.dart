@@ -1,9 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
+import '../utils/token_store.dart';
 import 'homepage.dart';
 
-class LoginPageView extends StatelessWidget {
+class LoginPageView extends StatefulWidget {
   const LoginPageView({super.key});
+
+  @override
+  State<LoginPageView> createState() => _LoginPageViewState();
+}
+
+class _LoginPageViewState extends State<LoginPageView> {
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+  Future<void> _login() async {
+    final String username = _usernameController.text;
+    final String password = _passwordController.text;
+
+    final response = await http.post(
+      Uri.parse('https://localhost:7081/api/Auth/login'), // Hard coded url
+      body: jsonEncode({'username': username, 'password': password}),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = jsonDecode(response.body);
+      setState(() {
+        TokenManager.saveToken(responseData['token']);
+      });
+
+      print(TokenManager.getToken());
+
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => const HomepageView()),
+      );
+    } else {
+      // Handle error
+      print('Login failed');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,29 +72,25 @@ class LoginPageView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 32.0),
-              const TextField(
-                decoration: InputDecoration(
+              TextField(
+                controller: _usernameController,
+                decoration: const InputDecoration(
                   labelText: 'Username',
                   border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 16.0),
-              const TextField(
+              TextField(
+                controller: _passwordController,
                 obscureText: true,
-                decoration: InputDecoration(
+                decoration: const InputDecoration(
                   labelText: 'Password',
                   border: OutlineInputBorder(),
                 ),
               ),
               const SizedBox(height: 24.0),
               ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => const HomepageView()),
-                  );
-                },
+                onPressed: () => _login(),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                 ),

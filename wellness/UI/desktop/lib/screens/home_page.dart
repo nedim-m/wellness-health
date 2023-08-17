@@ -1,25 +1,24 @@
+import 'package:desktop/screens/category_page.dart';
+import 'package:desktop/screens/user_page.dart';
 import 'package:fluent_ui/fluent_ui.dart';
-
 
 class HomepageView extends StatefulWidget {
   const HomepageView({super.key});
 
   @override
   State<HomepageView> createState() => _HomepageViewState();
-
 }
 
 class _HomepageViewState extends State<HomepageView> {
   int topIndex = 0;
-  
+
   PaneDisplayMode displayMode = PaneDisplayMode.top;
 
   List<NavigationPaneItem> items = [
     PaneItem(
       icon: const Icon(FluentIcons.people),
       title: const Text('Korsinici'),
-      body: const Text('Korsinici'),
-      
+      body: const UserPageView(),
     ),
     PaneItem(
       icon: const Icon(FluentIcons.teamwork),
@@ -39,7 +38,7 @@ class _HomepageViewState extends State<HomepageView> {
     PaneItem(
       icon: const Icon(FluentIcons.category_classification),
       title: const Text('Kategorije'),
-      body: const Text("Home4"),
+      body: const CategoryPageView(),
     ),
     PaneItem(
       icon: const Icon(FluentIcons.medical_care),

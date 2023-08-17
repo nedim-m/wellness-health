@@ -3,7 +3,7 @@ import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 import '../utils/token_store.dart';
-import 'homepage.dart';
+import 'home_page.dart';
 
 class LoginPageView extends StatefulWidget {
   const LoginPageView({super.key});
@@ -32,8 +32,9 @@ class _LoginPageViewState extends State<LoginPageView> {
         TokenManager.saveToken(responseData['token']);
       });
 
-      print(TokenManager.getToken());
+      //print(TokenManager.getToken());
 
+      // ignore: use_build_context_synchronously
       Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const HomepageView()),

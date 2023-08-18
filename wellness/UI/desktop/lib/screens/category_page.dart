@@ -174,7 +174,11 @@ DataRow recentFileDataRow(var data) {
       DataCell(Text(data.id.toString())),
       DataCell(Text(data.name ?? "Name")),
       DataCell(Text(data.description)),
-      DataCell(Text(data.status.toString())),
+      DataCell(
+        Text(
+          data.status ? "Aktivan" : "Neaktivan",
+        ),
+      ),
     ],
   );
 }

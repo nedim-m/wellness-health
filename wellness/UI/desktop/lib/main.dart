@@ -1,4 +1,5 @@
 import 'package:desktop/providers/category_provider.dart';
+import 'package:desktop/providers/user_provider.dart';
 import 'package:desktop/screens/login_page.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
@@ -8,6 +9,7 @@ void main() {
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => CategoryProvider()),
+      ChangeNotifierProvider(create: (_) => UserProvider()),
     ],
     child: const MyApp(),
   ));

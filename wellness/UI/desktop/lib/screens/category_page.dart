@@ -62,6 +62,8 @@ class _CategoryPageViewState extends State<CategoryPageView> {
                       child: TextField(
                         controller: controller,
                         decoration: const InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue)),
                           contentPadding:
                               EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                           border: InputBorder.none,
@@ -81,7 +83,7 @@ class _CategoryPageViewState extends State<CategoryPageView> {
                 ],
               ),
             ),
-            const SizedBox(height: 20), // Adjust spacing as needed
+            const SizedBox(height: 20),
             SizedBox(
               width: double.infinity,
               child: PaginatedDataTable(

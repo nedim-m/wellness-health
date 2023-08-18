@@ -35,72 +35,102 @@ class _CategoryPageViewState extends State<CategoryPageView> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SingleChildScrollView(
-        child: Container(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(
-                width: double.infinity,
-                //height: double.infinity,
-                child: PaginatedDataTable(
-                  header: Container(
-                    //input field
-                    padding: const EdgeInsets.all(5),
-                    decoration: BoxDecoration(
-                        border: Border.all(
-                          color: Colors.grey,
-                        ),
-                        borderRadius: BorderRadius.circular(12)),
-                    child: TextField(
-                      controller: controller,
-                      decoration: const InputDecoration(
-                          hintText: "Unesite ime korisnika"),
-                      onChanged: (value) {
-                        setState(() {
-                          myData.result = filterData
-                              .where((element) => element.name.contains(value))
-                              .toList();
-                        });
-                      },
+        child: Column(
+          children: [
+            Container(
+              width: 500,
+              padding: const EdgeInsets.all(10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  const Text(
+                    "Unesite ime korisnika",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 18,
                     ),
                   ),
-                  columns: const [
-                    DataColumn(
-                      label: Text(
-                        "Id",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 14),
+                  const SizedBox(width: 10),
+                  Expanded(
+                    child: Container(
+                      width: 250,
+                      height: 40,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: Colors.grey),
+                        borderRadius: BorderRadius.circular(8),
+                      ),
+                      child: TextField(
+                        controller: controller,
+                        decoration: const InputDecoration(
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                          border: InputBorder.none,
+                        ),
+                        style: const TextStyle(fontSize: 16),
+                        onChanged: (value) {
+                          setState(() {
+                            myData.result = filterData
+                                .where(
+                                    (element) => element.name.contains(value))
+                                .toList();
+                          });
+                        },
                       ),
                     ),
-                    DataColumn(
-                      label: Text(
-                        "Naziv",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 14),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 20), // Adjust spacing as needed
+            SizedBox(
+              width: double.infinity,
+              child: PaginatedDataTable(
+                columns: const [
+                  DataColumn(
+                    label: Text(
+                      "Id",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
                       ),
                     ),
-                    DataColumn(
-                      label: Text(
-                        "Opis",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 14),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      "Naziv",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
                       ),
                     ),
-                    DataColumn(
-                      label: Text(
-                        "Status",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w600, fontSize: 14),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      "Opis",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
                       ),
                     ),
-                  ],
-                  source: RowSource(
-                      count: myData.result.length, myData: myData.result),
-                  rowsPerPage: 8,
+                  ),
+                  DataColumn(
+                    label: Text(
+                      "Status",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
+                source: RowSource(
+                  count: myData.result.length,
+                  myData: myData.result,
                 ),
-              )
-            ],
-          ),
+                rowsPerPage: 8,
+              ),
+            ),
+          ],
         ),
       ),
     );

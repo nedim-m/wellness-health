@@ -13,7 +13,7 @@ class CategoryPageView extends StatefulWidget {
 
 class _CategoryPageViewState extends State<CategoryPageView> {
   final CategoryProvider _categoryProvider = CategoryProvider();
-  List<Category>? filterData;
+  List<Category> filterData = [];
 
   SearchResult<Category> myData = SearchResult<Category>();
   TextEditingController controller = TextEditingController();
@@ -57,7 +57,7 @@ class _CategoryPageViewState extends State<CategoryPageView> {
                           hintText: "Unesite ime korisnika"),
                       onChanged: (value) {
                         setState(() {
-                          myData.result = filterData!
+                          myData.result = filterData
                               .where((element) => element.name.contains(value))
                               .toList();
                         });
@@ -94,7 +94,8 @@ class _CategoryPageViewState extends State<CategoryPageView> {
                       ),
                     ),
                   ],
-                  source: RowSource(count: myData.count, myData: myData),
+                  source: RowSource(
+                      count: myData.result.length, myData: myData.result),
                   rowsPerPage: 8,
                 ),
               )
@@ -117,7 +118,7 @@ class RowSource extends DataTableSource {
   @override
   DataRow? getRow(int index) {
     if (index < rowCount) {
-      return recentFileDataRow(myData.result![index]);
+      return recentFileDataRow(myData![index]);
     } else {
       return null;
     }
@@ -137,7 +138,7 @@ DataRow recentFileDataRow(var data) {
   return DataRow(
     cells: [
       DataCell(Text(data.id.toString())),
-      DataCell(Text(data.name)),
+      DataCell(Text(data.name ?? "Name")),
       DataCell(Text(data.description)),
       DataCell(Text(data.status.toString())),
     ],

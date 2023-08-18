@@ -15,5 +15,6 @@ namespace wellness.Service.Services
         public CategoryService(IMapper mapper, Database.DbWellnessContext context) : base(mapper, context)
         {
         }
+
     }
 }

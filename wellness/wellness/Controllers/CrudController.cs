@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using wellness.Model;
 using wellness.Service.IServices;
 
@@ -19,13 +20,13 @@ namespace wellness.Controllers
             _service = service;
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Administrator")]
         public virtual async Task<T> Insert([FromBody] TInsert insert)
         {
             return await _service.Insert(insert);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize(Roles = "Administrator")]
         public virtual async Task<T> Update(int id, [FromBody] TUpdate update)
         {
             return await _service.Update(id, update);

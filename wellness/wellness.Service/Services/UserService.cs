@@ -13,61 +13,52 @@ using wellness.Service.IServices;
 
 namespace wellness.Service.Services
 {
-    public class UserService : IUserService
+    public class UserService : CrudService<Models.User.User, Database.User, UserSearchObj, UserRegisterRequest, UserUpdateRequest>, IUserService
     {
         private readonly IMapper _mapper;
         private readonly DbWellnessContext _context;
 
-        public UserService(IMapper mapper, DbWellnessContext context)
+        
+        public UserService(IMapper mapper, DbWellnessContext context) : base(mapper, context)
         {
             _mapper=mapper;
             _context=context;
         }
 
-        public Task<ServiceResponse<Models.User.User>> AddUserRoles(int id, string role)
-        {
-            throw new NotImplementedException();
-        }
 
-        public Task<ServiceResponse<Models.User.User>> DeleteUser(int id)
-        {
-            throw new NotImplementedException();
-        }
+      
 
-        public async Task<ServiceResponse<IEnumerable<Models.User.User>>> GetAllUsers(UserSearchObj search)
+        public override async Task<PagedResult<Models.User.User>> Get(UserSearchObj? search = null)
         {
+            var filteredEntity = _context.Set<Database.User>().AsQueryable().Include("Role");
 
-            var filteredEntity =  _context.Set<Database.User>().AsQueryable().Include("Role");
-            if (!string.IsNullOrWhiteSpace(search.SearchName))
+            if (!string.IsNullOrWhiteSpace(search?.SearchName))
             {
-                filteredEntity= filteredEntity.Where(x => x.FirstName.Contains(search.SearchName)|| x.LastName.Contains(search.SearchName));
+                filteredEntity = filteredEntity.Where(x => x.FirstName.Contains(search.SearchName) || x.LastName.Contains(search.SearchName));
             }
 
-            filteredEntity= filteredEntity.Where(x => x.Role.Name.Equals(search.Role));
-
-            var list = filteredEntity.ToList();
-            var serviceResponse = new ServiceResponse<IEnumerable<Models.User.User>>
+            if (!string.IsNullOrWhiteSpace(search?.Role))
             {
-                Data=_mapper.Map<IList<Models.User.User>>(list),
-                Success=true
+                filteredEntity = filteredEntity.Where(x => x.Role.Name.Equals(search.Role));
+            }
+
+            var list = await filteredEntity.ToListAsync(); 
+
+            var mappedList = _mapper.Map<List<Models.User.User>>(list);
+
+            var result = new PagedResult<Models.User.User>
+            {
+                Result = mappedList,
+                Count = mappedList.Count
             };
 
-            return  serviceResponse;
-
-
+            return result;
         }
 
-        public async Task<ServiceResponse<Models.User.User>> GetUserById(int id)
-        {
-            var serviceResponse = new ServiceResponse<Models.User.User>();
-            var dbUser = await _context.Users.Include("Role").FirstOrDefaultAsync(u => u.Id==id);
-            serviceResponse.Data=_mapper.Map<Models.User.User>(dbUser);
-            return serviceResponse;
-        }
 
-        public Task<ServiceResponse<Models.User.User>> UpdateUser(int id, UserUpdateRequest request)
-        {
-            throw new NotImplementedException();
-        }
+
+
+
+
     }
 }

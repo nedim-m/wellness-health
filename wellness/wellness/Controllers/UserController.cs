@@ -11,28 +11,10 @@ namespace wellness.Controllers
 
     [Route("api/[controller]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : CrudController<Models.User.User, UserSearchObj, UserRegisterRequest, UserUpdateRequest>
     {
-        private readonly IUserService _service;
-
-        public UserController(IUserService service)
+        public UserController(ILogger<BaseController<User, UserSearchObj>> logger, IUserService service) : base(logger, service)
         {
-            _service=service;
         }
-
-        [HttpGet("{id}"), Authorize(Roles = "Administrator")]
-        public async Task<ActionResult<ServiceResponse<User>>> Get(int id)
-        {
-            return Ok(await _service.GetUserById(id));
-        }
-
-
-        [HttpGet,Authorize(Roles ="Administrator")]
-        public async Task<ActionResult<ServiceResponse<IEnumerable<User>>>> GetAllUsers([FromQuery] UserSearchObj search)
-        {
-            return Ok(await _service.GetAllUsers(search));
-        }
-
-
     }
 }

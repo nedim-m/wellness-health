@@ -9,7 +9,6 @@ namespace wellness.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    
     public class CategoryController : CrudController<Category, BaseSearchObject, Category, Category>
     {
         public CategoryController(ILogger<BaseController<Category, BaseSearchObject>> logger, ICategoryService service) : base(logger, service)

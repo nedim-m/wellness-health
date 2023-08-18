@@ -37,6 +37,7 @@ class _CategoryPageViewState extends State<CategoryPageView> {
       body: SingleChildScrollView(
         child: Column(
           children: [
+            const SizedBox(height: 20),
             Container(
               width: 500,
               padding: const EdgeInsets.all(10),
@@ -44,10 +45,10 @@ class _CategoryPageViewState extends State<CategoryPageView> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Text(
-                    "Unesite ime korisnika",
+                    "Unesite naziv kategorije: ",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
-                      fontSize: 18,
+                      fontSize: 15,
                     ),
                   ),
                   const SizedBox(width: 10),
@@ -67,8 +68,9 @@ class _CategoryPageViewState extends State<CategoryPageView> {
                           contentPadding:
                               EdgeInsets.symmetric(vertical: 8, horizontal: 10),
                           border: InputBorder.none,
+                          prefixIcon: Icon(Icons.search),
                         ),
-                        style: const TextStyle(fontSize: 16),
+                        style: const TextStyle(fontSize: 14),
                         onChanged: (value) {
                           setState(() {
                             myData.result = filterData
@@ -83,7 +85,7 @@ class _CategoryPageViewState extends State<CategoryPageView> {
                 ],
               ),
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 10),
             SizedBox(
               width: double.infinity,
               child: PaginatedDataTable(
@@ -93,7 +95,7 @@ class _CategoryPageViewState extends State<CategoryPageView> {
                       "Id",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                        fontSize: 15,
                       ),
                     ),
                   ),
@@ -102,7 +104,7 @@ class _CategoryPageViewState extends State<CategoryPageView> {
                       "Naziv",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                        fontSize: 15,
                       ),
                     ),
                   ),
@@ -111,7 +113,7 @@ class _CategoryPageViewState extends State<CategoryPageView> {
                       "Opis",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                        fontSize: 15,
                       ),
                     ),
                   ),
@@ -120,7 +122,7 @@ class _CategoryPageViewState extends State<CategoryPageView> {
                       "Status",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
-                        fontSize: 14,
+                        fontSize: 15,
                       ),
                     ),
                   ),

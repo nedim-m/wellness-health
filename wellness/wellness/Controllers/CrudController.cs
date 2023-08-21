@@ -20,7 +20,8 @@ namespace wellness.Controllers
             _service = service;
         }
 
-        [HttpPost, Authorize(Roles = "Administrator")]
+        //[HttpPost, Authorize(Roles = "Administrator")]
+        [HttpPost]
         public virtual async Task<T> Insert([FromBody] TInsert insert)
         {
             return await _service.Insert(insert);

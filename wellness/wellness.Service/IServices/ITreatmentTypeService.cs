@@ -4,12 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using wellness.Model;
-using wellness.Model.Category;
+using wellness.Model.TreatmentType;
 
 namespace wellness.Service.IServices
 {
-    public interface ICategoryService : ICrudService<Category,BaseSearchObject,CategoryPostRequest, CategoryPostRequest>
+    public interface ITreatmentTypeService:ICrudService<TreatmentType,BaseSearchObject, TreatmentTypePostRequest, TreatmentTypePostRequest>
     {
-
     }
 }

@@ -10,7 +10,7 @@ using wellness.Service.IServices;
 
 namespace wellness.Service.Services
 {
-    public class CategoryService : CrudService<Category, Database.Category, BaseSearchObject, Category, Category>,ICategoryService
+    public class CategoryService : CrudService<Category, Database.Category, BaseSearchObject, CategoryPostRequest, CategoryPostRequest>,ICategoryService
     {
         public CategoryService(IMapper mapper, Database.DbWellnessContext context) : base(mapper, context)
         {

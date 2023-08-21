@@ -1,4 +1,5 @@
 import 'package:desktop/screens/category_page.dart';
+import 'package:desktop/screens/treatment_type_page.dart';
 import 'package:desktop/screens/user_page.dart';
 import 'package:desktop/screens/worker_page.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -34,7 +35,7 @@ class _HomepageViewState extends State<HomepageView> {
     PaneItem(
       icon: const Icon(FluentIcons.service_activity),
       title: const Text('Vrste usluge'),
-      body: const Text("Home3"),
+      body: const TreatmentTypePageView(),
     ),
     PaneItem(
       icon: const Icon(FluentIcons.category_classification),

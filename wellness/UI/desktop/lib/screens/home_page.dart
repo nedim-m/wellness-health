@@ -1,5 +1,6 @@
 import 'package:desktop/screens/category_page.dart';
 import 'package:desktop/screens/user_page.dart';
+import 'package:desktop/screens/worker_page.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
 class HomepageView extends StatefulWidget {
@@ -23,7 +24,7 @@ class _HomepageViewState extends State<HomepageView> {
     PaneItem(
       icon: const Icon(FluentIcons.teamwork),
       title: const Text('Zaposlenici'),
-      body: const Text("Home1"),
+      body: const WorkerPageView(),
     ),
     PaneItem(
       icon: const Icon(FluentIcons.temporary_user),

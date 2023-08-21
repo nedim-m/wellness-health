@@ -39,8 +39,20 @@ namespace wellness.Service.Services
 
             if (!string.IsNullOrWhiteSpace(search?.Role))
             {
-                filteredEntity = filteredEntity.Where(x => x.Role.Name.Equals(search.Role));
+                if (search.Role.Equals("notmember"))
+                {
+                    filteredEntity = filteredEntity.Where(x => !x.Role.Name.Equals("member") && !x.Role.Name.Equals("administrator"));
+                }
+                else
+                {
+                    filteredEntity = filteredEntity.Where(x => x.Role.Name.Equals(search.Role));
+                }
             }
+
+
+
+
+
 
             var list = await filteredEntity.ToListAsync(); 
 

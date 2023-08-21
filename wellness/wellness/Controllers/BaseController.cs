@@ -19,7 +19,8 @@ namespace wellness.Controllers
             _service = service;
         }
 
-        [HttpGet(), Authorize(Roles = "Administrator")]
+        //[HttpGet(), Authorize(Roles = "Administrator")]
+        [HttpGet()]
         public virtual async Task<PagedResult<T>> Get([FromQuery] TSearch? search = null)
         {
             return await _service.Get(search);

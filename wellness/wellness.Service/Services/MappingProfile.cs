@@ -16,7 +16,8 @@ namespace wellness.Service.Services
         {
             CreateMap<UserRegisterRequest, Database.User>();
             //CreateMap<Database.User, User>();
-            CreateMap<Database.User, User>().ForMember(dest=> dest.Role,opt=>opt.MapFrom(src=>src.Role.Name));
+            CreateMap<Database.User, User>().ForMember(dest=> dest.Role,opt=>opt.MapFrom(src=>src.Role.Name))
+                                            .ForMember(dest=>dest.ShiftTime,opt=>opt.MapFrom(src=>src.Role.ShiftTime));
             CreateMap<Category, Database.Category>();
             CreateMap<Database.Category,Category>();
 

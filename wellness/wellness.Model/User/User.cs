@@ -25,5 +25,6 @@ namespace wellness.Models.User
         public byte[]? Picture { get; set; }
         
         public string Role { get; set; }=string.Empty;
+        public string ShiftTime { get; set; } = string.Empty;
     }
 }

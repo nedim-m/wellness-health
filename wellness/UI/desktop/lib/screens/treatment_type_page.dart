@@ -183,30 +183,36 @@ DataRow recentFileDataRow(BuildContext context, var data) {
       DataCell(Text(data.name)),
       DataCell(Text(data.description)),
       DataCell(Text(data.price.toString())),
-      DataCell(Row(
-        children: [
-          ElevatedButton(
-            onPressed: () async {
-              await showDialog(
-                context: context,
-                builder: (context) {
-                  return EditPopUpWidget(
-                    data: data,
+      DataCell(
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return EditPopUpWidget(
+                        data: data,
+                      );
+                    },
                   );
                 },
-              );
-            },
-            child: Text("Edit"),
-          ),
-          SizedBox(width: 8), // Adding some spacing between buttons
-          ElevatedButton(
-            onPressed: () {
-              // Handle delete button click with data.Id
-            },
-            child: Text("Delete"),
-          ),
-        ],
-      )),
+                child: Text("Edit"),
+              ),
+            ),
+            SizedBox(width: 8),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  // Handle delete button press
+                },
+                child: Text("Delete"),
+              ),
+            ),
+          ],
+        ),
+      ),
     ],
   );
 }

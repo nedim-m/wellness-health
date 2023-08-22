@@ -5,10 +5,11 @@ import '../models/treatment_type.dart';
 import '../providers/treatment_type_provider.dart';
 
 class EditPopUpWidget extends StatefulWidget {
-  const EditPopUpWidget(
-      {super.key, required this.data, });
+  const EditPopUpWidget({
+    super.key,
+    required this.data,
+  });
   final TreatmentType data;
-
 
   @override
   State<EditPopUpWidget> createState() => _EditPopUpWidgetState();
@@ -37,18 +38,15 @@ class _EditPopUpWidgetState extends State<EditPopUpWidget> {
   }
 
   void _saveChanges() async {
-  final provider = Provider.of<TreatmentTypeProvider>(context, listen: false);
-  provider.update(
-    widget.data.id,
-    TreatmentType(widget.data.id, name.text, description.text,
-        double.parse(price.text)),
-  );
+    final provider = Provider.of<TreatmentTypeProvider>(context, listen: false);
+    provider.update(
+      widget.data.id,
+      TreatmentType(widget.data.id, name.text, description.text,
+          double.parse(price.text)),
+    );
 
-  Navigator.of(context).pop();
-
- 
-}
-
+    Navigator.of(context).pop();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +77,7 @@ class _EditPopUpWidgetState extends State<EditPopUpWidget> {
         ),
         TextButton(
           onPressed: () {
-            Navigator.of(context).pop(); // Close the dialog
+            Navigator.of(context).pop();
           },
           child: const Text("Cancel"),
         ),

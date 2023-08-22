@@ -13,6 +13,8 @@ public partial class Treatment
 
     public string Description { get; set; } = null!;
 
+    public int Duration { get; set; }
+
     public float Price { get; set; }
 
     public byte[] Picture { get; set; } = null!;

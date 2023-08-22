@@ -1,4 +1,5 @@
 import 'package:desktop/screens/category_page.dart';
+import 'package:desktop/screens/treatment_page.dart';
 import 'package:desktop/screens/treatment_type_page.dart';
 import 'package:desktop/screens/user_page.dart';
 import 'package:desktop/screens/worker_page.dart';
@@ -45,7 +46,7 @@ class _HomepageViewState extends State<HomepageView> {
     PaneItem(
       icon: const Icon(FluentIcons.medical_care),
       title: const Text('Tretmani'),
-      body: const Text("Home5"),
+      body: const TreatmentPageView(),
     ),
     PaneItem(
       icon: const Icon(FluentIcons.payment_card),

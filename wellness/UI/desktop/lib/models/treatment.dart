@@ -9,13 +9,14 @@ class Treatment {
   final String category;
   final String description;
   final double price;
+  final int duration;
   final String? picture;
 
   factory Treatment.fromJson(Map<String, dynamic> json) =>
       _$TreatmentFromJson(json);
 
   Treatment(this.id, this.treatmentType, this.category, this.description,
-      this.price, this.picture);
+      this.price, this.picture, this.duration);
 
   Map<String, dynamic> toJson() => _$TreatmentToJson(this);
 }

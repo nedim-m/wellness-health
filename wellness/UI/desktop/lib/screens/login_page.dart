@@ -15,6 +15,7 @@ class LoginPageView extends StatefulWidget {
 class _LoginPageViewState extends State<LoginPageView> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  bool _loginFailed = false;
 
   Future<void> _login() async {
     final String username = _usernameController.text;
@@ -30,9 +31,10 @@ class _LoginPageViewState extends State<LoginPageView> {
       final Map<String, dynamic> responseData = jsonDecode(response.body);
       setState(() {
         TokenManager.saveToken(responseData['token']);
+        _usernameController.clear();
+        _passwordController.clear();
       });
-
-      //print(TokenManager.getToken());
+      _loginFailed = false;
 
       // ignore: use_build_context_synchronously
       Navigator.push(
@@ -40,8 +42,9 @@ class _LoginPageViewState extends State<LoginPageView> {
         MaterialPageRoute(builder: (context) => const HomepageView()),
       );
     } else {
-      // Handle error
-      print('Login failed');
+      setState(() {
+        _loginFailed = true;
+      });
     }
   }
 
@@ -73,25 +76,49 @@ class _LoginPageViewState extends State<LoginPageView> {
                 ),
               ),
               const SizedBox(height: 32.0),
-              TextField(
-                controller: _usernameController,
-                decoration: const InputDecoration(
-                  labelText: 'Username',
-                  border: OutlineInputBorder(),
+              Container(
+                decoration: BoxDecoration(
+                  border: _loginFailed
+                      ? Border.all(color: Colors.red)
+                      : Border.all(color: Colors.grey), 
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: TextField(
+                  controller: _usernameController,
+                  decoration: const InputDecoration(
+                    labelText: 'Username',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
               ),
               const SizedBox(height: 16.0),
-              TextField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(
-                  labelText: 'Password',
-                  border: OutlineInputBorder(),
+              Container(
+                decoration: BoxDecoration(
+                  border: _loginFailed
+                      ? Border.all(color: Colors.red)
+                      : Border.all(color: Colors.grey), 
+                  borderRadius: BorderRadius.circular(8.0),
+                ),
+                child: TextField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: const InputDecoration(
+                    labelText: 'Password',
+                    border: OutlineInputBorder(),
+                  ),
                 ),
               ),
+              if (_loginFailed)
+                const Padding(
+                  padding: EdgeInsets.only(top: 8.0),
+                  child: Text(
+                    'Invalid username or password',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
               const SizedBox(height: 24.0),
               ElevatedButton(
-                onPressed: () => _login(),
+                onPressed: _login,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.blue,
                 ),

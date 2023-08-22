@@ -15,6 +15,7 @@ namespace wellness.Model.Treatment
         public string Category { get; set; } = string.Empty;
 
         public string Description { get; set; } = string.Empty;
+        public int Duration { get; set; }
 
         public float Price { get; set; }
 

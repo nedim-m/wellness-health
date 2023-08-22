@@ -55,6 +55,7 @@ builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICategoryService,CategoryService>();
 builder.Services.AddTransient<ITreatmentTypeService, TreatmentTypeService>();
+builder.Services.AddTransient<ITreatmentService, TreatmentService>();
 
 
 

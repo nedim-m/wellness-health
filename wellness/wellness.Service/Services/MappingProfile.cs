@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using wellness.Model.Category;
+using wellness.Model.Treatment;
 using wellness.Model.TreatmentType;
 using wellness.Model.User;
 using wellness.Models.User;
@@ -25,6 +26,9 @@ namespace wellness.Service.Services
             CreateMap<TreatmentTypePostRequest, Database.TreatmentType>();
             CreateMap<Database.TreatmentType, TreatmentType>();
 
+            CreateMap<TreatmentPostRequest, Database.Treatment>();
+            CreateMap<Database.Treatment, Treatment>().ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.Name))
+                                                      .ForMember(dest => dest.TreatmentType, opt => opt.MapFrom(src => src.TreatmentType.Name));
         }
     }
 }

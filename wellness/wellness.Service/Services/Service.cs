@@ -25,7 +25,7 @@ namespace wellness.Service.Services
         {
             var query = _context.Set<TDb>().AsQueryable();
 
-            PagedResult<T> result = new PagedResult<T>();
+            PagedResult<T> result = new();
 
 
 

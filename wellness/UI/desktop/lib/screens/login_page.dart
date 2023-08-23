@@ -22,7 +22,7 @@ class _LoginPageViewState extends State<LoginPageView> {
     final String password = _passwordController.text;
 
     final response = await http.post(
-      Uri.parse('https://localhost:7081/api/Auth/login'), // Hard coded url
+      Uri.parse('https://localhost:7081/Auth/login'), // Hard coded url
       body: jsonEncode({'username': username, 'password': password}),
       headers: {'Content-Type': 'application/json'},
     );
@@ -80,7 +80,7 @@ class _LoginPageViewState extends State<LoginPageView> {
                 decoration: BoxDecoration(
                   border: _loginFailed
                       ? Border.all(color: Colors.red)
-                      : Border.all(color: Colors.grey), 
+                      : Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: TextField(
@@ -96,7 +96,7 @@ class _LoginPageViewState extends State<LoginPageView> {
                 decoration: BoxDecoration(
                   border: _loginFailed
                       ? Border.all(color: Colors.red)
-                      : Border.all(color: Colors.grey), 
+                      : Border.all(color: Colors.grey),
                   borderRadius: BorderRadius.circular(8.0),
                 ),
                 child: TextField(

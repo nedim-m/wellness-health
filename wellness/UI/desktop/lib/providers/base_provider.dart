@@ -14,7 +14,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
   BaseProvider(this._endpoint) {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://localhost:7081/api/");
+        defaultValue: "https://localhost:7081/");
   }
 
   Future<SearchResult<T>> get({dynamic filter}) async {
@@ -45,7 +45,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     } else {
       throw Exception("Unknown error");
     }
-    // print("response: ${response.request} ${response.statusCode}, ${response.body}");
+    
   }
 
   Future<T> insert(dynamic request) async {
@@ -90,7 +90,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     } else if (response.statusCode == 401) {
       throw Exception("Unauthorized");
     } else {
-      print(response.body);
+      
       throw Exception("Something bad happened please try again");
     }
   }

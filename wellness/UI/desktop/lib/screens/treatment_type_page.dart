@@ -198,16 +198,14 @@ DataRow recentFileDataRow(BuildContext context, var data) {
                     },
                   );
                 },
-                child: Text("Edit"),
+                child: const Text("Edit"),
               ),
             ),
-            SizedBox(width: 8),
+            const SizedBox(width: 8),
             Expanded(
               child: ElevatedButton(
-                onPressed: () {
-                  // Handle delete button press
-                },
-                child: Text("Delete"),
+                onPressed: () {},
+                child: const Text("Delete"),
               ),
             ),
           ],

@@ -9,8 +9,7 @@ using wellness.Service.IServices;
 namespace wellness.Controllers
 {
 
-    [Route("api/[controller]")]
-    [ApiController]
+  
     public class UserController : CrudController<Models.User.User, UserSearchObj, UserRegisterRequest, UserUpdateRequest>
     {
         public UserController(ILogger<BaseController<User, UserSearchObj>> logger, IUserService service) : base(logger, service)

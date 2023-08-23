@@ -7,8 +7,8 @@ using wellness.Service.IServices;
 
 namespace wellness.Controllers
 {
-    [Route("api/[controller]")]
     [ApiController]
+    [Route("[controller]")]
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;

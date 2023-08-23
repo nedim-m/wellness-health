@@ -9,8 +9,7 @@ using wellness.Service.IServices;
 namespace wellness.Controllers
 {
 
-    [Route("api/[controller]")]
-    [ApiController]
+  
     public class TreatmentTypeController : CrudController<Model.TreatmentType.TreatmentType, BaseSearchObject, Model.TreatmentType.TreatmentTypePostRequest, Model.TreatmentType.TreatmentTypePostRequest>
     {
         public TreatmentTypeController(ILogger<BaseController<Model.TreatmentType.TreatmentType, BaseSearchObject>> logger, ITreatmentTypeService service) : base(logger, service)

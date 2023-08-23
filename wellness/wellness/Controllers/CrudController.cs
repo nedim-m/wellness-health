@@ -6,8 +6,6 @@ using wellness.Service.IServices;
 namespace wellness.Controllers
 {
 
-    [ApiController]
-    [Route("[controller]")]
     public class CrudController<T, TSearch, TInsert, TUpdate> : BaseController<T, TSearch> where T : class where TSearch : class where TInsert : class where TUpdate : class
     {
         protected new readonly ICrudService<T, TSearch, TInsert, TUpdate> _service;

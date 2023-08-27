@@ -1,4 +1,5 @@
 import 'package:desktop/providers/category_provider.dart';
+import 'package:desktop/providers/membership_type.provider.dart';
 import 'package:desktop/providers/treatment_type_provider.dart';
 import 'package:desktop/providers/user_provider.dart';
 import 'package:desktop/screens/login_page.dart';
@@ -12,6 +13,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => CategoryProvider()),
       ChangeNotifierProvider(create: (_) => UserProvider()),
       ChangeNotifierProvider(create: (_) => TreatmentTypeProvider()),
+      ChangeNotifierProvider(create: (_) => MembershipTypeProvider()),
     ],
     child: const MyApp(),
   ));

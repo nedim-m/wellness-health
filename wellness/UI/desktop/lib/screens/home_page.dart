@@ -5,6 +5,8 @@ import 'package:desktop/screens/user_page.dart';
 import 'package:desktop/screens/worker_page.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 
+import 'membership_type.dart';
+
 class HomepageView extends StatefulWidget {
   const HomepageView({super.key});
 
@@ -51,7 +53,7 @@ class _HomepageViewState extends State<HomepageView> {
     PaneItem(
       icon: const Icon(FluentIcons.payment_card),
       title: const Text('Članarina'),
-      body: const Text("Home6"),
+      body: const MembershipTypePageView(),
     ),
     PaneItemExpander(
       title: const Text('Izvjestaj'),

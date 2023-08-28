@@ -1,23 +1,22 @@
-import 'package:desktop/models/membership_type.dart';
-import 'package:desktop/providers/membership_type.provider.dart';
+import 'package:desktop/models/record.dart';
+import 'package:desktop/providers/record_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
 
-class MembershipTypePageView extends StatefulWidget {
-  const MembershipTypePageView({super.key});
+class RecordPageView extends StatefulWidget {
+  const RecordPageView({super.key});
 
   @override
-  State<MembershipTypePageView> createState() => _MembershipTypePageViewState();
+  State<RecordPageView> createState() => _RecordPageViewState();
 }
 
-class _MembershipTypePageViewState extends State<MembershipTypePageView> {
-  final MembershipTypeProvider membershipTypeProvider =
-      MembershipTypeProvider();
-  List<MembershipType> filterData = [];
+class _RecordPageViewState extends State<RecordPageView> {
+  final RecordProvider _recordProvider = RecordProvider();
+  List<Records> filterData = [];
 
-  SearchResult<MembershipType> myData = SearchResult<MembershipType>();
-  MembershipType? selectedMembershipType;
+  SearchResult<Records> myData = SearchResult<Records>();
+  TextEditingController controller = TextEditingController();
 
   @override
   void initState() {
@@ -25,17 +24,10 @@ class _MembershipTypePageViewState extends State<MembershipTypePageView> {
     fetchData();
   }
 
-  Future<void> fetchData() async {
-    myData = await membershipTypeProvider.get();
+  Future fetchData() async {
+    myData = await _recordProvider.get();
     setState(() {
       filterData = myData.result;
-    });
-  }
-
-  void filterMembershipTypes(String value) {
-    setState(() {
-      myData.result =
-          filterData.where((element) => element.name.contains(value)).toList();
     });
   }
 
@@ -53,7 +45,7 @@ class _MembershipTypePageViewState extends State<MembershipTypePageView> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Text(
-                    "Odaberite tip članarine: ",
+                    "Unesite ime korisnika: ",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
@@ -62,30 +54,31 @@ class _MembershipTypePageViewState extends State<MembershipTypePageView> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
                       width: 250,
                       height: 40,
                       decoration: BoxDecoration(
                         border: Border.all(color: Colors.grey),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: DropdownButton<MembershipType>(
-                        value: selectedMembershipType,
+                      child: TextField(
+                        controller: controller,
+                        decoration: const InputDecoration(
+                          focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(color: Colors.blue)),
+                          contentPadding:
+                              EdgeInsets.symmetric(vertical: 8, horizontal: 10),
+                          border: InputBorder.none,
+                          prefixIcon: Icon(Icons.search),
+                        ),
+                        style: const TextStyle(fontSize: 14),
                         onChanged: (value) {
                           setState(() {
-                            selectedMembershipType = value;
-                            filterMembershipTypes(value!.name);
+                            myData.result = filterData
+                                .where((element) =>
+                                    element.firstName.contains(value))
+                                .toList();
                           });
                         },
-                        items: filterData
-                            .map(
-                              (membershipType) =>
-                                  DropdownMenuItem<MembershipType>(
-                                value: membershipType,
-                                child: Text(membershipType.name),
-                              ),
-                            )
-                            .toList(),
                       ),
                     ),
                   ),
@@ -99,7 +92,7 @@ class _MembershipTypePageViewState extends State<MembershipTypePageView> {
                 columns: const [
                   DataColumn(
                     label: Text(
-                      "Naziv",
+                      "Ime",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 15,
@@ -108,7 +101,7 @@ class _MembershipTypePageViewState extends State<MembershipTypePageView> {
                   ),
                   DataColumn(
                     label: Text(
-                      "Opis",
+                      "Prezime",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 15,
@@ -117,7 +110,25 @@ class _MembershipTypePageViewState extends State<MembershipTypePageView> {
                   ),
                   DataColumn(
                     label: Text(
-                      "Cijena",
+                      "Korisničko ime",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      "Broj telefona",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
+                      "Vrijeme ulaska",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
                         fontSize: 15,
@@ -169,9 +180,11 @@ class RowSource extends DataTableSource {
 DataRow recentFileDataRow(var data) {
   return DataRow(
     cells: [
-      DataCell(Text(data.name)),
-      DataCell(Text(data.description)),
-      DataCell(Text(data.price.toString())),
+      DataCell(Text(data.firstName)),
+      DataCell(Text(data.lastName)),
+      DataCell(Text(data.userName)),
+      DataCell(Text(data.phone)),
+      DataCell(Text(data.entryDate.toString())),
     ],
   );
 }

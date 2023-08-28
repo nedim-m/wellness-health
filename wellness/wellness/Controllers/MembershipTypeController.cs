@@ -1,7 +1,6 @@
 ﻿using wellness.Model;
 using wellness.Model.MembershipType;
 using wellness.Service.IServices;
-using wellness.Service.Services;
 
 namespace wellness.Controllers
 {

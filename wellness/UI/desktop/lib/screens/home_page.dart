@@ -1,4 +1,5 @@
 import 'package:desktop/screens/category_page.dart';
+import 'package:desktop/screens/record_page.dart';
 import 'package:desktop/screens/treatment_page.dart';
 import 'package:desktop/screens/treatment_type_page.dart';
 import 'package:desktop/screens/user_page.dart';
@@ -33,7 +34,7 @@ class _HomepageViewState extends State<HomepageView> {
     PaneItem(
       icon: const Icon(FluentIcons.temporary_user),
       title: const Text('Trenutno prisutni'),
-      body: const Text("Home2"),
+      body: const RecordPageView(),
     ),
     PaneItem(
       icon: const Icon(FluentIcons.service_activity),

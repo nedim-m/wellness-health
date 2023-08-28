@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using wellness.Model;
 using wellness.Model.MembershipType;
+using wellness.Service.IServices;
 
 namespace wellness.Service.Services
 {

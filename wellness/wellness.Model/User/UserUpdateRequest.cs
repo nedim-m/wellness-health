@@ -17,9 +17,9 @@ namespace wellness.Models.User
         public string Email { get; set; } = null!;
         [Required]
         public string UserName { get; set; } = null!;
-        [Required]
+     
         public string Password { get; set; } = null!;
-        [Required]
+   
         public string ConfrimPassword { get; set; } = null!;
         public string? Phone { get; set; }
     }

@@ -4,7 +4,7 @@ import 'package:desktop/providers/treatment_type_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
-import '../widgets/edit_widget.dart';
+import '../popups/treatment_type_edit_popup.dart';
 
 class TreatmentTypePageView extends StatefulWidget {
   const TreatmentTypePageView({super.key});
@@ -192,7 +192,7 @@ DataRow recentFileDataRow(BuildContext context, var data) {
                   await showDialog(
                     context: context,
                     builder: (context) {
-                      return EditPopUpWidget(
+                      return TreatmentEditPopUpWidget(
                         data: data,
                       );
                     },

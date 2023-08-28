@@ -3,7 +3,7 @@ import 'package:desktop/providers/treatment_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
-import '../widgets/treatment_detail_widget.dart';
+import '../popups/treatment_detail_widget.dart';
 
 class TreatmentPageView extends StatefulWidget {
   const TreatmentPageView({super.key});

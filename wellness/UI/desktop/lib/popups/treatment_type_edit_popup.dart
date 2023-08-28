@@ -4,18 +4,19 @@ import 'package:provider/provider.dart';
 import '../models/treatment_type.dart';
 import '../providers/treatment_type_provider.dart';
 
-class EditPopUpWidget extends StatefulWidget {
-  const EditPopUpWidget({
+class TreatmentEditPopUpWidget extends StatefulWidget {
+  const TreatmentEditPopUpWidget({
     super.key,
     required this.data,
   });
   final TreatmentType data;
 
   @override
-  State<EditPopUpWidget> createState() => _EditPopUpWidgetState();
+  State<TreatmentEditPopUpWidget> createState() =>
+      _TreatmentEditPopUpWidgetState();
 }
 
-class _EditPopUpWidgetState extends State<EditPopUpWidget> {
+class _TreatmentEditPopUpWidgetState extends State<TreatmentEditPopUpWidget> {
   late TextEditingController name;
   late TextEditingController description;
   late TextEditingController price;

@@ -4,7 +4,7 @@ import 'package:desktop/providers/treatment_type_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
-import '../popups/treatment_type_edit_popup.dart';
+import '../popups/treatment_type_upsert_popup.dart';
 import '../widgets/bottom_right_button.dart';
 
 class TreatmentTypePageView extends StatefulWidget {
@@ -138,7 +138,19 @@ class _TreatmentTypePageViewState extends State<TreatmentTypePageView> {
                 rowsPerPage: 5,
               ),
             ),
-           const BottomRightButton(buttonText: "Dodaj")
+            BottomRightButton(
+              buttonText: "Dodaj",
+              onPressed: () async {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return const TreatmentEditPopUpWidget(
+                      edit: false,
+                    );
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -196,6 +208,7 @@ DataRow recentFileDataRow(BuildContext context, var data) {
                     builder: (context) {
                       return TreatmentEditPopUpWidget(
                         data: data,
+                        edit: true,
                       );
                     },
                   );

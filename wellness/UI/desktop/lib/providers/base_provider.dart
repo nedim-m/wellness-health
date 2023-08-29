@@ -45,7 +45,6 @@ abstract class BaseProvider<T> with ChangeNotifier {
     } else {
       throw Exception("Unknown error");
     }
-    
   }
 
   Future<T> insert(dynamic request) async {
@@ -90,7 +89,6 @@ abstract class BaseProvider<T> with ChangeNotifier {
     } else if (response.statusCode == 401) {
       throw Exception("Unauthorized");
     } else {
-      
       throw Exception("Something bad happened please try again");
     }
   }

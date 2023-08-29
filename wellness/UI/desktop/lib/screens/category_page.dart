@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 
 import '../models/category.dart';
 import '../models/search_result.dart';
-import '../popups/user_edit_popup.dart';
+import '../popups/category_upsert_popup.dart';
+
 import '../widgets/bottom_right_button.dart';
 
 class CategoryPageView extends StatefulWidget {
@@ -94,15 +95,6 @@ class _CategoryPageViewState extends State<CategoryPageView> {
                 columns: const [
                   DataColumn(
                     label: Text(
-                      "Id",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ),
-                  DataColumn(
-                    label: Text(
                       "Naziv",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
@@ -145,7 +137,19 @@ class _CategoryPageViewState extends State<CategoryPageView> {
                 rowsPerPage: 5,
               ),
             ),
-            const BottomRightButton(buttonText: "Dodaj")
+            BottomRightButton(
+              buttonText: "Dodaj",
+              onPressed: () async {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return const CategoryEditPopUpWidget(
+                      edit: false,
+                    );
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -185,7 +189,6 @@ class RowSource extends DataTableSource {
 DataRow recentFileDataRow(BuildContext context, var data) {
   return DataRow(
     cells: [
-      DataCell(Text(data.id.toString())),
       DataCell(Text(data.name ?? "Name")),
       DataCell(Text(data.description)),
       DataCell(
@@ -202,8 +205,9 @@ DataRow recentFileDataRow(BuildContext context, var data) {
                   showDialog(
                     context: context,
                     builder: (context) {
-                      return UserEditPopUpWidget(
+                      return CategoryEditPopUpWidget(
                         data: data,
+                        edit: true,
                       );
                     },
                   );

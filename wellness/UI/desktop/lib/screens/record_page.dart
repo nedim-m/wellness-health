@@ -1,6 +1,6 @@
 import 'package:desktop/models/record.dart';
 import 'package:desktop/providers/record_provider.dart';
-import 'package:desktop/widgets/bottom_right_button.dart';
+
 import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
@@ -47,7 +47,7 @@ class _RecordPageViewState extends State<RecordPageView> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   const Text(
-                    "Unesite ime korisnika: ",
+                    "Unesite ime prisutnog korisnika: ",
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: 15,
@@ -155,7 +155,7 @@ class _RecordPageViewState extends State<RecordPageView> {
                 rowsPerPage: 5,
               ),
             ),
-            const BottomRightButton(buttonText: "Evidentiraj ulaz")
+            //const BottomRightButton(buttonText: "Evidentiraj ulaz")
           ],
         ),
       ),

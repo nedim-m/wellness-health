@@ -7,9 +7,11 @@ import '../providers/treatment_type_provider.dart';
 class TreatmentEditPopUpWidget extends StatefulWidget {
   const TreatmentEditPopUpWidget({
     super.key,
-    required this.data,
+    this.data,
+    required this.edit,
   });
-  final TreatmentType data;
+  final TreatmentType? data;
+  final bool edit;
 
   @override
   State<TreatmentEditPopUpWidget> createState() =>
@@ -17,16 +19,17 @@ class TreatmentEditPopUpWidget extends StatefulWidget {
 }
 
 class _TreatmentEditPopUpWidgetState extends State<TreatmentEditPopUpWidget> {
-  late TextEditingController name;
-  late TextEditingController description;
-  late TextEditingController price;
+  TextEditingController name = TextEditingController();
+  TextEditingController description = TextEditingController();
+  TextEditingController price = TextEditingController();
 
   @override
   void initState() {
-    name = TextEditingController(text: widget.data.name);
-    description = TextEditingController(text: widget.data.description);
-    price = TextEditingController(text: widget.data.price.toString());
-
+    if (widget.edit == true && widget.data != null) {
+      name = TextEditingController(text: widget.data!.name);
+      description = TextEditingController(text: widget.data!.description);
+      price = TextEditingController(text: widget.data!.price.toString());
+    }
     super.initState();
   }
 
@@ -40,11 +43,17 @@ class _TreatmentEditPopUpWidgetState extends State<TreatmentEditPopUpWidget> {
 
   void _saveChanges() async {
     final provider = Provider.of<TreatmentTypeProvider>(context, listen: false);
-    provider.update(
-      widget.data.id,
-      TreatmentType(widget.data.id, name.text, description.text,
-          double.parse(price.text)),
-    );
+    if (widget.edit == true && widget.data != null) {
+      provider.update(
+        widget.data!.id,
+        TreatmentType(widget.data!.id, name.text, description.text,
+            double.parse(price.text)),
+      );
+    } else {
+      provider.insert(
+        TreatmentType(0, name.text, description.text, double.parse(price.text)),
+      );
+    }
 
     Navigator.of(context).pop();
   }
@@ -52,7 +61,7 @@ class _TreatmentEditPopUpWidgetState extends State<TreatmentEditPopUpWidget> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Edit Item"),
+      title: widget.edit ? const Text("Edit Item") : const Text("Add Item"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [

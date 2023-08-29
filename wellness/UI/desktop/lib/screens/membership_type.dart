@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
 import '../popups/user_edit_popup.dart';
-import '../widgets/bottom_right_button.dart';
+
 
 class MembershipTypePageView extends StatefulWidget {
   const MembershipTypePageView({super.key});
@@ -143,7 +143,7 @@ class _MembershipTypePageViewState extends State<MembershipTypePageView> {
                 rowsPerPage: 5,
               ),
             ),
-            const BottomRightButton(buttonText: "Dodaj")
+            //const BottomRightButton(buttonText: "Dodaj")
           ],
         ),
       ),

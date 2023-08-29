@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import '../models/search_result.dart';
 import '../models/user.dart';
 import '../popups/user_edit_popup.dart';
-import '../widgets/bottom_right_button.dart';
 
 class WorkerPageView extends StatefulWidget {
   const WorkerPageView({super.key});
@@ -147,7 +146,7 @@ class _WorkerPageViewState extends State<WorkerPageView> {
                 rowsPerPage: 5,
               ),
             ),
-            const BottomRightButton(buttonText: "Dodaj")
+            //const BottomRightButton(buttonText: "Dodaj")
           ],
         ),
       ),

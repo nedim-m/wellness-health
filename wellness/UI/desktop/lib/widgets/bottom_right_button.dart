@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 class BottomRightButton extends StatelessWidget {
-  const BottomRightButton({super.key, required this.buttonText});
+  const BottomRightButton(
+      {super.key, required this.buttonText, required this.onPressed});
   final String buttonText;
+  final VoidCallback onPressed;
 
   @override
   Widget build(BuildContext context) {
@@ -11,7 +13,7 @@ class BottomRightButton extends StatelessWidget {
       child: Align(
         alignment: Alignment.bottomRight,
         child: ElevatedButton(
-          onPressed: () {},
+          onPressed: onPressed,
           child: Text(buttonText),
         ),
       ),

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import '../models/search_result.dart';
 import '../models/user.dart';
 import '../popups/user_edit_popup.dart';
-import '../widgets/bottom_right_button.dart';
+
 
 class UserPageView extends StatefulWidget {
   const UserPageView({super.key});
@@ -156,7 +156,7 @@ class _UserPageViewState extends State<UserPageView> {
                 rowsPerPage: 5,
               ),
             ),
-            const BottomRightButton(buttonText: "Dodaj")
+            //const BottomRightButton(buttonText: "Dodaj")
           ],
         ),
       ),

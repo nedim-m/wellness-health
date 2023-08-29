@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
 import '../popups/treatment_detail_widget.dart';
-import '../widgets/bottom_right_button.dart';
+
 
 class TreatmentPageView extends StatefulWidget {
   const TreatmentPageView({super.key});
@@ -200,7 +200,7 @@ class _TreatmentPageViewState extends State<TreatmentPageView> {
                 rowsPerPage: 5,
               ),
             ),
-            const BottomRightButton(buttonText: "Dodaj")
+            //const BottomRightButton(buttonText: "Dodaj")
           ],
         ),
       ),

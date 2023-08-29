@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
 import '../popups/treatment_type_edit_popup.dart';
+import '../widgets/bottom_right_button.dart';
 
 class TreatmentTypePageView extends StatefulWidget {
   const TreatmentTypePageView({super.key});
@@ -134,9 +135,10 @@ class _TreatmentTypePageViewState extends State<TreatmentTypePageView> {
                   myData: myData.result,
                   context: context,
                 ),
-                rowsPerPage: 8,
+                rowsPerPage: 5,
               ),
             ),
+           const BottomRightButton(buttonText: "Dodaj")
           ],
         ),
       ),

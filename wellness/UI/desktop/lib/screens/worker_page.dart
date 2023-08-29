@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
 import '../models/user.dart';
+import '../popups/user_edit_popup.dart';
+import '../widgets/bottom_right_button.dart';
 
 class WorkerPageView extends StatefulWidget {
   const WorkerPageView({super.key});
@@ -127,14 +129,25 @@ class _WorkerPageViewState extends State<WorkerPageView> {
                       ),
                     ),
                   ),
+                  DataColumn(
+                    label: Text(
+                      "Akcija",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
                 ],
                 source: RowSource(
                   count: myData.result.length,
                   myData: myData.result,
+                  context: context,
                 ),
-                rowsPerPage: 8,
+                rowsPerPage: 5,
               ),
             ),
+            const BottomRightButton(buttonText: "Dodaj")
           ],
         ),
       ),
@@ -145,15 +158,17 @@ class _WorkerPageViewState extends State<WorkerPageView> {
 class RowSource extends DataTableSource {
   final dynamic myData;
   final int count;
+  final BuildContext context;
   RowSource({
     required this.myData,
     required this.count,
+    required this.context,
   });
 
   @override
   DataRow? getRow(int index) {
     if (index < rowCount) {
-      return recentFileDataRow(myData![index]);
+      return recentFileDataRow(context, myData![index]);
     } else {
       return null;
     }
@@ -169,7 +184,7 @@ class RowSource extends DataTableSource {
   int get selectedRowCount => 0;
 }
 
-DataRow recentFileDataRow(var data) {
+DataRow recentFileDataRow(BuildContext context, var data) {
   return DataRow(
     cells: [
       DataCell(Text(data.firstName)),
@@ -178,6 +193,27 @@ DataRow recentFileDataRow(var data) {
       DataCell(
         Text(
           data.status ? "DA" : "NE",
+        ),
+      ),
+      DataCell(
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return UserEditPopUpWidget(
+                        data: data,
+                      );
+                    },
+                  );
+                },
+                child: const Text("Edit"),
+              ),
+            ),
+          ],
         ),
       ),
     ],

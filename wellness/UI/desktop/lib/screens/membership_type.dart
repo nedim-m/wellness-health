@@ -3,6 +3,8 @@ import 'package:desktop/providers/membership_type.provider.dart';
 import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
+import '../popups/user_edit_popup.dart';
+import '../widgets/bottom_right_button.dart';
 
 class MembershipTypePageView extends StatefulWidget {
   const MembershipTypePageView({super.key});
@@ -62,7 +64,7 @@ class _MembershipTypePageViewState extends State<MembershipTypePageView> {
                   const SizedBox(width: 10),
                   Expanded(
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 10),
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       width: 250,
                       height: 40,
                       decoration: BoxDecoration(
@@ -124,14 +126,24 @@ class _MembershipTypePageViewState extends State<MembershipTypePageView> {
                       ),
                     ),
                   ),
+                  DataColumn(
+                    label: Text(
+                      "Akcija",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
                 ],
                 source: RowSource(
-                  count: myData.result.length,
-                  myData: myData.result,
-                ),
-                rowsPerPage: 8,
+                    count: myData.result.length,
+                    myData: myData.result,
+                    context: context),
+                rowsPerPage: 5,
               ),
             ),
+            const BottomRightButton(buttonText: "Dodaj")
           ],
         ),
       ),
@@ -142,15 +154,13 @@ class _MembershipTypePageViewState extends State<MembershipTypePageView> {
 class RowSource extends DataTableSource {
   final dynamic myData;
   final int count;
-  RowSource({
-    required this.myData,
-    required this.count,
-  });
+  final BuildContext context;
+  RowSource({required this.myData, required this.count, required this.context});
 
   @override
   DataRow? getRow(int index) {
     if (index < rowCount) {
-      return recentFileDataRow(myData![index]);
+      return recentFileDataRow(context, myData![index]);
     } else {
       return null;
     }
@@ -166,12 +176,33 @@ class RowSource extends DataTableSource {
   int get selectedRowCount => 0;
 }
 
-DataRow recentFileDataRow(var data) {
+DataRow recentFileDataRow(BuildContext context, data) {
   return DataRow(
     cells: [
       DataCell(Text(data.name)),
       DataCell(Text(data.description)),
       DataCell(Text(data.price.toString())),
+      DataCell(
+        Row(
+          children: [
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () async {
+                  await showDialog(
+                    context: context,
+                    builder: (context) {
+                      return UserEditPopUpWidget(
+                        data: data,
+                      );
+                    },
+                  );
+                },
+                child: const Text("Edit"),
+              ),
+            ),
+          ],
+        ),
+      ),
     ],
   );
 }

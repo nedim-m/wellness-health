@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
 import '../popups/treatment_detail_widget.dart';
+import '../widgets/bottom_right_button.dart';
 
 class TreatmentPageView extends StatefulWidget {
   const TreatmentPageView({super.key});
@@ -196,9 +197,10 @@ class _TreatmentPageViewState extends State<TreatmentPageView> {
                     count: myData.result.length,
                     myData: myData.result,
                     context: context),
-                rowsPerPage: 8,
+                rowsPerPage: 5,
               ),
             ),
+            const BottomRightButton(buttonText: "Dodaj")
           ],
         ),
       ),
@@ -258,6 +260,13 @@ DataRow recentFileDataRow(BuildContext context, var data) {
                   );
                 },
                 child: const Text("Details"),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {},
+                child: const Text("Edit"),
               ),
             ),
             const SizedBox(width: 8),

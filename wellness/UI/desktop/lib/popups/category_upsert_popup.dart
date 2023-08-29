@@ -20,14 +20,14 @@ class CategoryEditPopUpWidget extends StatefulWidget {
 class _CategoryEditPopUpWidgetState extends State<CategoryEditPopUpWidget> {
   TextEditingController name = TextEditingController();
   TextEditingController description = TextEditingController();
-  bool selectedStatus = false; // Holds the selected status value
+  bool selectedStatus = false; 
 
   @override
   void initState() {
     if (widget.edit == true && widget.data != null) {
       name = TextEditingController(text: widget.data!.name);
       description = TextEditingController(text: widget.data!.description);
-      selectedStatus = widget.data!.status; // Set the initial status value
+      selectedStatus = widget.data!.status; 
     }
     super.initState();
   }

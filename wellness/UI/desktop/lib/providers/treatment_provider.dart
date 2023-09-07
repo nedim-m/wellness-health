@@ -8,4 +8,6 @@ class TreatmentProvider extends BaseProvider<Treatment> {
   Treatment fromJson(data) {
     return Treatment.fromJson(data);
   }
+  
+  
 }

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
 import '../popups/treatment_detail_widget.dart';
-
+import '../popups/treatment_upsert_popup.dart';
 
 class TreatmentPageView extends StatefulWidget {
   const TreatmentPageView({super.key});
@@ -265,7 +265,17 @@ DataRow recentFileDataRow(BuildContext context, var data) {
             const SizedBox(width: 8),
             Expanded(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return TreatmenUpsertPopUpWidget(
+                        data: data,
+                        edit: true,
+                      );
+                    },
+                  );
+                },
                 child: const Text("Edit"),
               ),
             ),

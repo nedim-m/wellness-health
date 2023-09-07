@@ -69,6 +69,9 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var headers = createJwtHeaders(_token!);
 
     var jsonRequest = jsonEncode(request);
+
+    print("Ispis iz jsonRequesta: $jsonRequest");
+
     var response = await http.put(uri, headers: headers, body: jsonRequest);
 
     if (isValidResponse(response)) {

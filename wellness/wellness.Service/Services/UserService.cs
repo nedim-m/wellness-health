@@ -1,8 +1,11 @@
 ﻿using AutoMapper;
+using Azure.Core;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using wellness.Model;
@@ -18,7 +21,7 @@ namespace wellness.Service.Services
         private readonly IMapper _mapper;
         private readonly DbWellnessContext _context;
 
-        
+
         public UserService(IMapper mapper, DbWellnessContext context) : base(mapper, context)
         {
             _mapper=mapper;
@@ -26,7 +29,7 @@ namespace wellness.Service.Services
         }
 
 
-      
+
 
         public override async Task<PagedResult<Models.User.User>> Get(UserSearchObj? search = null)
         {
@@ -49,12 +52,7 @@ namespace wellness.Service.Services
                 }
             }
 
-
-
-
-
-
-            var list = await filteredEntity.ToListAsync(); 
+            var list = await filteredEntity.ToListAsync();
 
             var mappedList = _mapper.Map<List<Models.User.User>>(list);
 
@@ -68,7 +66,50 @@ namespace wellness.Service.Services
         }
 
 
+        public override async Task<Models.User.User> Update(int id, UserUpdateRequest update)
+        {
+            if (update.Password.IsNullOrEmpty() && update.ConfrimPassword.IsNullOrEmpty())
+            {
+                update.Password="";
+                update.ConfrimPassword="";
+                return await base.Update(id, update);
+            }
 
+
+            var userToUpdate = await _context.Users.FindAsync(id);
+            if (userToUpdate == null)
+            {
+                return null;
+            }
+
+            if (update.Password!=update.ConfrimPassword)
+            {
+                return null;
+            }
+            CreatePasswordHash(update.Password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            userToUpdate.PasswordHash= passwordHash;
+            userToUpdate.PasswordSalt=passwordSalt;
+
+            _mapper.Map(update, userToUpdate);
+
+
+
+            //_context.Update(userToUpdate);
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<Models.User.User>(userToUpdate);
+
+            // return _mapper.Map<Models.User.User>(userToUpdate);
+        }
+
+
+        private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
+        {
+            using var hmac = new HMACSHA512();
+            passwordSalt = hmac.Key;
+            passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
+        }
 
 
 

@@ -46,15 +46,13 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
 
   void _saveChanges() async {
     final provider = Provider.of<UserProvider>(context, listen: false);
-    provider.update(
+    provider.updateUser(
       widget.data.id,
-      (
-        firstName.text,
-        lastName.text,
-        email.text,
-        userName.text,
-        phone.text,
-      ),
+      firstName.text,
+      lastName.text,
+      email.text,
+      userName.text,
+      phone.text,
     );
 
     Navigator.of(context).pop();

@@ -25,7 +25,8 @@ namespace wellness.Controllers
             return await _service.Insert(insert);
         }
 
-        [HttpPut("{id}"), Authorize(Roles = "Administrator")]
+        //[HttpPut("{id}"), Authorize(Roles = "Administrator")]
+        [HttpPut("{id}")]
         public virtual async Task<T> Update(int id, [FromBody] TUpdate update)
         {
             return await _service.Update(id, update);

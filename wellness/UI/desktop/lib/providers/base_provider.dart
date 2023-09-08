@@ -9,8 +9,11 @@ import '../utils/token_store.dart';
 
 abstract class BaseProvider<T> with ChangeNotifier {
   static String? _baseUrl;
+  get baseUrl => _baseUrl;
   final String _endpoint;
+  get endpoint => _endpoint;
   final _token = TokenManager.getToken();
+  get token => _token;
 
   BaseProvider(this._endpoint) {
     _baseUrl = const String.fromEnvironment("baseUrl",

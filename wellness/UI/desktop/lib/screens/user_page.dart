@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
 import '../models/user.dart';
-import '../popups/user_edit_popup.dart';
+import '../popups/user_upsert_popup.dart';
+import '../widgets/bottom_right_button.dart';
 
 
 class UserPageView extends StatefulWidget {
@@ -156,7 +157,19 @@ class _UserPageViewState extends State<UserPageView> {
                 rowsPerPage: 5,
               ),
             ),
-            //const BottomRightButton(buttonText: "Dodaj")
+             BottomRightButton(
+              buttonText: "Dodaj",
+              onPressed: () async {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return const UserEditPopUpWidget(
+                      edit: false,
+                    );
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -216,6 +229,7 @@ DataRow recentFileDataRow(BuildContext context, var data) {
                     builder: (context) {
                       return UserEditPopUpWidget(
                         data: data,
+                        edit: true,
                       );
                     },
                   );

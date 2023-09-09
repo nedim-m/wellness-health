@@ -4,7 +4,7 @@ import 'package:desktop/providers/record_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
-import '../popups/user_edit_popup.dart';
+import '../popups/user_upsert_popup.dart';
 
 class RecordPageView extends StatefulWidget {
   const RecordPageView({super.key});
@@ -210,6 +210,7 @@ DataRow recentFileDataRow(BuildContext context, data) {
                     context: context,
                     builder: (context) {
                       return UserEditPopUpWidget(
+                        edit:false,
                         data: data,
                       );
                     },

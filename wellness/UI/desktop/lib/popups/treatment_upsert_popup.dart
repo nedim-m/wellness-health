@@ -1,16 +1,12 @@
 import 'package:desktop/models/treatment_type.dart';
 import 'package:desktop/providers/category_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../models/category.dart';
 import '../models/search_result.dart';
 import '../models/treatment.dart';
 
-import '../models/treatment_upsert.dart';
-
 import '../providers/treatment_type_provider.dart';
-import '../providers/treatment_upsert_provider.dart';
 
 class TreatmenUpsertPopUpWidget extends StatefulWidget {
   const TreatmenUpsertPopUpWidget({
@@ -67,7 +63,7 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
   }
 
   void _saveChanges() async {
-    final provider =
+    /*final provider =
         Provider.of<TreatmentUpsertProvider>(context, listen: false);
     if (widget.edit == true && widget.data != null) {
       provider.update(
@@ -89,8 +85,8 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
           int.parse(duration.text),
           double.parse(price.text),
         ),
-      );
-    }
+      )
+    }*/
 
     Navigator.of(context).pop();
   }

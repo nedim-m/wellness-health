@@ -1,9 +1,10 @@
+
 import 'package:desktop/providers/category_provider.dart';
 import 'package:desktop/providers/membership_type.provider.dart';
 import 'package:desktop/providers/record_provider.dart';
 import 'package:desktop/providers/treatment_provider.dart';
 import 'package:desktop/providers/treatment_type_provider.dart';
-import 'package:desktop/providers/treatment_upsert_provider.dart';
+
 import 'package:desktop/providers/user_provider.dart';
 import 'package:desktop/screens/login_page.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -19,7 +20,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => MembershipTypeProvider()),
       ChangeNotifierProvider(create: (_) => RecordProvider()),
       ChangeNotifierProvider(create: (_) => TreatmentProvider()),
-      ChangeNotifierProvider(create: (_) => TreatmentUpsertProvider()),
+
     ],
     child: const MyApp(),
   ));

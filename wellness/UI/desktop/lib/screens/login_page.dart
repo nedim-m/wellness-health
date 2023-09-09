@@ -22,6 +22,7 @@ class _LoginPageViewState extends State<LoginPageView> {
     final String password = _passwordController.text;
 
     final response = await http.post(
+     
       Uri.parse('https://localhost:7081/Auth/login'), // Hard coded url
       body: jsonEncode({'username': username, 'password': password}),
       headers: {'Content-Type': 'application/json'},

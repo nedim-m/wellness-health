@@ -95,13 +95,38 @@ namespace wellness.Service.Services
 
 
 
-            //_context.Update(userToUpdate);
+            
             await _context.SaveChangesAsync();
 
             return _mapper.Map<Models.User.User>(userToUpdate);
 
-            // return _mapper.Map<Models.User.User>(userToUpdate);
         }
+
+
+        public override async Task<Models.User.User> Insert(UserRegisterRequest insert)
+        {
+            if (insert.Password!=insert.ConfrimPassword)
+            {
+                return null;
+            }
+            CreatePasswordHash(insert.Password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            var user = _mapper.Map<Database.User>(insert);
+            user.PasswordHash= passwordHash;
+            user.PasswordSalt=passwordSalt;
+            user.RoleId=2;
+            _context.Users.Add(user);
+
+
+
+            await _context.SaveChangesAsync();
+
+
+
+
+            return _mapper.Map<Models.User.User>(user);
+        }
+
 
 
         private static void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
@@ -110,6 +135,8 @@ namespace wellness.Service.Services
             passwordSalt = hmac.Key;
             passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
         }
+
+
 
 
 

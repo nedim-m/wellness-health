@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
 import '../models/user.dart';
-import '../popups/user_edit_popup.dart';
+
+import '../popups/worker_upsert_popup.dart';
+import '../widgets/bottom_right_button.dart';
 
 class WorkerPageView extends StatefulWidget {
   const WorkerPageView({super.key});
@@ -146,7 +148,19 @@ class _WorkerPageViewState extends State<WorkerPageView> {
                 rowsPerPage: 5,
               ),
             ),
-            //const BottomRightButton(buttonText: "Dodaj")
+            BottomRightButton(
+              buttonText: "Dodaj",
+              onPressed: () async {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return const WorkerEditPopUpWidget(
+                      edit: false,
+                    );
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -203,7 +217,8 @@ DataRow recentFileDataRow(BuildContext context, var data) {
                   await showDialog(
                     context: context,
                     builder: (context) {
-                      return UserEditPopUpWidget(
+                      return WorkerEditPopUpWidget(
+                        edit: true,
                         data: data,
                       );
                     },

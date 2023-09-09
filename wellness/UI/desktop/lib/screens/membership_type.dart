@@ -3,7 +3,7 @@ import 'package:desktop/providers/membership_type.provider.dart';
 import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
-import '../popups/user_edit_popup.dart';
+import '../popups/user_upsert_popup.dart';
 
 
 class MembershipTypePageView extends StatefulWidget {
@@ -192,6 +192,7 @@ DataRow recentFileDataRow(BuildContext context, data) {
                     context: context,
                     builder: (context) {
                       return UserEditPopUpWidget(
+                        edit: false,
                         data: data,
                       );
                     },

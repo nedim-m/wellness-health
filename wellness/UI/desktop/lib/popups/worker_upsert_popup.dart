@@ -4,32 +4,37 @@ import 'package:provider/provider.dart';
 
 import '../models/user.dart';
 
-class UserEditPopUpWidget extends StatefulWidget {
-  const UserEditPopUpWidget({
+class WorkerEditPopUpWidget extends StatefulWidget {
+  const WorkerEditPopUpWidget({
     Key? key,
-    required this.data,
+    this.data,
+    required this.edit,
   }) : super(key: key);
 
-  final User data;
+  final User? data;
+  final bool edit;
 
   @override
-  State<UserEditPopUpWidget> createState() => _UserEditPopUpWidgetState();
+  State<WorkerEditPopUpWidget> createState() => _WorkerEditPopUpWidgetState();
 }
 
-class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
-  late TextEditingController firstName;
-  late TextEditingController lastName;
-  late TextEditingController email;
-  late TextEditingController userName;
-  late TextEditingController phone;
+class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
+  TextEditingController firstName = TextEditingController();
+  TextEditingController lastName = TextEditingController();
+  TextEditingController email = TextEditingController();
+  TextEditingController userName = TextEditingController();
+  TextEditingController phone = TextEditingController();
+  TextEditingController password = TextEditingController();
 
   @override
   void initState() {
-    firstName = TextEditingController(text: widget.data.firstName);
-    lastName = TextEditingController(text: widget.data.lastName);
-    email = TextEditingController(text: widget.data.email);
-    userName = TextEditingController(text: widget.data.userName);
-    phone = TextEditingController(text: widget.data.phone);
+    if (widget.edit == true && widget.data != null) {
+      firstName = TextEditingController(text: widget.data!.firstName);
+      lastName = TextEditingController(text: widget.data!.lastName);
+      email = TextEditingController(text: widget.data!.email);
+      userName = TextEditingController(text: widget.data!.userName);
+      phone = TextEditingController(text: widget.data!.phone);
+    }
 
     super.initState();
   }
@@ -41,19 +46,31 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
     email.dispose();
     userName.dispose();
     phone.dispose();
+    password.dispose();
     super.dispose();
   }
 
   void _saveChanges() async {
     final provider = Provider.of<UserProvider>(context, listen: false);
-    provider.updateUser(
-      widget.data.id,
-      firstName.text,
-      lastName.text,
-      email.text,
-      userName.text,
-      phone.text,
-    );
+    if (widget.edit == true && widget.data != null) {
+      provider.updateUser(
+        widget.data!.id,
+        firstName.text,
+        lastName.text,
+        email.text,
+        userName.text,
+        phone.text,
+      );
+    } else {
+      provider.addWorker(
+        firstName.text,
+        lastName.text,
+        email.text,
+        userName.text,
+        phone.text,
+        password.text
+      );
+    }
 
     Navigator.of(context).pop();
   }
@@ -61,7 +78,7 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: const Text("Edit User"),
+      title: widget.edit ? const Text("Edit Worker") : const Text("Add Worker"),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -86,6 +103,10 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
             controller: phone,
             decoration: const InputDecoration(labelText: "Phone"),
             keyboardType: TextInputType.phone,
+          ),
+          TextField(
+            controller: password,
+            decoration: const InputDecoration(labelText: "Password"),
           ),
         ],
       ),

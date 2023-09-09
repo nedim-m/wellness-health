@@ -1,12 +1,14 @@
 ﻿using wellness.Model;
 using wellness.Model.Record;
+using wellness.Model.Role;
+using wellness.Model.RoleUpsertRequest;
 using wellness.Service.IServices;
 
 namespace wellness.Controllers
 {
-    public class RecordController : CrudController<Record, BaseSearchObject, RecordPostRequest, RecordPostRequest>
+    public class RoleController : CrudController<Role, BaseSearchObject, RoleUpsertRequest, RoleUpsertRequest>
     {
-        public RecordController(ILogger<BaseController<Record, BaseSearchObject>> logger, IRecordService service) : base(logger, service)
+        public RoleController(ILogger<BaseController<Role, BaseSearchObject>> logger, IRoleService service) : base(logger, service)
         {
         }
     }

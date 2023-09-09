@@ -2,7 +2,10 @@ import 'package:desktop/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../models/role.dart';
+import '../models/search_result.dart';
 import '../models/user.dart';
+import '../providers/role_provider.dart';
 
 class WorkerEditPopUpWidget extends StatefulWidget {
   const WorkerEditPopUpWidget({
@@ -19,12 +22,16 @@ class WorkerEditPopUpWidget extends StatefulWidget {
 }
 
 class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
+  final RoleProvider roleProvider = RoleProvider();
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController userName = TextEditingController();
   TextEditingController phone = TextEditingController();
   TextEditingController password = TextEditingController();
+  SearchResult<Role> myData = SearchResult<Role>();
+  Role? selectedRole;
+  List<Role> allRoles = [];
 
   @override
   void initState() {
@@ -35,8 +42,16 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
       userName = TextEditingController(text: widget.data!.userName);
       phone = TextEditingController(text: widget.data!.phone);
     }
+    fetchData();
 
     super.initState();
+  }
+
+  Future<void> fetchData() async {
+    myData = await roleProvider.get();
+    setState(() {
+      allRoles = myData.result;
+    });
   }
 
   @override
@@ -53,13 +68,15 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
   void _saveChanges() async {
     final provider = Provider.of<UserProvider>(context, listen: false);
     if (widget.edit == true && widget.data != null) {
-      provider.updateUser(
+      provider.updateWorker(
         widget.data!.id,
         firstName.text,
         lastName.text,
         email.text,
         userName.text,
         phone.text,
+        password.text,
+        selectedRole!.id,
       );
     } else {
       provider.addWorker(
@@ -68,7 +85,8 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
         email.text,
         userName.text,
         phone.text,
-        password.text
+        password.text,
+        selectedRole!.id,
       );
     }
 
@@ -107,6 +125,21 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
           TextField(
             controller: password,
             decoration: const InputDecoration(labelText: "Password"),
+          ),
+          DropdownButton<Role>(
+            value: selectedRole,
+            onChanged: (newValue) {
+              setState(() {
+                selectedRole = newValue!;
+              });
+            },
+            items: allRoles.map<DropdownMenuItem<Role>>((Role role) {
+              return DropdownMenuItem<Role>(
+                value: role,
+                child: Text(role.name),
+              );
+            }).toList(),
+            hint: const Text("Izaberite poziciju"),
           ),
         ],
       ),

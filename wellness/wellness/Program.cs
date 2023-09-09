@@ -58,6 +58,7 @@ builder.Services.AddTransient<ITreatmentTypeService, TreatmentTypeService>();
 builder.Services.AddTransient<ITreatmentService, TreatmentService>();
 builder.Services.AddTransient<IMembershipTypeService, MembershipTypeService>();
 builder.Services.AddTransient<IRecordService, RecordService>();
+builder.Services.AddTransient<IRoleService, RoleService>();
 
 
 

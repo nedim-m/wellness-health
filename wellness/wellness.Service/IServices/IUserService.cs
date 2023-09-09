@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 using wellness.Model;
 using wellness.Model.User;
 using wellness.Models.User;
+using wellness.Models.UserPostRequest;
 
 namespace wellness.Service.IServices
 {
-    public interface IUserService : ICrudService<User,UserSearchObj,UserRegisterRequest,UserUpdateRequest>
+    public interface IUserService : ICrudService<User,UserSearchObj,UserPostRequest, UserPostRequest>
     {
         /*Task<ServiceResponse<IEnumerable<Models.User.User>>> GetAllUsers(UserSearchObj search);
         Task<ServiceResponse<Models.User.User>> GetUserById(int id);

@@ -11,12 +11,13 @@ using System.Threading.Tasks;
 using wellness.Model;
 using wellness.Model.User;
 using wellness.Models.User;
+using wellness.Models.UserPostRequest;
 using wellness.Service.Database;
 using wellness.Service.IServices;
 
 namespace wellness.Service.Services
 {
-    public class UserService : CrudService<Models.User.User, Database.User, UserSearchObj, UserRegisterRequest, UserUpdateRequest>, IUserService
+    public class UserService : CrudService<Models.User.User, Database.User, UserSearchObj, UserPostRequest, UserPostRequest>, IUserService
     {
         private readonly IMapper _mapper;
         private readonly DbWellnessContext _context;
@@ -66,7 +67,7 @@ namespace wellness.Service.Services
         }
 
 
-        public override async Task<Models.User.User> Update(int id, UserUpdateRequest update)
+        public override async Task<Models.User.User> Update(int id, UserPostRequest update)
         {
             if (update.Password.IsNullOrEmpty() && update.ConfrimPassword.IsNullOrEmpty())
             {
@@ -103,7 +104,7 @@ namespace wellness.Service.Services
         }
 
 
-        public override async Task<Models.User.User> Insert(UserRegisterRequest insert)
+        public override async Task<Models.User.User> Insert(UserPostRequest insert)
         {
             if (insert.Password!=insert.ConfrimPassword)
             {
@@ -114,7 +115,7 @@ namespace wellness.Service.Services
             var user = _mapper.Map<Database.User>(insert);
             user.PasswordHash= passwordHash;
             user.PasswordSalt=passwordSalt;
-            user.RoleId=2;
+            user.RoleId=insert.RoleId;
             _context.Users.Add(user);
 
 

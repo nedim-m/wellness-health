@@ -1,7 +1,7 @@
-
 import 'package:desktop/providers/category_provider.dart';
 import 'package:desktop/providers/membership_type.provider.dart';
 import 'package:desktop/providers/record_provider.dart';
+import 'package:desktop/providers/role_provider.dart';
 import 'package:desktop/providers/treatment_provider.dart';
 import 'package:desktop/providers/treatment_type_provider.dart';
 
@@ -20,7 +20,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => MembershipTypeProvider()),
       ChangeNotifierProvider(create: (_) => RecordProvider()),
       ChangeNotifierProvider(create: (_) => TreatmentProvider()),
-
+      ChangeNotifierProvider(create: (_) => RoleProvider()),
     ],
     child: const MyApp(),
   ));

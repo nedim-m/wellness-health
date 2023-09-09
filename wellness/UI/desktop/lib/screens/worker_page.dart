@@ -28,11 +28,18 @@ class _WorkerPageViewState extends State<WorkerPageView> {
     fetchData();
   }
 
-  Future fetchData() async {
-    myData = await _userProvider.get(filter: {'role': "notmember"});
-    setState(() {
-      filterData = myData.result;
-    });
+  Future<void> fetchData() async {
+    try {
+      myData = await _userProvider.get(filter: {'role': 'notmember'});
+
+      if (mounted) {
+        setState(() {
+          filterData = myData.result;
+        });
+      }
+    } catch (e) {
+      print('Error fetching data: $e');
+    }
   }
 
   @override

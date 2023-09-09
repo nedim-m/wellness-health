@@ -7,10 +7,13 @@ using System.Threading.Tasks;
 using wellness.Model.Category;
 using wellness.Model.MembershipType;
 using wellness.Model.Record;
+using wellness.Model.Role;
+using wellness.Model.RoleUpsertRequest;
 using wellness.Model.Treatment;
 using wellness.Model.TreatmentType;
 using wellness.Model.User;
 using wellness.Models.User;
+using wellness.Models.UserPostRequest;
 
 namespace wellness.Service.Services
 {
@@ -20,6 +23,7 @@ namespace wellness.Service.Services
         {
             CreateMap<UserRegisterRequest, Database.User>();
             CreateMap<UserUpdateRequest, Database.User>();
+            CreateMap<UserPostRequest, Database.User>();
 
             CreateMap<Database.User, User>().ForMember(dest=> dest.Role,opt=>opt.MapFrom(src=>src.Role.Name))
                                             .ForMember(dest=>dest.ShiftTime,opt=>opt.MapFrom(src=>src.Role.ShiftTime));
@@ -41,6 +45,9 @@ namespace wellness.Service.Services
                                                 .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.User.LastName))
                                                 .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.User.Phone))
                                                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
+
+            CreateMap<RoleUpsertRequest, Database.Role>();
+            CreateMap<Database.Role, Role>();
 
 
         }

@@ -8,7 +8,7 @@ using wellness.Model.Record;
 
 namespace wellness.Service.IServices
 {
-    public interface IRecordService:ICrudService<Record,BaseSearchObject,RecordPostRequest,RecordPostRequest>
+    public interface IRecordService:ICrudService<Record,RecordSearchObj,RecordPostRequest,RecordPostRequest>
     {
 
     }

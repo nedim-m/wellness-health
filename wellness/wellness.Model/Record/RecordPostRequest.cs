@@ -11,9 +11,9 @@ namespace wellness.Model.Record
     {
 
        
-        public DateTime EntryDate { get; set; }
+        public String? EntryDate { get; set; }
         
-        public DateTime? LeaveEntryDate { get; set; }
+        public String? LeaveEntryDate { get; set; }
         [Required]
         public int UserId { get; set; }
     }

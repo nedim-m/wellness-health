@@ -1,9 +1,11 @@
 import 'package:desktop/models/record.dart';
+import 'package:desktop/popups/record_add_popup.dart';
 import 'package:desktop/providers/record_provider.dart';
 
 import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
+import '../widgets/bottom_right_button.dart';
 
 class RecordPageView extends StatefulWidget {
   const RecordPageView({super.key});
@@ -26,7 +28,7 @@ class _RecordPageViewState extends State<RecordPageView> {
   }
 
   Future fetchData() async {
-    myData = await _recordProvider.get();
+    myData = await _recordProvider.get(filter: {'prisutni': 'DA'});
     setState(() {
       filterData = myData.result;
     });
@@ -159,7 +161,17 @@ class _RecordPageViewState extends State<RecordPageView> {
                 rowsPerPage: 5,
               ),
             ),
-            //const BottomRightButton(buttonText: "Evidentiraj ulaz")
+            BottomRightButton(
+              buttonText: "Evidentiraj ulaz",
+              onPressed: () async {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return const RecordAddPopupWidget();
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),

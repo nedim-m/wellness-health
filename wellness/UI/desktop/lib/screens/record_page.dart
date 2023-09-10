@@ -4,7 +4,6 @@ import 'package:desktop/providers/record_provider.dart';
 import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
-import '../popups/user_upsert_popup.dart';
 
 class RecordPageView extends StatefulWidget {
   const RecordPageView({super.key});
@@ -31,6 +30,10 @@ class _RecordPageViewState extends State<RecordPageView> {
     setState(() {
       filterData = myData.result;
     });
+  }
+
+  Future leaveEntry(dynamic user) async {
+    await _recordProvider.leaveEntry(user);
   }
 
   @override
@@ -148,6 +151,7 @@ class _RecordPageViewState extends State<RecordPageView> {
                   ),
                 ],
                 source: RowSource(
+                  leaveEntry,
                   count: myData.result.length,
                   myData: myData.result,
                   context: context,
@@ -167,7 +171,9 @@ class RowSource extends DataTableSource {
   final dynamic myData;
   final int count;
   final BuildContext context;
-  RowSource({
+  final Function(dynamic) leaveEntry;
+  RowSource(
+    this.leaveEntry, {
     required this.myData,
     required this.count,
     required this.context,
@@ -176,7 +182,7 @@ class RowSource extends DataTableSource {
   @override
   DataRow? getRow(int index) {
     if (index < rowCount) {
-      return recentFileDataRow(context, myData![index]);
+      return recentFileDataRow(context, myData![index], leaveEntry);
     } else {
       return null;
     }
@@ -192,7 +198,8 @@ class RowSource extends DataTableSource {
   int get selectedRowCount => 0;
 }
 
-DataRow recentFileDataRow(BuildContext context, data) {
+DataRow recentFileDataRow(
+    BuildContext context, data, Function(dynamic) leaveEntry) {
   return DataRow(
     cells: [
       DataCell(Text(data.firstName)),
@@ -206,15 +213,7 @@ DataRow recentFileDataRow(BuildContext context, data) {
             Expanded(
               child: ElevatedButton(
                 onPressed: () async {
-                  await showDialog(
-                    context: context,
-                    builder: (context) {
-                      return UserEditPopUpWidget(
-                        edit:false,
-                        data: data,
-                      );
-                    },
-                  );
+                  await leaveEntry(data);
                 },
                 child: const Text("Izlaz"),
               ),

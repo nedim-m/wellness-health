@@ -73,8 +73,6 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     var jsonRequest = jsonEncode(request);
 
-
-
     var response = await http.put(uri, headers: headers, body: jsonRequest);
 
     if (isValidResponse(response)) {
@@ -95,7 +93,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     } else if (response.statusCode == 401) {
       throw Exception("Unauthorized");
     } else {
-   
+      print("Response error code: ${response.statusCode}");
       throw Exception("Something bad happened please try again");
     }
   }

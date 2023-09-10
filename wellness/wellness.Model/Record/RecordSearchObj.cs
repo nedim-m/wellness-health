@@ -8,6 +8,6 @@ namespace wellness.Model.Record
 {
     public class RecordSearchObj:BaseSearchObject
     {
-        bool Prisutni { get; set; }
+        public string Prisutni { get; set; } = string.Empty;
     }
 }

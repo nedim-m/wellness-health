@@ -5,13 +5,13 @@ part 'record.g.dart';
 @JsonSerializable()
 class Records {
   final int id;
-  final DateTime entryDate;
-  final DateTime leaveEntryDate;
+  final String? entryDate;
+  final String? leaveEntryDate;
   final int userId;
   final String firstName;
   final String lastName;
   final String phone;
-   final String userName;
+  final String userName;
 
   factory Records.fromJson(Map<String, dynamic> json) =>
       _$RecordsFromJson(json);

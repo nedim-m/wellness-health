@@ -8,8 +8,8 @@ part of 'record.dart';
 
 Records _$RecordsFromJson(Map<String, dynamic> json) => Records(
       json['id'] as int,
-      DateTime.parse(json['entryDate'] as String),
-      DateTime.parse(json['leaveEntryDate'] as String),
+      json['entryDate'] as String?,
+      json['leaveEntryDate'] as String?,
       json['userId'] as int,
       json['firstName'] as String,
       json['lastName'] as String,
@@ -19,8 +19,8 @@ Records _$RecordsFromJson(Map<String, dynamic> json) => Records(
 
 Map<String, dynamic> _$RecordsToJson(Records instance) => <String, dynamic>{
       'id': instance.id,
-      'entryDate': instance.entryDate.toIso8601String(),
-      'leaveEntryDate': instance.leaveEntryDate.toIso8601String(),
+      'entryDate': instance.entryDate,
+      'leaveEntryDate': instance.leaveEntryDate,
       'userId': instance.userId,
       'firstName': instance.firstName,
       'lastName': instance.lastName,

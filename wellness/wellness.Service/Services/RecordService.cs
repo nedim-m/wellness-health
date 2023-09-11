@@ -35,7 +35,11 @@ namespace wellness.Service.Services
 
             if (!string.IsNullOrWhiteSpace(search?.Prisutni)&& search.Prisutni=="DA")
             {
-                filteredEntity=filteredEntity.Where(x => x.LeaveEntryDate==null);
+                filteredEntity=filteredEntity.Where(x => x.User.Prisutan==true && x.User.RoleId==3);
+            }
+            else
+            {
+                filteredEntity=filteredEntity.Where(x => x.User.Prisutan!=true && x.User.RoleId==3);
             }
 
 
@@ -50,6 +54,42 @@ namespace wellness.Service.Services
             };
 
             return result;
+        }
+
+        public override async Task<Record> Insert(RecordPostRequest insert)
+        {
+
+            var record = _mapper.Map<Database.Record>(insert);
+            var userToUpdate = await _context.Users.FindAsync(insert.UserId);
+            if(userToUpdate != null)
+            userToUpdate.Prisutan=true;
+
+
+            _context.Records.Add(record);
+
+
+
+            await _context.SaveChangesAsync();
+
+
+            return _mapper.Map<Record>(record);
+        }
+
+        public override async Task<Record> Update(int id, RecordPostRequest update)
+        {
+
+            var recordToUpdate = await _context.Records.FindAsync(id);
+            var userToUpdate = await _context.Users.FindAsync(update.UserId);
+
+            if(userToUpdate != null && recordToUpdate!=null)
+            {
+                _mapper.Map(update, recordToUpdate);
+                userToUpdate.Prisutan=false;
+                await _context.SaveChangesAsync();
+
+            }
+
+            return _mapper.Map<Record>(recordToUpdate);
         }
     }
 }

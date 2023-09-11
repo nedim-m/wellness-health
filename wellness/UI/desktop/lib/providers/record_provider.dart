@@ -29,9 +29,35 @@ class RecordProvider extends BaseProvider<Records> {
       "leaveEntryDate": formattedDateTime,
       "userId": data.userId
     });
-   
 
     var response = await http.put(uri, headers: headers, body: jsonRequest);
+
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+      return (data);
+    } else {
+      throw Exception("Unknown error");
+    }
+  }
+
+  Future<dynamic> addEntry(
+    dynamic data,
+  ) async {
+    var url = "$baseUrl$endpoint";
+    var uri = Uri.parse(url);
+    var headers = createJwtHeaders(token!);
+
+    DateTime now = DateTime.now();
+    String formattedDateTime = DateFormat('dd.MM.yy - HH:mm').format(now);
+
+    print("Formatiran datum : $formattedDateTime");
+    var jsonRequest = jsonEncode(<String, dynamic>{
+      "entryDate": formattedDateTime,
+      "userId": data.id,
+      "leaveEntryDate": null
+    });
+
+    var response = await http.post(uri, headers: headers, body: jsonRequest);
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);

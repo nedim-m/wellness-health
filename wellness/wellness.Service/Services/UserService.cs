@@ -53,7 +53,18 @@ namespace wellness.Service.Services
                 }
             }
 
-            var list = await filteredEntity.ToListAsync();
+            if (!string.IsNullOrWhiteSpace(search?.Prisutan))
+            {
+                if (search.Prisutan=="DA")
+                filteredEntity=filteredEntity.Where(x => x.Role.Name.Equals("member")&& x.Prisutan==true);
+                else
+                filteredEntity=filteredEntity.Where(x => x.Role.Name.Equals("member")&& x.Prisutan!=true);
+                
+            }
+
+
+
+                var list = await filteredEntity.ToListAsync();
 
             var mappedList = _mapper.Map<List<Models.User.User>>(list);
 
@@ -127,6 +138,11 @@ namespace wellness.Service.Services
 
             return _mapper.Map<Models.User.User>(user);
         }
+
+
+
+
+
 
 
 

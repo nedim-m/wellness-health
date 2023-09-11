@@ -10,6 +10,8 @@ namespace wellness.Model.User
     {
         public string Role { get; set; } = string.Empty;
         public string? SearchName { get; set; }
-        public string Prisutni { get; set; } = string.Empty;
+
+        public string? Prisutan { get; set; }
+
     }
 }

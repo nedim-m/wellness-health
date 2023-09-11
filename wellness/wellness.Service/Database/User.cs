@@ -28,6 +28,7 @@ public partial class User
     public string? Phone { get; set; }
 
     public bool Status { get; set; }
+    public bool? Prisutan { get; set; }
 
     public byte[]? Picture { get; set; }
 

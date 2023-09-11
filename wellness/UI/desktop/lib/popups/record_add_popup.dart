@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
 import '../models/user.dart';
+import '../providers/record_provider.dart';
 import '../providers/user_provider.dart';
 
 class RecordAddPopupWidget extends StatefulWidget {
@@ -13,12 +14,13 @@ class RecordAddPopupWidget extends StatefulWidget {
 
 class _RecordAddPopupWidgetState extends State<RecordAddPopupWidget> {
   final UserProvider userProvider = UserProvider();
+  final RecordProvider recordProvider = RecordProvider();
   SearchResult<User> myData = SearchResult<User>();
   User? selectedUser;
   List<User> allUsers = [];
 
   Future<void> fetchData() async {
-    myData = await userProvider.get(filter: {'prisutni': 'NE'});
+    myData = await userProvider.get(filter: {'prisutan': 'NE'});
     setState(() {
       allUsers = myData.result;
     });
@@ -30,7 +32,9 @@ class _RecordAddPopupWidgetState extends State<RecordAddPopupWidget> {
     super.initState();
   }
 
-  void _saveChanges() async {}
+  void _saveChanges() async {
+    await recordProvider.addEntry(selectedUser);
+  }
 
   @override
   Widget build(BuildContext context) {

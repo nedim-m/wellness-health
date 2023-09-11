@@ -38,6 +38,8 @@ class _RecordPageViewState extends State<RecordPageView> {
     await _recordProvider.leaveEntry(user);
   }
 
+ 
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -226,6 +228,7 @@ DataRow recentFileDataRow(
               child: ElevatedButton(
                 onPressed: () async {
                   await leaveEntry(data);
+                   
                 },
                 child: const Text("Izlaz"),
               ),

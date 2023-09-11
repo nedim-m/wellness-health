@@ -21,6 +21,7 @@ namespace wellness.Model.Record
         public string LastName { get; set; } = null!;
         public string? Phone { get; set; }
         public string UserName { get; set; } = null!;
+        public bool? Prisutan { get; set; }
 
     }
 }

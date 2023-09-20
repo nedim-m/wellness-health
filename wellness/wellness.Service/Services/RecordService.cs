@@ -35,7 +35,7 @@ namespace wellness.Service.Services
 
             if (!string.IsNullOrWhiteSpace(search?.Prisutni)&& search.Prisutni=="DA")
             {
-                filteredEntity=filteredEntity.Where(x => x.User.Prisutan==true && x.User.RoleId==3);
+                filteredEntity=filteredEntity.Where(x => x.User.Prisutan==true && x.User.RoleId==3 && x.LeaveEntryDate==null);
             }
             else
             {

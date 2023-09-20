@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/user.dart';
+import '../utils/validation_rules.dart';
 
 class UserEditPopUpWidget extends StatefulWidget {
   const UserEditPopUpWidget({
@@ -24,6 +25,9 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
   TextEditingController email = TextEditingController();
   TextEditingController userName = TextEditingController();
   TextEditingController phone = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>(); // Add a form key
+  final _validation = ValidationRules();
 
   @override
   void initState() {
@@ -50,58 +54,72 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
 
   void _saveChanges() async {
     final provider = Provider.of<UserProvider>(context, listen: false);
-    if (widget.edit == true && widget.data != null) {
-      provider.updateUser(
-        widget.data!.id,
-        firstName.text,
-        lastName.text,
-        email.text,
-        userName.text,
-        phone.text,
-      );
-    } else {
-      provider.addUser(
-        firstName.text,
-        lastName.text,
-        email.text,
-        userName.text,
-        phone.text,
-      );
-    }
+    if (_formKey.currentState!.validate()) {
+      // Validate the form
+      if (widget.edit == true && widget.data != null) {
+        provider.updateUser(
+          widget.data!.id,
+          firstName.text,
+          lastName.text,
+          email.text,
+          userName.text,
+          phone.text,
+        );
+      } else {
+        provider.addUser(
+          firstName.text,
+          lastName.text,
+          email.text,
+          userName.text,
+          phone.text,
+        );
+      }
 
-    Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: widget.edit ? const Text("Edit User") : const Text("Add User"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: firstName,
-            decoration: const InputDecoration(labelText: "First Name"),
-          ),
-          TextField(
-            controller: lastName,
-            decoration: const InputDecoration(labelText: "Last Name"),
-          ),
-          TextField(
-            controller: email,
-            decoration: const InputDecoration(labelText: "Email"),
-            keyboardType: TextInputType.emailAddress,
-          ),
-          TextField(
-            controller: userName,
-            decoration: const InputDecoration(labelText: "Username"),
-          ),
-          TextField(
-            controller: phone,
-            decoration: const InputDecoration(labelText: "Phone"),
-            keyboardType: TextInputType.phone,
-          ),
-        ],
+      content: Form(
+        key: _formKey, // Assign the form key to the form
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              controller: firstName,
+              decoration: const InputDecoration(labelText: "First Name"),
+              validator: (value) => _validation.validateTextInput(
+                  value, 'Please enter your First Name.'),
+            ),
+            TextFormField(
+              controller: lastName,
+              decoration: const InputDecoration(labelText: "Last Name"),
+              validator: (value) => _validation.validateTextInput(
+                  value, 'Please enter your Last Name.'),
+            ),
+            TextFormField(
+              controller: email,
+              decoration: const InputDecoration(labelText: "Email"),
+              keyboardType: TextInputType.emailAddress,
+              validator: _validation.validateEmail,
+            ),
+            TextFormField(
+              controller: userName,
+              decoration: const InputDecoration(labelText: "Username"),
+              validator: (value) => _validation.validateTextInput(
+                  value, 'Please enter your Username'),
+            ),
+            TextFormField(
+              controller: phone,
+              decoration: const InputDecoration(labelText: "Phone"),
+              keyboardType: TextInputType.phone,
+              validator: (value) => _validation.validatePhone(value),
+            ),
+          ],
+        ),
       ),
       actions: [
         TextButton(

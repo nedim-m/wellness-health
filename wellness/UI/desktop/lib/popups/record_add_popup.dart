@@ -34,6 +34,8 @@ class _RecordAddPopupWidgetState extends State<RecordAddPopupWidget> {
 
   void _saveChanges() async {
     await recordProvider.addEntry(selectedUser);
+    // ignore: use_build_context_synchronously
+    Navigator.of(context).pop();
   }
 
   @override

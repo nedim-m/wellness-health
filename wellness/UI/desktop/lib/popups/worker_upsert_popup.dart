@@ -6,6 +6,7 @@ import '../models/role.dart';
 import '../models/search_result.dart';
 import '../models/user.dart';
 import '../providers/role_provider.dart';
+import '../utils/validation_rules.dart';
 
 class WorkerEditPopUpWidget extends StatefulWidget {
   const WorkerEditPopUpWidget({
@@ -32,6 +33,8 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
   SearchResult<Role> myData = SearchResult<Role>();
   Role? selectedRole;
   List<Role> allRoles = [];
+  final _formKey = GlobalKey<FormState>();
+  final _validation = ValidationRules();
 
   @override
   void initState() {
@@ -67,81 +70,99 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
 
   void _saveChanges() async {
     final provider = Provider.of<UserProvider>(context, listen: false);
-    if (widget.edit == true && widget.data != null) {
-      provider.updateWorker(
-        widget.data!.id,
-        firstName.text,
-        lastName.text,
-        email.text,
-        userName.text,
-        phone.text,
-        password.text,
-        selectedRole!.id,
-      );
-    } else {
-      provider.addWorker(
-        firstName.text,
-        lastName.text,
-        email.text,
-        userName.text,
-        phone.text,
-        password.text,
-        selectedRole!.id,
-      );
-    }
+    if (_formKey.currentState!.validate()) {
+      if (widget.edit == true && widget.data != null) {
+        provider.updateWorker(
+          widget.data!.id,
+          firstName.text,
+          lastName.text,
+          email.text,
+          userName.text,
+          phone.text,
+          password.text,
+          selectedRole!.id,
+        );
+      } else {
+        provider.addWorker(
+          firstName.text,
+          lastName.text,
+          email.text,
+          userName.text,
+          phone.text,
+          password.text,
+          selectedRole!.id,
+        );
+      }
 
-    Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: widget.edit ? const Text("Edit Worker") : const Text("Add Worker"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: firstName,
-            decoration: const InputDecoration(labelText: "First Name"),
+      content: SingleChildScrollView(
+        child: Form(
+          key: _formKey,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextFormField(
+                controller: firstName,
+                decoration: const InputDecoration(labelText: "First Name"),
+                validator: (value) => _validation.validateTextInput(
+                    value, 'Please enter your First Name.'),
+              ),
+              TextFormField(
+                controller: lastName,
+                decoration: const InputDecoration(labelText: "Last Name"),
+                validator: (value) => _validation.validateTextInput(
+                    value, 'Please enter your Last Name.'),
+              ),
+              TextFormField(
+                controller: email,
+                decoration: const InputDecoration(labelText: "Email"),
+                keyboardType: TextInputType.emailAddress,
+                validator: _validation.validateEmail,
+              ),
+              TextFormField(
+                controller: userName,
+                decoration: const InputDecoration(labelText: "Username"),
+                validator: (value) => _validation.validateTextInput(
+                    value, 'Please enter your Username'),
+              ),
+              TextFormField(
+                controller: phone,
+                decoration: const InputDecoration(labelText: "Phone"),
+                keyboardType: TextInputType.phone,
+                validator: _validation.validatePhone,
+              ),
+              TextFormField(
+                controller: password,
+                decoration: const InputDecoration(labelText: "Password"),
+                keyboardType: TextInputType.visiblePassword,
+                validator: _validation.validatePassword,
+              ),
+              DropdownButtonFormField<Role>(
+                value: selectedRole,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedRole = newValue!;
+                  });
+                },
+                items: allRoles.map<DropdownMenuItem<Role>>((Role role) {
+                  return DropdownMenuItem<Role>(
+                    value: role,
+                    child: Text(role.name),
+                  );
+                }).toList(),
+                hint: const Text("Izaberite poziciju"),
+                validator: _validation.validateDropdown,
+              ),
+            ],
           ),
-          TextField(
-            controller: lastName,
-            decoration: const InputDecoration(labelText: "Last Name"),
-          ),
-          TextField(
-            controller: email,
-            decoration: const InputDecoration(labelText: "Email"),
-            keyboardType: TextInputType.emailAddress,
-          ),
-          TextField(
-            controller: userName,
-            decoration: const InputDecoration(labelText: "Username"),
-          ),
-          TextField(
-            controller: phone,
-            decoration: const InputDecoration(labelText: "Phone"),
-            keyboardType: TextInputType.phone,
-          ),
-          TextField(
-            controller: password,
-            decoration: const InputDecoration(labelText: "Password"),
-          ),
-          DropdownButton<Role>(
-            value: selectedRole,
-            onChanged: (newValue) {
-              setState(() {
-                selectedRole = newValue!;
-              });
-            },
-            items: allRoles.map<DropdownMenuItem<Role>>((Role role) {
-              return DropdownMenuItem<Role>(
-                value: role,
-                child: Text(role.name),
-              );
-            }).toList(),
-            hint: const Text("Izaberite poziciju"),
-          ),
-        ],
+        ),
       ),
       actions: [
         TextButton(

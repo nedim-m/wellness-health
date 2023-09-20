@@ -36,4 +36,25 @@ class ValidationRules {
     }
     return null;
   }
+
+  String? validatePassword(String? password) {
+    if (password == null || password.isEmpty) {
+      return 'Please enter a password.';
+    }
+    if (password.length < 8) {
+      return 'Password must be at least 8 characters long.';
+    }
+    if (!RegExp(r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+])')
+        .hasMatch(password)) {
+      return 'Password must contain at least one capital letter, one number, and one special character.';
+    }
+    return null;
+  }
+
+  String? validateDropdown(dynamic value) {
+    if (value == null) {
+      return 'Please select a from dropdown.';
+    }
+    return null;
+  }
 }

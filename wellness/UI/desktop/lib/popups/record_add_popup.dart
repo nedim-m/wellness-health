@@ -4,6 +4,7 @@ import '../models/search_result.dart';
 import '../models/user.dart';
 import '../providers/record_provider.dart';
 import '../providers/user_provider.dart';
+import '../utils/validation_rules.dart';
 
 class RecordAddPopupWidget extends StatefulWidget {
   const RecordAddPopupWidget({super.key});
@@ -18,6 +19,8 @@ class _RecordAddPopupWidgetState extends State<RecordAddPopupWidget> {
   SearchResult<User> myData = SearchResult<User>();
   User? selectedUser;
   List<User> allUsers = [];
+  final _formKey = GlobalKey<FormState>();
+  final _validation = ValidationRules();
 
   Future<void> fetchData() async {
     myData = await userProvider.get(filter: {'prisutan': 'NE'});
@@ -33,34 +36,40 @@ class _RecordAddPopupWidgetState extends State<RecordAddPopupWidget> {
   }
 
   void _saveChanges() async {
-    await recordProvider.addEntry(selectedUser);
-    // ignore: use_build_context_synchronously
-    Navigator.of(context).pop();
+    if (_formKey.currentState!.validate()) {
+      await recordProvider.addEntry(selectedUser!);
+      // ignore: use_build_context_synchronously
+      Navigator.of(context).pop();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: const Text("Evidentiraj ulazak"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          DropdownButton<User>(
-            value: selectedUser,
-            onChanged: (newValue) {
-              setState(() {
-                selectedUser = newValue!;
-              });
-            },
-            items: allUsers.map<DropdownMenuItem<User>>((User user) {
-              return DropdownMenuItem<User>(
-                value: user,
-                child: Text("${user.firstName} ${user.lastName}"),
-              );
-            }).toList(),
-            hint: const Text("Izaberite korisnika"),
-          ),
-        ],
+      content: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            DropdownButtonFormField<User>(
+              value: selectedUser,
+              onChanged: (newValue) {
+                setState(() {
+                  selectedUser = newValue;
+                });
+              },
+              items: allUsers.map<DropdownMenuItem<User>>((User user) {
+                return DropdownMenuItem<User>(
+                  value: user,
+                  child: Text("${user.firstName} ${user.lastName}"),
+                );
+              }).toList(),
+              hint: const Text("Izaberite korisnika"),
+              validator: _validation.validateDropdown,
+            ),
+          ],
+        ),
       ),
       actions: [
         TextButton(

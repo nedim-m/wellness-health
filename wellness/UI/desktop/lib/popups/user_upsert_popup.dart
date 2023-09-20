@@ -26,7 +26,7 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
   TextEditingController userName = TextEditingController();
   TextEditingController phone = TextEditingController();
 
-  final _formKey = GlobalKey<FormState>(); // Add a form key
+  final _formKey = GlobalKey<FormState>();
   final _validation = ValidationRules();
 
   @override
@@ -55,7 +55,6 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
   void _saveChanges() async {
     final provider = Provider.of<UserProvider>(context, listen: false);
     if (_formKey.currentState!.validate()) {
-      // Validate the form
       if (widget.edit == true && widget.data != null) {
         provider.updateUser(
           widget.data!.id,
@@ -84,7 +83,7 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
     return AlertDialog(
       title: widget.edit ? const Text("Edit User") : const Text("Add User"),
       content: Form(
-        key: _formKey, // Assign the form key to the form
+        key: _formKey,
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
@@ -116,7 +115,7 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
               controller: phone,
               decoration: const InputDecoration(labelText: "Phone"),
               keyboardType: TextInputType.phone,
-              validator: (value) => _validation.validatePhone(value),
+              validator: _validation.validatePhone,
             ),
           ],
         ),

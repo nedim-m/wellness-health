@@ -3,6 +3,8 @@ import 'package:desktop/providers/category_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../utils/validation_rules.dart';
+
 class CategoryEditPopUpWidget extends StatefulWidget {
   const CategoryEditPopUpWidget({
     super.key,
@@ -20,14 +22,16 @@ class CategoryEditPopUpWidget extends StatefulWidget {
 class _CategoryEditPopUpWidgetState extends State<CategoryEditPopUpWidget> {
   TextEditingController name = TextEditingController();
   TextEditingController description = TextEditingController();
-  bool selectedStatus = false; 
+  bool selectedStatus = false;
+  final _formKey = GlobalKey<FormState>();
+  final _validation = ValidationRules();
 
   @override
   void initState() {
     if (widget.edit == true && widget.data != null) {
       name = TextEditingController(text: widget.data!.name);
       description = TextEditingController(text: widget.data!.description);
-      selectedStatus = widget.data!.status; 
+      selectedStatus = widget.data!.status;
     }
     super.initState();
   }
@@ -41,60 +45,69 @@ class _CategoryEditPopUpWidgetState extends State<CategoryEditPopUpWidget> {
 
   void _saveChanges() async {
     final provider = Provider.of<CategoryProvider>(context, listen: false);
-    if (widget.edit == true && widget.data != null) {
-      provider.update(
-        widget.data!.id,
-        Category(
+    if (_formKey.currentState!.validate()) {
+      if (widget.edit == true && widget.data != null) {
+        provider.update(
           widget.data!.id,
-          name.text,
-          description.text,
-          selectedStatus,
-        ),
-      );
-    } else {
-      provider.insert(
-        Category(0, name.text, description.text, selectedStatus),
-      );
-    }
+          Category(
+            widget.data!.id,
+            name.text,
+            description.text,
+            selectedStatus,
+          ),
+        );
+      } else {
+        provider.insert(
+          Category(0, name.text, description.text, selectedStatus),
+        );
+      }
 
-    Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: widget.edit ? const Text("Edit Item") : const Text("Add Item"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: name,
-            decoration: const InputDecoration(labelText: "Naziv"),
-          ),
-          TextField(
-            controller: description,
-            decoration: const InputDecoration(labelText: "Opis"),
-          ),
-          DropdownButtonFormField<bool>(
-            value: selectedStatus,
-            onChanged: (newValue) {
-              setState(() {
-                selectedStatus = newValue!;
-              });
-            },
-            items: const [
-              DropdownMenuItem<bool>(
-                value: true,
-                child: Text('Aktivan'),
-              ),
-              DropdownMenuItem<bool>(
-                value: false,
-                child: Text('Neaktivan'),
-              ),
-            ],
-            decoration: const InputDecoration(labelText: 'Status'),
-          ),
-        ],
+      content: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              controller: name,
+              decoration: const InputDecoration(labelText: "Naziv"),
+              validator: (value) =>
+                  _validation.validateTextInput(value, 'Please enter Name.'),
+            ),
+            TextFormField(
+              controller: description,
+              decoration: const InputDecoration(labelText: "Opis"),
+              validator: (value) => _validation.validateTextInput(
+                  value, 'Please enter Description.'),
+            ),
+            DropdownButtonFormField<bool>(
+              value: selectedStatus,
+              onChanged: (newValue) {
+                setState(() {
+                  selectedStatus = newValue!;
+                });
+              },
+              items: const [
+                DropdownMenuItem<bool>(
+                  value: true,
+                  child: Text('Aktivan'),
+                ),
+                DropdownMenuItem<bool>(
+                  value: false,
+                  child: Text('Neaktivan'),
+                ),
+              ],
+              decoration: const InputDecoration(labelText: 'Status'),
+            ),
+          ],
+        ),
       ),
       actions: [
         TextButton(

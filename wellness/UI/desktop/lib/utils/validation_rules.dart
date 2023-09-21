@@ -57,4 +57,18 @@ class ValidationRules {
     }
     return null;
   }
+
+  String? validatePrice(String? price) {
+    if (price == null || price.isEmpty) {
+      return 'Please enter a price.';
+    }
+
+    final RegExp priceRegex = RegExp(r'^\d+(\.\d{1,2})?$');
+
+    if (!priceRegex.hasMatch(price)) {
+      return 'Invalid price format. Please enter a valid price (e.g., 10.99).';
+    }
+
+    return null;
+  }
 }

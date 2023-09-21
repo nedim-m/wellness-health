@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../models/treatment_type.dart';
 import '../providers/treatment_type_provider.dart';
+import '../utils/validation_rules.dart';
 
 class TreatmentEditPopUpWidget extends StatefulWidget {
   const TreatmentEditPopUpWidget({
@@ -22,6 +23,9 @@ class _TreatmentEditPopUpWidgetState extends State<TreatmentEditPopUpWidget> {
   TextEditingController name = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController price = TextEditingController();
+
+  final _formKey = GlobalKey<FormState>();
+  final _validation = ValidationRules();
 
   @override
   void initState() {
@@ -43,42 +47,53 @@ class _TreatmentEditPopUpWidgetState extends State<TreatmentEditPopUpWidget> {
 
   void _saveChanges() async {
     final provider = Provider.of<TreatmentTypeProvider>(context, listen: false);
-    if (widget.edit == true && widget.data != null) {
-      provider.update(
-        widget.data!.id,
-        TreatmentType(widget.data!.id, name.text, description.text,
-            double.parse(price.text)),
-      );
-    } else {
-      provider.insert(
-        TreatmentType(0, name.text, description.text, double.parse(price.text)),
-      );
-    }
+    if (_formKey.currentState!.validate()) {
+      if (widget.edit == true && widget.data != null) {
+        provider.update(
+          widget.data!.id,
+          TreatmentType(widget.data!.id, name.text, description.text,
+              double.parse(price.text)),
+        );
+      } else {
+        provider.insert(
+          TreatmentType(
+              0, name.text, description.text, double.parse(price.text)),
+        );
+      }
 
-    Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: widget.edit ? const Text("Edit Item") : const Text("Add Item"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          TextField(
-            controller: name,
-            decoration: const InputDecoration(labelText: "Naziv"),
-          ),
-          TextField(
-            controller: description,
-            decoration: const InputDecoration(labelText: "Opis"),
-          ),
-          TextField(
-            controller: price,
-            decoration: const InputDecoration(labelText: "Cijena"),
-            keyboardType: TextInputType.number,
-          ),
-        ],
+      content: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFormField(
+              controller: name,
+              decoration: const InputDecoration(labelText: "Naziv"),
+              validator: (value) =>
+                  _validation.validateTextInput(value, 'Please enter Name.'),
+            ),
+            TextFormField(
+              controller: description,
+              decoration: const InputDecoration(labelText: "Opis"),
+              validator: (value) => _validation.validateTextInput(
+                  value, 'Please enter Description.'),
+            ),
+            TextFormField(
+              controller: price,
+              decoration: const InputDecoration(labelText: "Cijena"),
+              keyboardType: TextInputType.number,
+              validator: _validation.validatePrice,
+            ),
+          ],
+        ),
       ),
       actions: [
         TextButton(

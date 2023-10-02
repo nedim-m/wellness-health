@@ -3,8 +3,9 @@ import 'package:desktop/providers/membership_type.provider.dart';
 import 'package:flutter/material.dart';
 
 import '../models/search_result.dart';
-import '../popups/user_upsert_popup.dart';
+import '../popups/membership_type_upsert_popup.dart';
 
+import '../widgets/bottom_right_button.dart';
 
 class MembershipTypePageView extends StatefulWidget {
   const MembershipTypePageView({super.key});
@@ -143,7 +144,19 @@ class _MembershipTypePageViewState extends State<MembershipTypePageView> {
                 rowsPerPage: 5,
               ),
             ),
-            //const BottomRightButton(buttonText: "Dodaj")
+            BottomRightButton(
+              buttonText: "Dodaj",
+              onPressed: () async {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return const MembershipTypeEditPopUpWidget(
+                      edit: false,
+                    );
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -191,8 +204,8 @@ DataRow recentFileDataRow(BuildContext context, data) {
                   await showDialog(
                     context: context,
                     builder: (context) {
-                      return UserEditPopUpWidget(
-                        edit: false,
+                      return MembershipTypeEditPopUpWidget(
+                        edit: true,
                         data: data,
                       );
                     },

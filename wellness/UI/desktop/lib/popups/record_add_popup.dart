@@ -7,7 +7,9 @@ import '../providers/user_provider.dart';
 import '../utils/validation_rules.dart';
 
 class RecordAddPopupWidget extends StatefulWidget {
-  const RecordAddPopupWidget({super.key});
+   final Function() refreshCallback;
+
+  const RecordAddPopupWidget({super.key, required this.refreshCallback});
 
   @override
   State<RecordAddPopupWidget> createState() => _RecordAddPopupWidgetState();
@@ -38,6 +40,7 @@ class _RecordAddPopupWidgetState extends State<RecordAddPopupWidget> {
   void _saveChanges() async {
     if (_formKey.currentState!.validate()) {
       await recordProvider.addEntry(selectedUser!);
+      widget.refreshCallback();
       // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
     }

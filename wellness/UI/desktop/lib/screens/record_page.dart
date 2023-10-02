@@ -38,8 +38,6 @@ class _RecordPageViewState extends State<RecordPageView> {
     await _recordProvider.leaveEntry(user);
   }
 
- 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -159,6 +157,7 @@ class _RecordPageViewState extends State<RecordPageView> {
                   count: myData.result.length,
                   myData: myData.result,
                   context: context,
+                  refreshCallback: fetchData,
                 ),
                 rowsPerPage: 5,
               ),
@@ -169,7 +168,9 @@ class _RecordPageViewState extends State<RecordPageView> {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    return const RecordAddPopupWidget();
+                    return RecordAddPopupWidget(
+                      refreshCallback: fetchData,
+                    );
                   },
                 );
               },
@@ -186,17 +187,20 @@ class RowSource extends DataTableSource {
   final int count;
   final BuildContext context;
   final Function(dynamic) leaveEntry;
+  final Function() refreshCallback;
   RowSource(
     this.leaveEntry, {
     required this.myData,
     required this.count,
     required this.context,
+    required this.refreshCallback,
   });
 
   @override
   DataRow? getRow(int index) {
     if (index < rowCount) {
-      return recentFileDataRow(context, myData![index], leaveEntry);
+      return recentFileDataRow(
+          context, myData![index], leaveEntry, refreshCallback);
     } else {
       return null;
     }
@@ -212,8 +216,8 @@ class RowSource extends DataTableSource {
   int get selectedRowCount => 0;
 }
 
-DataRow recentFileDataRow(
-    BuildContext context, data, Function(dynamic) leaveEntry) {
+DataRow recentFileDataRow(BuildContext context, data,
+    Function(dynamic) leaveEntry, Function() refreshCallback) {
   return DataRow(
     cells: [
       DataCell(Text(data.firstName)),
@@ -228,7 +232,7 @@ DataRow recentFileDataRow(
               child: ElevatedButton(
                 onPressed: () async {
                   await leaveEntry(data);
-                   
+                  refreshCallback();
                 },
                 child: const Text("Izlaz"),
               ),

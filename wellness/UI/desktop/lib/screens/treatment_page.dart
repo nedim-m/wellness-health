@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import '../models/search_result.dart';
 import '../popups/treatment_detail_widget.dart';
 import '../popups/treatment_upsert_popup.dart';
+import '../widgets/bottom_right_button.dart';
 
 class TreatmentPageView extends StatefulWidget {
   const TreatmentPageView({super.key});
@@ -194,13 +195,28 @@ class _TreatmentPageViewState extends State<TreatmentPageView> {
                   ),
                 ],
                 source: RowSource(
-                    count: myData.result.length,
-                    myData: myData.result,
-                    context: context),
+                  count: myData.result.length,
+                  myData: myData.result,
+                  context: context,
+                  refreshCallback: fetchData,
+                ),
                 rowsPerPage: 5,
               ),
             ),
-            //const BottomRightButton(buttonText: "Dodaj")
+            BottomRightButton(
+              buttonText: "Dodaj",
+              onPressed: () async {
+                showDialog(
+                  context: context,
+                  builder: (context) {
+                    return TreatmenUpsertPopUpWidget(
+                      edit: false,
+                      refreshCallback: fetchData,
+                    );
+                  },
+                );
+              },
+            ),
           ],
         ),
       ),
@@ -208,20 +224,24 @@ class _TreatmentPageViewState extends State<TreatmentPageView> {
   }
 }
 
+class TreatmenUpsertPopUpWidgetState {}
+
 class RowSource extends DataTableSource {
   final dynamic myData;
   final int count;
   final BuildContext context;
+  final Function() refreshCallback;
   RowSource({
     required this.myData,
     required this.count,
     required this.context,
+    required this.refreshCallback,
   });
 
   @override
   DataRow? getRow(int index) {
     if (index < rowCount) {
-      return recentFileDataRow(context, myData![index]);
+      return recentFileDataRow(context, myData![index], refreshCallback);
     } else {
       return null;
     }
@@ -237,7 +257,8 @@ class RowSource extends DataTableSource {
   int get selectedRowCount => 0;
 }
 
-DataRow recentFileDataRow(BuildContext context, var data) {
+DataRow recentFileDataRow(
+    BuildContext context, var data, Function() refreshCallback) {
   return DataRow(
     cells: [
       DataCell(Text(data.treatmentType)),
@@ -272,6 +293,7 @@ DataRow recentFileDataRow(BuildContext context, var data) {
                       return TreatmenUpsertPopUpWidget(
                         data: data,
                         edit: true,
+                        refreshCallback: refreshCallback,
                       );
                     },
                   );

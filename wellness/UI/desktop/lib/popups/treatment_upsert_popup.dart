@@ -1,6 +1,8 @@
 import 'package:desktop/models/treatment_type.dart';
 import 'package:desktop/providers/category_provider.dart';
+import 'package:desktop/providers/treatment_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../models/category.dart';
 import '../models/search_result.dart';
@@ -13,10 +15,11 @@ class TreatmenUpsertPopUpWidget extends StatefulWidget {
     super.key,
     this.data,
     required this.edit,
+    required this.refreshCallback,
   });
   final Treatment? data;
   final bool edit;
-
+  final Function() refreshCallback;
   @override
   State<TreatmenUpsertPopUpWidget> createState() =>
       _TreatmenUpsertPopUpWidgetState();
@@ -63,31 +66,28 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
   }
 
   void _saveChanges() async {
-    /*final provider =
-        Provider.of<TreatmentUpsertProvider>(context, listen: false);
+    final provider = Provider.of<TreatmentProvider>(context, listen: false);
     if (widget.edit == true && widget.data != null) {
-      provider.update(
-          widget.data!.id,
-          TreatmentUpsert(
-              selectedTreatmentTypeId!,
-              selectedCategoryId!,
-              description.text,
-              double.parse(price.text),
-              int.parse(duration.text),
-              null));
+      await provider.updateTreatment(
+        widget.data!.id,
+        selectedTreatmentTypeId!,
+        selectedCategoryId!,
+        description.text,
+        int.parse(duration.text),
+        double.parse(price.text),
+        "N/A",
+      );
     } else {
-      provider.insert(
-        (
-          0,
-          selectedTreatmentTypeId!,
-          selectedCategoryId!,
-          description.text,
-          int.parse(duration.text),
-          double.parse(price.text),
-        ),
-      )
-    }*/
-
+      await provider.addTreatment(
+        selectedTreatmentTypeId!,
+        selectedCategoryId!,
+        description.text,
+        int.parse(duration.text),
+        double.parse(price.text),
+        "N/A",
+      );
+    }
+    widget.refreshCallback();
     Navigator.of(context).pop();
   }
 

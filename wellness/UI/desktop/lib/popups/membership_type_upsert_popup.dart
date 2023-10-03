@@ -12,9 +12,11 @@ class MembershipTypeEditPopUpWidget extends StatefulWidget {
     super.key,
     this.data,
     required this.edit,
+    required this.refreshCallback,
   });
   final MembershipType? data;
   final bool edit;
+  final Function() refreshCallback;
 
   @override
   State<MembershipTypeEditPopUpWidget> createState() =>
@@ -53,18 +55,19 @@ class _MembershipTypeEditPopUpWidgetState
         Provider.of<MembershipTypeProvider>(context, listen: false);
     if (_formKey.currentState!.validate()) {
       if (widget.edit == true && widget.data != null) {
-        provider.update(
+        await provider.update(
           widget.data!.id,
           TreatmentType(widget.data!.id, name.text, description.text,
               double.parse(price.text)),
         );
       } else {
-        provider.insert(
+        await provider.insert(
           TreatmentType(
               0, name.text, description.text, double.parse(price.text)),
         );
       }
-
+      widget.refreshCallback();
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
     }
   }

@@ -138,9 +138,11 @@ class _MembershipTypePageViewState extends State<MembershipTypePageView> {
                   ),
                 ],
                 source: RowSource(
-                    count: myData.result.length,
-                    myData: myData.result,
-                    context: context),
+                  count: myData.result.length,
+                  myData: myData.result,
+                  context: context,
+                  refreshCallback: fetchData,
+                ),
                 rowsPerPage: 5,
               ),
             ),
@@ -150,8 +152,9 @@ class _MembershipTypePageViewState extends State<MembershipTypePageView> {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    return const MembershipTypeEditPopUpWidget(
+                    return MembershipTypeEditPopUpWidget(
                       edit: false,
+                      refreshCallback: fetchData,
                     );
                   },
                 );
@@ -168,12 +171,18 @@ class RowSource extends DataTableSource {
   final dynamic myData;
   final int count;
   final BuildContext context;
-  RowSource({required this.myData, required this.count, required this.context});
+  final Function() refreshCallback;
+  RowSource({
+    required this.myData,
+    required this.count,
+    required this.context,
+    required this.refreshCallback,
+  });
 
   @override
   DataRow? getRow(int index) {
     if (index < rowCount) {
-      return recentFileDataRow(context, myData![index]);
+      return recentFileDataRow(context, myData![index], refreshCallback);
     } else {
       return null;
     }
@@ -189,7 +198,8 @@ class RowSource extends DataTableSource {
   int get selectedRowCount => 0;
 }
 
-DataRow recentFileDataRow(BuildContext context, data) {
+DataRow recentFileDataRow(
+    BuildContext context, data, Function() refreshCallback) {
   return DataRow(
     cells: [
       DataCell(Text(data.name)),
@@ -207,6 +217,7 @@ DataRow recentFileDataRow(BuildContext context, data) {
                       return MembershipTypeEditPopUpWidget(
                         edit: true,
                         data: data,
+                        refreshCallback: refreshCallback,
                       );
                     },
                   );

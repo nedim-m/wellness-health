@@ -10,9 +10,11 @@ class CategoryEditPopUpWidget extends StatefulWidget {
     super.key,
     this.data,
     required this.edit,
+    required this.refreshCallback,
   });
   final Category? data;
   final bool edit;
+  final Function() refreshCallback;
 
   @override
   State<CategoryEditPopUpWidget> createState() =>
@@ -45,9 +47,10 @@ class _CategoryEditPopUpWidgetState extends State<CategoryEditPopUpWidget> {
 
   void _saveChanges() async {
     final provider = Provider.of<CategoryProvider>(context, listen: false);
+
     if (_formKey.currentState!.validate()) {
       if (widget.edit == true && widget.data != null) {
-        provider.update(
+        await provider.update(
           widget.data!.id,
           Category(
             widget.data!.id,
@@ -57,11 +60,12 @@ class _CategoryEditPopUpWidgetState extends State<CategoryEditPopUpWidget> {
           ),
         );
       } else {
-        provider.insert(
+        await provider.insert(
           Category(0, name.text, description.text, selectedStatus),
         );
       }
-
+      widget.refreshCallback();
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
     }
   }

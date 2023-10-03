@@ -151,6 +151,7 @@ class _WorkerPageViewState extends State<WorkerPageView> {
                   count: myData.result.length,
                   myData: myData.result,
                   context: context,
+                  refreshCallback: fetchData,
                 ),
                 rowsPerPage: 5,
               ),
@@ -161,8 +162,9 @@ class _WorkerPageViewState extends State<WorkerPageView> {
                 showDialog(
                   context: context,
                   builder: (context) {
-                    return const WorkerEditPopUpWidget(
+                    return WorkerEditPopUpWidget(
                       edit: false,
+                      refreshCallback: fetchData,
                     );
                   },
                 );
@@ -179,16 +181,18 @@ class RowSource extends DataTableSource {
   final dynamic myData;
   final int count;
   final BuildContext context;
+  final Function() refreshCallback;
   RowSource({
     required this.myData,
     required this.count,
     required this.context,
+    required this.refreshCallback,
   });
 
   @override
   DataRow? getRow(int index) {
     if (index < rowCount) {
-      return recentFileDataRow(context, myData![index]);
+      return recentFileDataRow(context, myData![index], refreshCallback);
     } else {
       return null;
     }
@@ -204,7 +208,8 @@ class RowSource extends DataTableSource {
   int get selectedRowCount => 0;
 }
 
-DataRow recentFileDataRow(BuildContext context, var data) {
+DataRow recentFileDataRow(
+    BuildContext context, var data, Function() refreshCallback) {
   return DataRow(
     cells: [
       DataCell(Text(data.firstName)),
@@ -227,6 +232,7 @@ DataRow recentFileDataRow(BuildContext context, var data) {
                       return WorkerEditPopUpWidget(
                         edit: true,
                         data: data,
+                        refreshCallback: refreshCallback,
                       );
                     },
                   );

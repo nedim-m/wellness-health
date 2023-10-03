@@ -13,10 +13,12 @@ class WorkerEditPopUpWidget extends StatefulWidget {
     Key? key,
     this.data,
     required this.edit,
+    required this.refreshCallback,
   }) : super(key: key);
 
   final User? data;
   final bool edit;
+  final Function() refreshCallback;
 
   @override
   State<WorkerEditPopUpWidget> createState() => _WorkerEditPopUpWidgetState();
@@ -72,7 +74,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
     final provider = Provider.of<UserProvider>(context, listen: false);
     if (_formKey.currentState!.validate()) {
       if (widget.edit == true && widget.data != null) {
-        provider.updateWorker(
+        await provider.updateWorker(
           widget.data!.id,
           firstName.text,
           lastName.text,
@@ -83,7 +85,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
           selectedRole!.id,
         );
       } else {
-        provider.addWorker(
+        await provider.addWorker(
           firstName.text,
           lastName.text,
           email.text,
@@ -93,7 +95,8 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
           selectedRole!.id,
         );
       }
-
+      widget.refreshCallback();
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
     }
   }

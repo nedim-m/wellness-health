@@ -9,6 +9,7 @@ import '../models/search_result.dart';
 import '../models/treatment.dart';
 
 import '../providers/treatment_type_provider.dart';
+import '../utils/validation_rules.dart';
 
 class TreatmenUpsertPopUpWidget extends StatefulWidget {
   const TreatmenUpsertPopUpWidget({
@@ -37,6 +38,9 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
 
   int? selectedTreatmentTypeId;
   int? selectedCategoryId;
+
+  final _formKey = GlobalKey<FormState>();
+  final _validation = ValidationRules();
 
   @override
   void initState() {
@@ -67,82 +71,94 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
 
   void _saveChanges() async {
     final provider = Provider.of<TreatmentProvider>(context, listen: false);
-    if (widget.edit == true && widget.data != null) {
-      await provider.updateTreatment(
-        widget.data!.id,
-        selectedTreatmentTypeId!,
-        selectedCategoryId!,
-        description.text,
-        int.parse(duration.text),
-        double.parse(price.text),
-        "N/A",
-      );
-    } else {
-      await provider.addTreatment(
-        selectedTreatmentTypeId!,
-        selectedCategoryId!,
-        description.text,
-        int.parse(duration.text),
-        double.parse(price.text),
-        "N/A",
-      );
+    if (_formKey.currentState!.validate()) {
+      if (widget.edit == true && widget.data != null) {
+        await provider.updateTreatment(
+          widget.data!.id,
+          selectedTreatmentTypeId!,
+          selectedCategoryId!,
+          description.text,
+          int.parse(duration.text),
+          double.parse(price.text),
+          "N/A",
+        );
+      } else {
+        await provider.addTreatment(
+          selectedTreatmentTypeId!,
+          selectedCategoryId!,
+          description.text,
+          int.parse(duration.text),
+          double.parse(price.text),
+          "N/A",
+        );
+      }
+      widget.refreshCallback();
+      Navigator.of(context).pop();
     }
-    widget.refreshCallback();
-    Navigator.of(context).pop();
   }
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: widget.edit ? const Text("Edit Item") : const Text("Add Item"),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          DropdownButtonFormField<int>(
-            value: selectedTreatmentTypeId,
-            onChanged: (newValue) {
-              setState(() {
-                selectedTreatmentTypeId = newValue;
-              });
-            },
-            items: treatmentType.result.map((treatment) {
-              return DropdownMenuItem<int>(
-                value: treatment.id,
-                child: Text(treatment.name),
-              );
-            }).toList(),
-            decoration: const InputDecoration(labelText: 'Vrsta usluge'),
-          ),
-          DropdownButtonFormField<int>(
-            value: selectedCategoryId,
-            onChanged: (newValue) {
-              setState(() {
-                selectedCategoryId = newValue;
-              });
-            },
-            items: category.result.map((cat) {
-              return DropdownMenuItem<int>(
-                value: cat.id,
-                child: Text(cat.name),
-              );
-            }).toList(),
-            decoration: const InputDecoration(labelText: 'Kategorija'),
-          ),
-          TextField(
-            controller: description,
-            decoration: const InputDecoration(labelText: "Opis"),
-          ),
-          TextField(
-            controller: duration,
-            decoration: const InputDecoration(labelText: "Trajanje"),
-            keyboardType: TextInputType.number,
-          ),
-          TextField(
-            controller: price,
-            decoration: const InputDecoration(labelText: "Cijena"),
-            keyboardType: TextInputType.number,
-          ),
-        ],
+      content: Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            DropdownButtonFormField<int>(
+              value: selectedTreatmentTypeId,
+              onChanged: (newValue) {
+                setState(() {
+                  selectedTreatmentTypeId = newValue;
+                });
+              },
+              items: treatmentType.result.map((treatment) {
+                return DropdownMenuItem<int>(
+                  value: treatment.id,
+                  child: Text(treatment.name),
+                );
+              }).toList(),
+              decoration: const InputDecoration(labelText: 'Vrsta usluge'),
+              validator: _validation.validateDropdown,
+            ),
+            DropdownButtonFormField<int>(
+              value: selectedCategoryId,
+              onChanged: (newValue) {
+                setState(() {
+                  selectedCategoryId = newValue;
+                });
+              },
+              items: category.result.map((cat) {
+                return DropdownMenuItem<int>(
+                  value: cat.id,
+                  child: Text(cat.name),
+                );
+              }).toList(),
+              decoration: const InputDecoration(labelText: 'Kategorija'),
+              validator: _validation.validateDropdown,
+            ),
+            TextFormField(
+              controller: description,
+              decoration: const InputDecoration(labelText: "Opis"),
+              validator: (value) => _validation.validateTextInput(
+                  value, 'Please enter description.'),
+            ),
+            TextFormField(
+              controller: duration,
+              decoration: const InputDecoration(labelText: "Trajanje"),
+              keyboardType: TextInputType.number,
+              validator: (value) => _validation.validateNumberInput(
+                  value, 'Please enter duration.'),
+            ),
+            TextFormField(
+              controller: price,
+              decoration: const InputDecoration(labelText: "Cijena"),
+              keyboardType: TextInputType.number,
+              validator: _validation.validatePrice,
+            ),
+          ],
+        ),
       ),
       actions: [
         TextButton(

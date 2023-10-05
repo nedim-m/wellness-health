@@ -71,4 +71,18 @@ class ValidationRules {
 
     return null;
   }
+
+  String? validateNumberInput(String? userInput, String errorMessage) {
+    if (userInput == null || userInput.isEmpty) {
+      return errorMessage;
+    }
+
+    final RegExp numericRegex = RegExp(r'^[0-9]+$');
+
+    if (!numericRegex.hasMatch(userInput)) {
+      return 'Input must contain only numbers.';
+    }
+
+    return null;
+  }
 }

@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:desktop/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:file_picker/file_picker.dart'; // Import FilePicker package
+import 'dart:io';
 
 import '../models/user.dart';
 import '../utils/validation_rules.dart';
@@ -28,8 +32,10 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
   TextEditingController userName = TextEditingController();
   TextEditingController phone = TextEditingController();
 
+  File? selectedPhoto;
   final _formKey = GlobalKey<FormState>();
   final _validation = ValidationRules();
+  String? _base64Image;
 
   @override
   void initState() {
@@ -54,6 +60,20 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
     super.dispose();
   }
 
+  Future<void> _selectPhoto() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+
+    if (result != null) {
+      setState(() {
+        selectedPhoto = File(result.files.single.path!);
+      });
+
+      _base64Image = base64Encode(selectedPhoto!.readAsBytesSync());
+    }
+  }
+
   void _saveChanges() async {
     final provider = Provider.of<UserProvider>(context, listen: false);
     if (_formKey.currentState!.validate()) {
@@ -65,6 +85,7 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
           email.text,
           userName.text,
           phone.text,
+          _base64Image!,
         );
       } else {
         await provider.addUser(
@@ -73,10 +94,11 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
           email.text,
           userName.text,
           phone.text,
+          _base64Image!,
         );
       }
+
       widget.refreshCallback();
-      // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
     }
   }
@@ -90,6 +112,28 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            GestureDetector(
+              onTap: _selectPhoto,
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  border: Border.all(color: Colors.grey),
+                ),
+                child: selectedPhoto != null
+                    ? Image.file(selectedPhoto!, fit: BoxFit.cover)
+                    : const Center(
+                        child: Text(
+                          "Tap to Add Photo",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+              ),
+            ),
             TextFormField(
               controller: firstName,
               decoration: const InputDecoration(labelText: "First Name"),

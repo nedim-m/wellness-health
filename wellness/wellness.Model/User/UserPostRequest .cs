@@ -21,7 +21,7 @@ namespace wellness.Models.UserPostRequest
         public string Password { get; set; } = null!;
         
         public string ConfrimPassword { get; set; } = null!;
-
+        public byte[]? Picture { get; set; }
         public int RoleId { get; set; }
 
         public string? Phone { get; set; }

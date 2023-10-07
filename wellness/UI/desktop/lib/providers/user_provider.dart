@@ -14,7 +14,7 @@ class UserProvider extends BaseProvider<User> {
   }
 
   Future<dynamic> updateUser(int id, String firstName, String lastName,
-      String email, String userName, String phone) async {
+      String email, String userName, String phone, String picture) async {
     var url = "$baseUrl$endpoint/$id";
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token!);
@@ -26,10 +26,10 @@ class UserProvider extends BaseProvider<User> {
       "userName": userName,
       "password": "",
       "confrimPassword": "",
+      "picture": picture,
       "roleId": 3,
       "phone": phone
     });
-
 
     var response = await http.put(uri, headers: headers, body: jsonRequest);
 
@@ -42,7 +42,7 @@ class UserProvider extends BaseProvider<User> {
   }
 
   Future<dynamic> addUser(String firstName, String lastName, String email,
-      String userName, String phone) async {
+      String userName, String phone, String picture) async {
     var url = "${baseUrl}Auth/register";
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token!);
@@ -54,6 +54,7 @@ class UserProvider extends BaseProvider<User> {
       "userName": userName,
       "password": "user",
       "confrimPassword": "user",
+      "picture": picture,
       "phone": phone
     });
 

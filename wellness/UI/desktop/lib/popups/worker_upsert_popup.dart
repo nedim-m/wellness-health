@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:desktop/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:file_picker/file_picker.dart'; // Import FilePicker package
+import 'dart:io';
 
 import '../models/role.dart';
 import '../models/search_result.dart';
@@ -35,8 +39,10 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
   SearchResult<Role> myData = SearchResult<Role>();
   Role? selectedRole;
   List<Role> allRoles = [];
+  File? selectedPhoto;
   final _formKey = GlobalKey<FormState>();
   final _validation = ValidationRules();
+  String? _base64Image;
 
   @override
   void initState() {
@@ -70,6 +76,20 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
     super.dispose();
   }
 
+  Future<void> _selectPhoto() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+
+    if (result != null) {
+      setState(() {
+        selectedPhoto = File(result.files.single.path!);
+      });
+
+      _base64Image = base64Encode(selectedPhoto!.readAsBytesSync());
+    }
+  }
+
   void _saveChanges() async {
     final provider = Provider.of<UserProvider>(context, listen: false);
     if (_formKey.currentState!.validate()) {
@@ -83,6 +103,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
           phone.text,
           password.text,
           selectedRole!.id,
+          _base64Image!,
         );
       } else {
         await provider.addWorker(
@@ -93,10 +114,16 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
           phone.text,
           password.text,
           selectedRole!.id,
+          _base64Image!,
         );
       }
+
+      // Save the selected photo if there is one
+      if (selectedPhoto != null) {
+        // Implement the logic to save the photo here
+      }
+
       widget.refreshCallback();
-      // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
     }
   }
@@ -111,6 +138,28 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              GestureDetector(
+                onTap: _selectPhoto,
+                child: Container(
+                  width: 100,
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.grey[200],
+                    border: Border.all(color: Colors.grey),
+                  ),
+                  child: selectedPhoto != null
+                      ? Image.file(selectedPhoto!, fit: BoxFit.cover)
+                      : const Center(
+                          child: Text(
+                            "Tap to Add Photo",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              color: Colors.grey,
+                            ),
+                          ),
+                        ),
+                ),
+              ),
               TextFormField(
                 controller: firstName,
                 decoration: const InputDecoration(labelText: "First Name"),
@@ -160,7 +209,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
                     child: Text(role.name),
                   );
                 }).toList(),
-                hint: const Text("Izaberite poziciju"),
+                hint: const Text("Choose a Role"),
                 validator: _validation.validateDropdown,
               ),
             ],

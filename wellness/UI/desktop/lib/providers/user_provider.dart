@@ -68,8 +68,15 @@ class UserProvider extends BaseProvider<User> {
     }
   }
 
-  Future<dynamic> addWorker(String firstName, String lastName, String email,
-      String userName, String phone, String password, int roleId) async {
+  Future<dynamic> addWorker(
+      String firstName,
+      String lastName,
+      String email,
+      String userName,
+      String phone,
+      String password,
+      int roleId,
+      String picture) async {
     var url = "$baseUrl$endpoint";
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token!);
@@ -81,6 +88,7 @@ class UserProvider extends BaseProvider<User> {
       "userName": userName,
       "password": password,
       "confrimPassword": password,
+      "picture": picture,
       "roleId": roleId,
       "phone": phone
     });
@@ -96,14 +104,16 @@ class UserProvider extends BaseProvider<User> {
   }
 
   Future<dynamic> updateWorker(
-      int id,
-      String firstName,
-      String lastName,
-      String email,
-      String userName,
-      String phone,
-      String password,
-      int roleId) async {
+    int id,
+    String firstName,
+    String lastName,
+    String email,
+    String userName,
+    String phone,
+    String password,
+    int roleId,
+    String picture,
+  ) async {
     var url = "$baseUrl$endpoint/$id";
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token!);
@@ -115,6 +125,7 @@ class UserProvider extends BaseProvider<User> {
       "userName": userName,
       "password": password,
       "confrimPassword": password,
+      "picture": picture,
       "roleId": roleId,
       "phone": phone
     });

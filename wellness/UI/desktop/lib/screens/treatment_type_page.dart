@@ -3,6 +3,7 @@ import 'package:desktop/providers/treatment_type_provider.dart';
 
 import 'package:flutter/material.dart';
 
+
 import '../models/search_result.dart';
 import '../popups/treatment_type_upsert_popup.dart';
 import '../widgets/bottom_right_button.dart';
@@ -32,6 +33,11 @@ class _TreatmentTypePageViewState extends State<TreatmentTypePageView> {
     setState(() {
       filterData = myData.result;
     });
+  }
+
+  Future<void> deleteData(int id) async {
+    await treatmentProvider.delete(id);
+    fetchData();
   }
 
   @override
@@ -135,6 +141,7 @@ class _TreatmentTypePageViewState extends State<TreatmentTypePageView> {
                   myData: myData.result,
                   context: context,
                   refreshCallback: fetchData,
+                  deleteCallback: deleteData,
                 ),
                 rowsPerPage: 5,
               ),
@@ -165,18 +172,21 @@ class RowSource extends DataTableSource {
   final int count;
   final BuildContext context;
   final Function() refreshCallback;
+  final Function(int) deleteCallback;
 
   RowSource({
     required this.context,
     required this.myData,
     required this.count,
     required this.refreshCallback,
+    required this.deleteCallback,
   });
 
   @override
   DataRow? getRow(int index) {
     if (index < rowCount) {
-      return recentFileDataRow(context, myData![index], refreshCallback);
+      return recentFileDataRow(
+          context, myData![index], refreshCallback, deleteCallback);
     } else {
       return null;
     }
@@ -192,8 +202,8 @@ class RowSource extends DataTableSource {
   int get selectedRowCount => 0;
 }
 
-DataRow recentFileDataRow(
-    BuildContext context, var data, Function() refreshCallback) {
+DataRow recentFileDataRow(BuildContext context, var data,
+    Function() refreshCallback, Function(int) deleteCallback) {
   return DataRow(
     cells: [
       DataCell(Text(data.name)),
@@ -222,7 +232,9 @@ DataRow recentFileDataRow(
             const SizedBox(width: 8),
             Expanded(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () {
+                  deleteCallback(data.id);
+                },
                 child: const Text("Delete"),
               ),
             ),

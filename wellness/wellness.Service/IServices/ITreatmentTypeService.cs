@@ -10,5 +10,6 @@ namespace wellness.Service.IServices
 {
     public interface ITreatmentTypeService:ICrudService<TreatmentType,BaseSearchObject, TreatmentTypePostRequest, TreatmentTypePostRequest>
     {
+        Task<bool> Delete(int id);
     }
 }

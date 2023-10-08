@@ -12,8 +12,25 @@ namespace wellness.Service.Services
 {
     public class TreatmentTypeService : CrudService<Model.TreatmentType.TreatmentType, Database.TreatmentType, BaseSearchObject, Model.TreatmentType.TreatmentTypePostRequest, Model.TreatmentType.TreatmentTypePostRequest>, ITreatmentTypeService
     {
+        private readonly DbWellnessContext _context;
         public TreatmentTypeService(IMapper mapper, DbWellnessContext context) : base(mapper, context)
         {
+            _context=context;
+        }
+
+        public async Task<bool> Delete(int id)
+        {
+            var obj = await _context.TreatmentTypes.FindAsync(id);
+            if (obj!=null)
+            {
+                _context.TreatmentTypes.Remove(obj);
+                await _context.SaveChangesAsync();
+                return true;
+            }
+
+            return false;
+            
+
         }
     }
 }

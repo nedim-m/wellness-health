@@ -1,6 +1,10 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:desktop/models/treatment_type.dart';
 import 'package:desktop/providers/category_provider.dart';
 import 'package:desktop/providers/treatment_provider.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -42,6 +46,9 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
   final _formKey = GlobalKey<FormState>();
   final _validation = ValidationRules();
 
+  File? selectedPhoto;
+  String? _base64Image;
+
   @override
   void initState() {
     if (widget.edit == true && widget.data != null) {
@@ -69,6 +76,20 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
     setState(() {});
   }
 
+  Future<void> _selectPhoto() async {
+    FilePickerResult? result = await FilePicker.platform.pickFiles(
+      type: FileType.image,
+    );
+
+    if (result != null) {
+      setState(() {
+        selectedPhoto = File(result.files.single.path!);
+      });
+
+      _base64Image = base64Encode(selectedPhoto!.readAsBytesSync());
+    }
+  }
+
   void _saveChanges() async {
     final provider = Provider.of<TreatmentProvider>(context, listen: false);
     if (_formKey.currentState!.validate()) {
@@ -80,7 +101,7 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
           description.text,
           int.parse(duration.text),
           double.parse(price.text),
-          "N/A",
+          _base64Image!,
         );
       } else {
         await provider.addTreatment(
@@ -89,7 +110,7 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
           description.text,
           int.parse(duration.text),
           double.parse(price.text),
-          "N/A",
+          _base64Image!,
         );
       }
       widget.refreshCallback();
@@ -106,6 +127,28 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            GestureDetector(
+              onTap: _selectPhoto,
+              child: Container(
+                width: 100,
+                height: 100,
+                decoration: BoxDecoration(
+                  color: Colors.grey[200],
+                  border: Border.all(color: Colors.grey),
+                ),
+                child: selectedPhoto != null
+                    ? Image.file(selectedPhoto!, fit: BoxFit.cover)
+                    : const Center(
+                        child: Text(
+                          "Tap to Add Photo",
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            color: Colors.grey,
+                          ),
+                        ),
+                      ),
+              ),
+            ),
             DropdownButtonFormField<int>(
               value: selectedTreatmentTypeId,
               onChanged: (newValue) {

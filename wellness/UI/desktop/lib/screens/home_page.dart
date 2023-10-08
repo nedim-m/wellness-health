@@ -23,7 +23,7 @@ class _HomepageViewState extends State<HomepageView> {
   List<NavigationPaneItem> items = [
     PaneItem(
       icon: const Icon(FluentIcons.people),
-      title: const Text('Korsinici'),
+      title: const Text('Korisnici'),
       body: const UserPageView(),
     ),
     PaneItem(

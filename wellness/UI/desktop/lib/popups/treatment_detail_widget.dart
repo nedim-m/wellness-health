@@ -1,13 +1,20 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
+import 'dart:convert';
 
 import '../models/treatment.dart';
 
 class TreatmentDetailWidget extends StatelessWidget {
-  const TreatmentDetailWidget({super.key, required this.data});
+  const TreatmentDetailWidget({Key? key, required this.data}) : super(key: key);
   final Treatment data;
 
   @override
   Widget build(BuildContext context) {
+    final List<int> imageBytes = base64.decode(data.picture ?? '');
+    final ImageProvider decodedImage =
+        MemoryImage(Uint8List.fromList(imageBytes));
+
     return AlertDialog(
       title: const Text("Detalji tretmana"),
       content: Row(
@@ -49,10 +56,10 @@ class TreatmentDetailWidget extends StatelessWidget {
             ),
           ),
           if (data.picture != null)
-            Image.network(
-              data.picture!,
-              height: 100,
-              width: 100,
+            Image(
+              image: decodedImage,
+              height: 200,
+              width: 200,
             ),
         ],
       ),

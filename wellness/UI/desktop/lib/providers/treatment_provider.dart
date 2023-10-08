@@ -24,10 +24,8 @@ class TreatmentProvider extends BaseProvider<Treatment> {
       "description": description,
       "duration": duration,
       "price": price,
-      "picture": null,
+      "picture": picture,
     });
-
-    print(jsonRequest);
 
     var response = await http.post(uri, headers: headers, body: jsonRequest);
 
@@ -51,7 +49,7 @@ class TreatmentProvider extends BaseProvider<Treatment> {
       "description": description,
       "duration": duration,
       "price": price,
-      "picture": null,
+      "picture": picture,
     });
 
     var response = await http.put(uri, headers: headers, body: jsonRequest);

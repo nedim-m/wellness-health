@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:desktop/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:file_picker/file_picker.dart'; // Import FilePicker package
+import 'package:file_picker/file_picker.dart'; 
 import 'dart:io';
 
 import '../models/role.dart';
@@ -118,10 +118,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
         );
       }
 
-      // Save the selected photo if there is one
-      if (selectedPhoto != null) {
-        // Implement the logic to save the photo here
-      }
+      
 
       widget.refreshCallback();
       Navigator.of(context).pop();

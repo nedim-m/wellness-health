@@ -52,6 +52,7 @@ namespace wellness.Service.Services
 
             return new AuthResponse
             {
+                Message=user.RoleId.ToString(),
                 Success = true,
                 Token = token,
                 RefreshToken = refreshToken.Token,
@@ -78,6 +79,7 @@ namespace wellness.Service.Services
 
             return new AuthResponse
             {
+                Message=user.RoleId.ToString(),
                 Success = true,
                 Token = token,
                 RefreshToken = newRefreshToken.Token,

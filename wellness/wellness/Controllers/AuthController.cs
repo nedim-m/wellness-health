@@ -28,9 +28,18 @@ namespace wellness.Controllers
         [HttpPost("login")]
         public async Task<ActionResult<AuthResponse>> Login(UserLoginRequest request)
         {
+
+
             var response = await _authService.Login(request);
+
             if (response.Success)
-                return Ok(response);
+            {
+                if (request.Desktop && !response.Message.Equals("3"))
+                    return Ok(response);
+                if (!request.Desktop && response.Message.Equals("3"))
+                    return Ok(response);
+
+            }
 
             return BadRequest(response.Message);
         }

@@ -16,15 +16,16 @@ class _LoginPageViewState extends State<LoginPageView> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   bool _loginFailed = false;
+  final String _errorMessage = "Invalid username or password!";
 
   Future<void> _login() async {
     final String username = _usernameController.text;
     final String password = _passwordController.text;
 
     final response = await http.post(
-     
       Uri.parse('https://localhost:7081/Auth/login'), // Hard coded url
-      body: jsonEncode({'username': username, 'password': password}),
+      body: jsonEncode(
+          {'username': username, 'password': password, 'desktop': true}),
       headers: {'Content-Type': 'application/json'},
     );
 
@@ -110,11 +111,11 @@ class _LoginPageViewState extends State<LoginPageView> {
                 ),
               ),
               if (_loginFailed)
-                const Padding(
-                  padding: EdgeInsets.only(top: 8.0),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
                   child: Text(
-                    'Invalid username or password',
-                    style: TextStyle(color: Colors.red),
+                    _errorMessage,
+                    style: const TextStyle(color: Colors.red),
                   ),
                 ),
               const SizedBox(height: 24.0),

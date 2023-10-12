@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:desktop/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:file_picker/file_picker.dart'; 
+import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 
 import '../models/role.dart';
@@ -117,8 +117,6 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
           _base64Image!,
         );
       }
-
-      
 
       widget.refreshCallback();
       Navigator.of(context).pop();

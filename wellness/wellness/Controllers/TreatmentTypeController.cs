@@ -24,7 +24,9 @@ namespace wellness.Controllers
         public async Task<ActionResult>Delete(int id)
         {
             var response = await _service.Delete(id);
+            if(response)
             return Ok(response);
+            return BadRequest();
         }
     }
 }

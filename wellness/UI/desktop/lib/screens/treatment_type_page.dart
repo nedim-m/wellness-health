@@ -3,7 +3,6 @@ import 'package:desktop/providers/treatment_type_provider.dart';
 
 import 'package:flutter/material.dart';
 
-
 import '../models/search_result.dart';
 import '../popups/treatment_type_upsert_popup.dart';
 import '../widgets/bottom_right_button.dart';
@@ -35,9 +34,18 @@ class _TreatmentTypePageViewState extends State<TreatmentTypePageView> {
     });
   }
 
-  Future<void> deleteData(int id) async {
-    await treatmentProvider.delete(id);
-    fetchData();
+  Future<bool> deleteData(int id) async {
+    try {
+      bool success = await treatmentProvider.delete(id);
+
+      if (success) {
+        fetchData();
+      }
+
+      return success;
+    } catch (e) {
+      return false;
+    }
   }
 
   @override
@@ -232,8 +240,28 @@ DataRow recentFileDataRow(BuildContext context, var data,
             const SizedBox(width: 8),
             Expanded(
               child: ElevatedButton(
-                onPressed: () {
-                  deleteCallback(data.id);
+                onPressed: () async {
+                  bool deleted = await deleteCallback(data.id);
+                  if (!deleted) {
+                    // ignore: use_build_context_synchronously
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Deletion Error'),
+                          content: const Text('You cannot delete this item.'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
                 },
                 child: const Text("Delete"),
               ),

@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,16 +22,21 @@ namespace wellness.Service.Services
         public async Task<bool> Delete(int id)
         {
             var obj = await _context.TreatmentTypes.FindAsync(id);
-            if (obj!=null)
+            if (obj != null)
             {
-                _context.TreatmentTypes.Remove(obj);
-                await _context.SaveChangesAsync();
-                return true;
+                var hasRelatedTreatments = await _context.Treatments
+                    .AnyAsync(t => t.TreatmentTypeId == id);
+
+                if (!hasRelatedTreatments)
+                {
+                    _context.TreatmentTypes.Remove(obj);
+                    await _context.SaveChangesAsync();
+                    return true;
+                }
             }
 
             return false;
-            
-
         }
+
     }
 }

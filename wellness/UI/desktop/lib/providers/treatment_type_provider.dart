@@ -12,18 +12,22 @@ class TreatmentTypeProvider extends BaseProvider<TreatmentType> {
     return TreatmentType.fromJson(data);
   }
 
-  Future<void> delete(int id) async {
+  Future<bool> delete(int id) async {
     var url = "$baseUrl$endpoint/$id";
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token!);
 
     var response = await http.delete(uri, headers: headers);
 
-    if (isValidResponse(response)) {
-      var data = jsonDecode(response.body);
-      return (data);
-    } else {
-      throw Exception("Unknown error");
+    try {
+      if (isValidResponse(response)) {
+        var data = jsonDecode(response.body);
+        return data;
+      } else {
+        throw Exception("Unknown error");
+      }
+    } catch (e) {
+      return false;
     }
   }
 }

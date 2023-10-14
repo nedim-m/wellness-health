@@ -250,7 +250,10 @@ DataRow recentFileDataRow(BuildContext context, var data,
                       context: context,
                       builder: (context) {
                         return AlertDialog(
-                          title: const Text('Deletion Error'),
+                          title: const Text(
+                            'Deletion Error',
+                            style: TextStyle(color: Colors.red),
+                          ),
                           content: const Text('You cannot delete this item.'),
                           actions: <Widget>[
                             TextButton(

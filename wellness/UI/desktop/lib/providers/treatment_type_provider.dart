@@ -26,6 +26,7 @@ class TreatmentTypeProvider extends BaseProvider<TreatmentType> {
       } else {
         throw Exception("Unknown error");
       }
+      
     } catch (e) {
       return false;
     }

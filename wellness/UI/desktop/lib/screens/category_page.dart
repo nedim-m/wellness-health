@@ -34,6 +34,20 @@ class _CategoryPageViewState extends State<CategoryPageView> {
     });
   }
 
+  Future<bool> deleteData(int id) async {
+    try {
+      bool success = await _categoryProvider.delete(id);
+
+      if (success) {
+        fetchData();
+      }
+
+      return success;
+    } catch (e) {
+      return false;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -135,6 +149,7 @@ class _CategoryPageViewState extends State<CategoryPageView> {
                   myData: myData.result,
                   context: context,
                   refreshCallback: fetchData,
+                  deleteCallback: deleteData,
                 ),
                 rowsPerPage: 5,
               ),
@@ -165,17 +180,19 @@ class RowSource extends DataTableSource {
   final int count;
   final BuildContext context;
   final Function() refreshCallback;
-  RowSource({
-    required this.myData,
-    required this.count,
-    required this.context,
-    required this.refreshCallback,
-  });
+  final Function(int) deleteCallback;
+  RowSource(
+      {required this.myData,
+      required this.count,
+      required this.context,
+      required this.refreshCallback,
+      required this.deleteCallback});
 
   @override
   DataRow? getRow(int index) {
     if (index < rowCount) {
-      return recentFileDataRow(context, myData![index], refreshCallback);
+      return recentFileDataRow(
+          context, myData![index], refreshCallback, deleteCallback);
     } else {
       return null;
     }
@@ -191,8 +208,8 @@ class RowSource extends DataTableSource {
   int get selectedRowCount => 0;
 }
 
-DataRow recentFileDataRow(
-    BuildContext context, var data, Function() refreshCallback) {
+DataRow recentFileDataRow(BuildContext context, var data,
+    Function() refreshCallback, Function(int) deleteCallback) {
   return DataRow(
     cells: [
       DataCell(Text(data.name ?? "Name")),
@@ -225,7 +242,29 @@ DataRow recentFileDataRow(
             const SizedBox(width: 8),
             Expanded(
               child: ElevatedButton(
-                onPressed: () {},
+                onPressed: () async {
+                  bool deleted = await deleteCallback(data.id);
+                  if (!deleted) {
+                    // ignore: use_build_context_synchronously
+                    showDialog(
+                      context: context,
+                      builder: (context) {
+                        return AlertDialog(
+                          title: const Text('Deletion Error'),
+                          content: const Text('You cannot delete this item.'),
+                          actions: <Widget>[
+                            TextButton(
+                              child: const Text('OK'),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                              },
+                            ),
+                          ],
+                        );
+                      },
+                    );
+                  }
+                },
                 child: const Text("Delete"),
               ),
             ),

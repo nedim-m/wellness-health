@@ -10,6 +10,6 @@ namespace wellness.Service.IServices
 {
     public interface ICategoryService : ICrudService<Category,BaseSearchObject,CategoryPostRequest, CategoryPostRequest>
     {
-
+        Task<bool> Delete(int id);
     }
 }

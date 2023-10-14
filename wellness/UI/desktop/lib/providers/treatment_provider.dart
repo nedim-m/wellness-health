@@ -61,4 +61,23 @@ class TreatmentProvider extends BaseProvider<Treatment> {
       throw Exception("Unknown error");
     }
   }
+
+  Future<bool> delete(int id) async {
+    var url = "$baseUrl$endpoint/$id";
+    var uri = Uri.parse(url);
+    var headers = createJwtHeaders(token!);
+
+    var response = await http.delete(uri, headers: headers);
+
+    try {
+      if (isValidResponse(response)) {
+        var data = jsonDecode(response.body);
+        return data;
+      } else {
+        throw Exception("Unknown error");
+      }
+    } catch (e) {
+      return false;
+    }
+  }
 }

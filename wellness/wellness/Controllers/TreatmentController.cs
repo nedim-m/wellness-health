@@ -12,8 +12,22 @@ namespace wellness.Controllers
   
     public class TreatmentController : CrudController<Model.Treatment.Treatment, BaseSearchObject, Model.Treatment.TreatmentPostRequest, Model.Treatment.TreatmentPostRequest>
     {
+
+        private new readonly ITreatmentService _service;
         public TreatmentController(ILogger<BaseController<Model.Treatment.Treatment, BaseSearchObject>> logger, ITreatmentService service) : base(logger, service)
         {
+            _service=service;
         }
+
+
+        [HttpDelete("{id}")]
+        public async Task<ActionResult> Delete(int id)
+        {
+            var response = await _service.Delete(id);
+            if (response)
+                return Ok(response);
+            return BadRequest();
+        }
+
     }
 }

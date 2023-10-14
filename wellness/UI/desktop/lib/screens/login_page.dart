@@ -1,8 +1,6 @@
+import 'package:desktop/providers/user_provider.dart';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
-import '../utils/token_store.dart';
 import 'home_page.dart';
 
 class LoginPageView extends StatefulWidget {
@@ -15,29 +13,20 @@ class LoginPageView extends StatefulWidget {
 class _LoginPageViewState extends State<LoginPageView> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final UserProvider _userProvider = UserProvider();
   bool _loginFailed = false;
   final String _errorMessage = "Invalid username or password!";
 
   Future<void> _login() async {
     final String username = _usernameController.text;
     final String password = _passwordController.text;
-
-    final response = await http.post(
-      Uri.parse('https://localhost:7081/Auth/login'), // Hard coded url
-      body: jsonEncode(
-          {'username': username, 'password': password, 'desktop': true}),
-      headers: {'Content-Type': 'application/json'},
-    );
-
-    if (response.statusCode == 200) {
-      final Map<String, dynamic> responseData = jsonDecode(response.body);
+    final response = await _userProvider.login(username, password);
+    if (response) {
       setState(() {
-        TokenManager.saveToken(responseData['token']);
         _usernameController.clear();
         _passwordController.clear();
       });
       _loginFailed = false;
-
       // ignore: use_build_context_synchronously
       Navigator.push(
         context,

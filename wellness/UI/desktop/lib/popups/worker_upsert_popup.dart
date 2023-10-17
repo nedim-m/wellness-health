@@ -52,6 +52,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
       email = TextEditingController(text: widget.data!.email);
       userName = TextEditingController(text: widget.data!.userName);
       phone = TextEditingController(text: widget.data!.phone);
+      _base64Image = widget.data!.picture;
     }
     fetchData();
 
@@ -84,9 +85,8 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
     if (result != null) {
       setState(() {
         selectedPhoto = File(result.files.single.path!);
+        _base64Image = base64Encode(selectedPhoto!.readAsBytesSync());
       });
-
-      _base64Image = base64Encode(selectedPhoto!.readAsBytesSync());
     }
   }
 
@@ -103,7 +103,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
           phone.text,
           password.text,
           selectedRole!.id,
-          _base64Image!,
+          _base64Image ?? widget.data!.picture,
         );
       } else {
         await provider.addWorker(
@@ -114,7 +114,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
           phone.text,
           password.text,
           selectedRole!.id,
-          _base64Image!,
+          _base64Image ?? "N/A",
         );
       }
 
@@ -145,15 +145,20 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
                   ),
                   child: selectedPhoto != null
                       ? Image.file(selectedPhoto!, fit: BoxFit.cover)
-                      : const Center(
-                          child: Text(
-                            "Tap to Add Photo",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.grey,
+                      : _base64Image != null && _base64Image!.isNotEmpty
+                          ? Image.memory(
+                              base64.decode(_base64Image!),
+                              fit: BoxFit.cover,
+                            )
+                          : const Center(
+                              child: Text(
+                                "Tap to Add Photo",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
                             ),
-                          ),
-                        ),
                 ),
               ),
               TextFormField(

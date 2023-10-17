@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'package:desktop/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:file_picker/file_picker.dart'; 
+import 'package:file_picker/file_picker.dart';
 import 'dart:io';
 
 import '../models/user.dart';
@@ -45,6 +45,7 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
       email = TextEditingController(text: widget.data!.email);
       userName = TextEditingController(text: widget.data!.userName);
       phone = TextEditingController(text: widget.data!.phone);
+      _base64Image = widget.data!.picture;
     }
 
     super.initState();
@@ -68,9 +69,8 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
     if (result != null) {
       setState(() {
         selectedPhoto = File(result.files.single.path!);
+        _base64Image = base64Encode(selectedPhoto!.readAsBytesSync());
       });
-
-      _base64Image = base64Encode(selectedPhoto!.readAsBytesSync());
     }
   }
 
@@ -85,7 +85,7 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
           email.text,
           userName.text,
           phone.text,
-          _base64Image!,
+          _base64Image ?? widget.data!.picture,
         );
       } else {
         await provider.addUser(
@@ -94,7 +94,7 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
           email.text,
           userName.text,
           phone.text,
-          _base64Image!,
+          _base64Image ?? "N/A",
         );
       }
 
@@ -123,15 +123,20 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
                 ),
                 child: selectedPhoto != null
                     ? Image.file(selectedPhoto!, fit: BoxFit.cover)
-                    : const Center(
-                        child: Text(
-                          "Tap to Add Photo",
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: Colors.grey,
+                    : _base64Image != null && _base64Image!.isNotEmpty
+                        ? Image.memory(
+                            base64.decode(_base64Image!),
+                            fit: BoxFit.cover,
+                          )
+                        : const Center(
+                            child: Text(
+                              "Tap to Add Photo",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: Colors.grey,
+                              ),
+                            ),
                           ),
-                        ),
-                      ),
               ),
             ),
             TextFormField(

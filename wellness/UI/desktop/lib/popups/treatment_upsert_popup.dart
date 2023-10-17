@@ -114,6 +114,7 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
         );
       }
       widget.refreshCallback();
+      // ignore: use_build_context_synchronously
       Navigator.of(context).pop();
     }
   }

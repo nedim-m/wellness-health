@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:desktop/providers/base_provider.dart';
+import 'package:desktop/utils/role_store.dart';
 import 'package:http/http.dart' as http;
 
 import '../models/user.dart';
@@ -158,6 +159,7 @@ class UserProvider extends BaseProvider<User> {
       if (isValidResponse(response)) {
         var data = jsonDecode(response.body);
         TokenManager.saveToken(data['token']);
+        RoleManager.saveIsAdmin(data['message']);
         return true;
       } else {
         throw Exception("Unknown error");

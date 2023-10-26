@@ -8,8 +8,8 @@ using wellness.Model.Category;
 
 namespace wellness.Service.IServices
 {
-    public interface ICategoryService : ICrudService<Category,BaseSearchObject,Category,Category>
+    public interface ICategoryService : ICrudService<Category,BaseSearchObject,CategoryPostRequest, CategoryPostRequest>
     {
-
+        Task<bool> Delete(int id);
     }
 }

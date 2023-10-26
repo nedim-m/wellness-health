@@ -54,6 +54,11 @@ builder.Services.AddCors(options => options.AddPolicy(name: "NgOrigins",
 builder.Services.AddTransient<IAuthService, AuthService>();
 builder.Services.AddTransient<IUserService, UserService>();
 builder.Services.AddTransient<ICategoryService,CategoryService>();
+builder.Services.AddTransient<ITreatmentTypeService, TreatmentTypeService>();
+builder.Services.AddTransient<ITreatmentService, TreatmentService>();
+builder.Services.AddTransient<IMembershipTypeService, MembershipTypeService>();
+builder.Services.AddTransient<IRecordService, RecordService>();
+builder.Services.AddTransient<IRoleService, RoleService>();
 
 
 

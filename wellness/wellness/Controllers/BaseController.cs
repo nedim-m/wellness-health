@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using wellness.Model;
 using wellness.Service.IServices;
 
@@ -18,14 +19,15 @@ namespace wellness.Controllers
             _service = service;
         }
 
+        //[HttpGet(), Authorize(Roles = "Administrator")]
         [HttpGet()]
-        public async Task<PagedResult<T>> Get([FromQuery] TSearch? search = null)
+        public virtual async Task<PagedResult<T>> Get([FromQuery] TSearch? search = null)
         {
             return await _service.Get(search);
         }
 
-        [HttpGet("{id}")]
-        public async Task<T> GetById(int id)
+        [HttpGet("{id}"),Authorize(Roles = "Administrator")]
+        public virtual async Task<T> GetById(int id)
         {
             return await _service.GetById(id);
         }

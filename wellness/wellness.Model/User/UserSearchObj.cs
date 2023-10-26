@@ -6,9 +6,12 @@ using System.Threading.Tasks;
 
 namespace wellness.Model.User
 {
-    public class UserSearchObj
+    public class UserSearchObj : BaseSearchObject
     {
         public string Role { get; set; } = string.Empty;
-        public string? SearchName { get; set; } 
+        public string? SearchName { get; set; }
+
+        public string? Prisutan { get; set; }
+
     }
 }

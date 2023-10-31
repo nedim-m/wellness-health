@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace wellness.Service.Migrations
 {
     /// <inheritdoc />
-    public partial class test : Migration
+    public partial class testDbContextseed : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -91,6 +91,7 @@ namespace wellness.Service.Migrations
                     UserName = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Phone = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<bool>(type: "bit", nullable: false),
+                    Prisutan = table.Column<bool>(type: "bit", nullable: true),
                     Picture = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
                     RoleId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -114,6 +115,7 @@ namespace wellness.Service.Migrations
                     TreatmentTypeId = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Duration = table.Column<int>(type: "int", nullable: false),
                     Price = table.Column<float>(type: "real", nullable: false),
                     Picture = table.Column<byte[]>(type: "varbinary(max)", nullable: false)
                 },
@@ -169,8 +171,8 @@ namespace wellness.Service.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    EntryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    LeaveEntryDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EntryDate = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    LeaveEntryDate = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -249,11 +251,21 @@ namespace wellness.Service.Migrations
                     { 1, "Administracija", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Administrator", null },
                     { 2, "Evidencija prisutnih, rezervacija i tretmana", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Worker-first-shift", "od 08:00 do 16:00" },
                     { 3, "Korisnik", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Member", null },
-                    { 4, "Evidencija prisutnih, rezervacija i tretmana", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Worker-second-shift", "od 08:00 do 16:00" },
+                    { 4, "Evidencija prisutnih, rezervacija i tretmana", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Worker-second-shift", "od 16:00 do 23:00" },
                     { 5, "Fitnes trener", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Trainer-first-shift", "od 08:00 do 16:00" },
-                    { 6, "Fitnes trener, rezervacija i tretmana", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Trainer-second-shift", "od 08:00 do 16:00" },
+                    { 6, "Fitnes trener", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Trainer-second-shift", "od 16:00 do 23:00" },
                     { 7, "Fizijatar", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Physiotherapist-first-shift", "od 08:00 do 16:00" },
-                    { 8, "Fizijatar, rezervacija i tretmana", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Physiotherapist-second-shift", "od 08:00 do 16:00" }
+                    { 8, "Fizijatar", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Physiotherapist-second-shift", "od 16:00 do 23:00" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Users",
+                columns: new[] { "Id", "Email", "FirstName", "LastName", "PasswordHash", "PasswordSalt", "Phone", "Picture", "Prisutan", "RefreshToken", "RoleId", "Status", "TokenCreated", "TokenExpires", "UserName" },
+                values: new object[,]
+                {
+                    { 1, "admin@admin.com", "Admin", "Admin", new byte[] { 121, 196, 229, 226, 156, 226, 132, 65, 207, 254, 90, 152, 15, 48, 147, 10, 89, 188, 65, 118, 220, 95, 122, 84, 106, 251, 167, 20, 10, 222, 210, 1, 240, 243, 68, 22, 243, 36, 222, 42, 114, 207, 117, 174, 34, 135, 67, 30, 40, 144, 21, 250, 33, 24, 220, 142, 39, 23, 128, 238, 188, 139, 4, 78 }, new byte[] { 75, 42, 158, 170, 242, 143, 49, 217, 11, 31, 60, 110, 3, 162, 244, 15, 64, 94, 80, 27, 194, 224, 95, 84, 48, 137, 97, 152, 191, 77, 4, 64, 228, 187, 93, 203, 209, 195, 10, 79, 104, 102, 93, 239, 221, 198, 205, 163, 233, 41, 66, 94, 12, 94, 221, 83, 37, 109, 174, 4, 57, 130, 84, 173, 232, 26, 71, 252, 179, 190, 224, 34, 89, 148, 191, 140, 142, 144, 249, 67, 210, 95, 74, 103, 212, 227, 49, 150, 210, 201, 150, 249, 28, 214, 117, 144, 115, 247, 175, 249, 6, 143, 5, 220, 125, 177, 84, 227, 243, 230, 189, 223, 14, 6, 213, 241, 83, 211, 21, 122, 147, 225, 62, 239, 53, 224, 105, 160 }, "061111222", null, null, "", 1, true, new DateTime(2023, 10, 31, 7, 55, 42, 537, DateTimeKind.Utc).AddTicks(2589), new DateTime(2023, 10, 31, 8, 55, 42, 537, DateTimeKind.Utc).AddTicks(2593), "admin" },
+                    { 2, "worker@admin.com", "Worker", "Worker", new byte[] { 121, 196, 229, 226, 156, 226, 132, 65, 207, 254, 90, 152, 15, 48, 147, 10, 89, 188, 65, 118, 220, 95, 122, 84, 106, 251, 167, 20, 10, 222, 210, 1, 240, 243, 68, 22, 243, 36, 222, 42, 114, 207, 117, 174, 34, 135, 67, 30, 40, 144, 21, 250, 33, 24, 220, 142, 39, 23, 128, 238, 188, 139, 4, 78 }, new byte[] { 75, 42, 158, 170, 242, 143, 49, 217, 11, 31, 60, 110, 3, 162, 244, 15, 64, 94, 80, 27, 194, 224, 95, 84, 48, 137, 97, 152, 191, 77, 4, 64, 228, 187, 93, 203, 209, 195, 10, 79, 104, 102, 93, 239, 221, 198, 205, 163, 233, 41, 66, 94, 12, 94, 221, 83, 37, 109, 174, 4, 57, 130, 84, 173, 232, 26, 71, 252, 179, 190, 224, 34, 89, 148, 191, 140, 142, 144, 249, 67, 210, 95, 74, 103, 212, 227, 49, 150, 210, 201, 150, 249, 28, 214, 117, 144, 115, 247, 175, 249, 6, 143, 5, 220, 125, 177, 84, 227, 243, 230, 189, 223, 14, 6, 213, 241, 83, 211, 21, 122, 147, 225, 62, 239, 53, 224, 105, 160 }, "061112333", null, null, "", 2, true, new DateTime(2023, 10, 31, 7, 55, 42, 537, DateTimeKind.Utc).AddTicks(2772), new DateTime(2023, 10, 31, 8, 55, 42, 537, DateTimeKind.Utc).AddTicks(2773), "worker" },
+                    { 3, "member@admin.com", "Member", "Member", new byte[] { 121, 196, 229, 226, 156, 226, 132, 65, 207, 254, 90, 152, 15, 48, 147, 10, 89, 188, 65, 118, 220, 95, 122, 84, 106, 251, 167, 20, 10, 222, 210, 1, 240, 243, 68, 22, 243, 36, 222, 42, 114, 207, 117, 174, 34, 135, 67, 30, 40, 144, 21, 250, 33, 24, 220, 142, 39, 23, 128, 238, 188, 139, 4, 78 }, new byte[] { 75, 42, 158, 170, 242, 143, 49, 217, 11, 31, 60, 110, 3, 162, 244, 15, 64, 94, 80, 27, 194, 224, 95, 84, 48, 137, 97, 152, 191, 77, 4, 64, 228, 187, 93, 203, 209, 195, 10, 79, 104, 102, 93, 239, 221, 198, 205, 163, 233, 41, 66, 94, 12, 94, 221, 83, 37, 109, 174, 4, 57, 130, 84, 173, 232, 26, 71, 252, 179, 190, 224, 34, 89, 148, 191, 140, 142, 144, 249, 67, 210, 95, 74, 103, 212, 227, 49, 150, 210, 201, 150, 249, 28, 214, 117, 144, 115, 247, 175, 249, 6, 143, 5, 220, 125, 177, 84, 227, 243, 230, 189, 223, 14, 6, 213, 241, 83, 211, 21, 122, 147, 225, 62, 239, 53, 224, 105, 160 }, "061110121", null, null, "", 3, true, new DateTime(2023, 10, 31, 7, 55, 42, 537, DateTimeKind.Utc).AddTicks(2937), new DateTime(2023, 10, 31, 8, 55, 42, 537, DateTimeKind.Utc).AddTicks(2938), "worker" }
                 });
 
             migrationBuilder.CreateIndex(

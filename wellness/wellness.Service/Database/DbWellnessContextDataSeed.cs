@@ -53,7 +53,7 @@ namespace wellness.Service.Database
             });
             modelBuilder.Entity<User>().HasData(new User
             {
-                Id = 3ad,
+                Id = 3,
                 FirstName = "Member",
                 LastName = "Member",
                 Email = "member@admin.com",

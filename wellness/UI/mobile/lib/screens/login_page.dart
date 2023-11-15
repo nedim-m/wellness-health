@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/screens/home_page.dart';
 
 class LoginPageView extends StatefulWidget {
   const LoginPageView({super.key});
@@ -29,10 +30,10 @@ class _LoginPageViewState extends State<LoginPageView> {
       });
       _loginFailed = false;
       // ignore: use_build_context_synchronously
-      /* Navigator.push(
+      Navigator.push(
         context,
         MaterialPageRoute(builder: (context) => const HomepageView()),
-      );*/
+      );
     } else {
       setState(() {
         _loginFailed = true;

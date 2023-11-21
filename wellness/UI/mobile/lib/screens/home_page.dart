@@ -23,16 +23,19 @@ class HomepageView extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: const Padding(
-        padding: EdgeInsets.all(16.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CustomButton(text: 'Pregled Tretmana'),
-            CustomButton(text: 'Moje rezervacije'),
-            CustomButton(text: 'Profil'),
-            CustomButton(text: 'Odjava'),
-          ],
+      body: Container(
+        margin: const EdgeInsets.only(bottom: 100.0),
+        child: const Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomButton(text: 'Pregled Tretmana'),
+              CustomButton(text: 'Moje rezervacije'),
+              CustomButton(text: 'Profil'),
+              CustomButton(text: 'Odjava'),
+            ],
+          ),
         ),
       ),
     );

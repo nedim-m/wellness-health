@@ -17,11 +17,8 @@ class _LoginPageViewState extends State<LoginPageView> {
   Future<void> _login() async {
     final String username = _usernameController.text;
     final String password = _passwordController.text;
-    // Replace the following line with your actual login logic
-    // final response = await _userProvider.login(username, password);
 
-    // Temporary code to simulate login success
-    final response = true;
+    const response = true;
 
     if (response) {
       setState(() {

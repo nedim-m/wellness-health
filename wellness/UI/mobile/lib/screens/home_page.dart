@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import 'package:mobile/widgets/homepage_button.dart';
+
+import 'package:mobile/screens/login_page.dart';
+import 'package:mobile/screens/treatment_overview_page.dart';
+import 'package:mobile/widgets/app_bar.dart';
+import 'package:mobile/widgets/custom_button.dart';
 
 class HomepageView extends StatelessWidget {
   const HomepageView({super.key});
@@ -8,21 +11,7 @@ class HomepageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text('Wellness Center - Health'),
-            Gap(10),
-            Text(
-              'Dobro došli, Ime i Prezime',
-              style: TextStyle(fontSize: 16.0),
-            ),
-          ],
-        ),
-        centerTitle: true,
-      ),
+      appBar: const AppBarWidget(),
       body: Container(
         margin: const EdgeInsets.only(bottom: 100.0),
         child: const Padding(
@@ -30,10 +19,22 @@ class HomepageView extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              CustomButton(text: 'Pregled Tretmana'),
-              CustomButton(text: 'Moje rezervacije'),
-              CustomButton(text: 'Profil'),
-              CustomButton(text: 'Odjava'),
+              CustomButton(
+                text: 'Pregled Tretmana',
+                navigateTo: TreatmentOverview(),
+              ),
+              CustomButton(
+                text: 'Moje rezervacije',
+                navigateTo: LoginPageView(),
+              ),
+              CustomButton(
+                text: 'Profil',
+                navigateTo: LoginPageView(),
+              ),
+              CustomButton(
+                text: 'Odjava',
+                navigateTo: LoginPageView(),
+              ),
             ],
           ),
         ),

@@ -74,7 +74,7 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
                     },
                     items: treatmentTypes.map((type) => type.name).toList(),
                   ),
-                  const SizedBox(height: 15),
+                  const SizedBox(height: 20),
                   _buildDropdown(
                     label: "Enter category",
                     value: selectedCategory,
@@ -88,7 +88,7 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
                 ],
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
               child: DataTable(
@@ -133,7 +133,6 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
     required List<String> items,
   }) {
     return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         Padding(
@@ -142,22 +141,37 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
             label,
             style: const TextStyle(
               fontWeight: FontWeight.bold,
-              fontSize: 16,
+              fontSize: 18,
             ),
             textAlign: TextAlign.center,
           ),
         ),
-        DropdownButton<String>(
-          value: value,
-          onChanged: onChanged,
-          items: items
-              .map<DropdownMenuItem<String>>(
-                (String value) => DropdownMenuItem<String>(
-                  value: value,
-                  child: Center(child: Text(value)),
-                ),
-              )
-              .toList(),
+        Center(
+          child: SizedBox(
+            width: double.infinity,
+            child: DropdownButton<String>(
+              value: value,
+              onChanged: onChanged,
+              itemHeight: 50.0,
+              underline: Container(
+                width: double.infinity, // Ensure the underline takes full width
+                height: 1,
+                color: Colors.grey,
+              ),
+              isExpanded: true, // Allow the dropdown to take full width
+              hint: const Center(
+                child: Text("Select", textAlign: TextAlign.center),
+              ), // Center the default label
+              items: items
+                  .map<DropdownMenuItem<String>>(
+                    (String value) => DropdownMenuItem<String>(
+                      value: value,
+                      child: Center(child: Text(value)),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
         ),
       ],
     );

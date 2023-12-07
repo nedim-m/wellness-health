@@ -1,21 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/models/category.dart';
+import 'package:mobile/models/treatment.dart';
+import 'package:mobile/models/treatment_type.dart';
+import 'package:mobile/providers/category_provider.dart';
+import 'package:mobile/providers/treatment_provider.dart';
+import 'package:mobile/providers/treatment_type_provider.dart';
 import 'package:mobile/widgets/app_bar.dart';
 
 class TreatmentOverview extends StatefulWidget {
-  const TreatmentOverview({super.key});
+  const TreatmentOverview({Key? key}) : super(key: key);
 
   @override
   State<TreatmentOverview> createState() => _TreatmentOverviewState();
 }
 
 class _TreatmentOverviewState extends State<TreatmentOverview> {
-  List<String> filterData = ['Treatment 1', 'Treatment 2', 'Treatment 3'];
-  List<String> myData = [];
-  String selectedTreatment = '';
-  String selectedCategory = '';
+  final TreatmentProvider _treatmentProvider = TreatmentProvider();
+  final CategoryProvider _categoryProvider = CategoryProvider();
+  final TreatmentTypeProvider _treatmentTypeProvider = TreatmentTypeProvider();
 
-  TextEditingController treatmentTypeController = TextEditingController();
-  TextEditingController categoryController = TextEditingController();
+  List<Treatment> filterData = [];
+  List<Treatment> myData = [];
+  List<Category> categories = [];
+  List<TreatmentType> treatmentTypes = [];
+  String? selectedTreatment; // Make it nullable
+  String? selectedCategory; // Make it nullable
 
   @override
   void initState() {
@@ -23,10 +32,19 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
     fetchData();
   }
 
-  void fetchData() {
+  Future<void> fetchData() async {
+    myData = await _treatmentProvider.get();
+    categories = await _categoryProvider.get();
+    treatmentTypes = await _treatmentTypeProvider.get();
+
     setState(() {
-      myData = List.from(filterData);
+      filterData = myData;
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override
@@ -35,64 +53,37 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
       appBar: const AppBarWidget(),
       body: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
             Container(
+              width: MediaQuery.of(context).size.width * 0.9,
               padding: const EdgeInsets.all(10),
               child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
-                    child: Text(
-                      "Enter treatment type",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                  DropdownButton<String>(
+                  _buildDropdown(
+                    label: "Enter treatment type",
                     value: selectedTreatment,
                     onChanged: (value) {
                       setState(() {
-                        selectedTreatment = value!;
+                        selectedTreatment = value;
                       });
                     },
-                    items: filterData.map<DropdownMenuItem<String>>(
-                      (String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      },
-                    ).toList(),
+                    items: treatmentTypes.map((type) => type.name).toList(),
                   ),
                   const SizedBox(height: 15),
-                  const Padding(
-                    padding: EdgeInsets.symmetric(vertical: 8.0),
-                    child: Text(
-                      "Enter category",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 18,
-                      ),
-                    ),
-                  ),
-                  DropdownButton<String>(
+                  _buildDropdown(
+                    label: "Enter category",
                     value: selectedCategory,
                     onChanged: (value) {
                       setState(() {
-                        selectedCategory = value!;
+                        selectedCategory = value;
                       });
                     },
-                    items: filterData.map<DropdownMenuItem<String>>(
-                      (String value) {
-                        return DropdownMenuItem<String>(
-                          value: value,
-                          child: Text(value),
-                        );
-                      },
-                    ).toList(),
+                    items: categories.map((category) => category.name).toList(),
                   ),
                 ],
               ),
@@ -106,9 +97,10 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
                     label: Text(
                       "Treatment Type",
                       style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16,
                       ),
+                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],
@@ -116,7 +108,12 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
                     .map(
                       (data) => DataRow(
                         cells: [
-                          DataCell(Text(data)),
+                          DataCell(
+                            Text(data.description),
+                            onTap: () {
+                              // Add onTap logic if needed
+                            },
+                          ),
                         ],
                       ),
                     )
@@ -126,6 +123,43 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildDropdown({
+    required String label,
+    required String? value,
+    required ValueChanged<String?> onChanged,
+    required List<String> items,
+  }) {
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.symmetric(vertical: 8.0),
+          child: Text(
+            label,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 16,
+            ),
+            textAlign: TextAlign.center,
+          ),
+        ),
+        DropdownButton<String>(
+          value: value,
+          onChanged: onChanged,
+          items: items
+              .map<DropdownMenuItem<String>>(
+                (String value) => DropdownMenuItem<String>(
+                  value: value,
+                  child: Center(child: Text(value)),
+                ),
+              )
+              .toList(),
+        ),
+      ],
     );
   }
 }

@@ -1,8 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/providers/category_provider.dart';
+import 'package:mobile/providers/treatment_provider.dart';
+import 'package:mobile/providers/treatment_type_provider.dart';
 import 'package:mobile/screens/login_page.dart';
+import 'package:provider/provider.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(create: (_) => TreatmentProvider()),
+      ChangeNotifierProvider(create: (_) => TreatmentTypeProvider()),
+      ChangeNotifierProvider(create: (_) => CategoryProvider()),
+    ],
+    child: const MyApp(),
+  ));
 }
 
 class MyApp extends StatelessWidget {

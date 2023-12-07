@@ -1,8 +1,10 @@
 import 'dart:convert';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+
 import 'package:http/http.dart';
+import 'package:http/io_client.dart';
 import 'package:mobile/utils/token_store.dart';
 
 abstract class BaseProvider<T> with ChangeNotifier {
@@ -13,12 +15,18 @@ abstract class BaseProvider<T> with ChangeNotifier {
   final _token = TokenManager.getToken();
   get token => _token;
 
+  HttpClient client = HttpClient();
+  IOClient? http;
+
   BaseProvider(this._endpoint) {
     _baseUrl = const String.fromEnvironment("baseUrl",
         defaultValue: "https://10.0.2.2:7081/");
     if (_baseUrl!.endsWith("/") == false) {
       _baseUrl = "${_baseUrl!}/";
     }
+
+    client.badCertificateCallback = (cert, host, port) => true;
+    http = IOClient(client);
   }
 
   Future<List<T>> get({dynamic filter}) async {
@@ -30,16 +38,14 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
 
     var uri = Uri.parse(url);
-    var headers = createJwtHeaders(_token!);
+    var headers = createJwtHeaders(_token ?? ''); //zbog testa
 
-    var response = await http.get(uri, headers: headers);
+    var response = await http!.get(uri, headers: headers);
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
 
-      var result = data.map((x) => fromJson(x)).cast<T>().toList();
-
-      return result;
+      return data['result'].map((x) => fromJson(x)).cast<T>().toList();
     } else {
       throw Exception("Unknown error");
     }
@@ -51,7 +57,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     var headers = createJwtHeaders(_token!);
 
     var jsonRequest = jsonEncode(request);
-    var response = await http.post(uri, headers: headers, body: jsonRequest);
+    var response = await http!.post(uri, headers: headers, body: jsonRequest);
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
@@ -68,7 +74,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
     var jsonRequest = jsonEncode(request);
 
-    var response = await http.put(uri, headers: headers, body: jsonRequest);
+    var response = await http!.put(uri, headers: headers, body: jsonRequest);
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);

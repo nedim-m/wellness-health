@@ -5,6 +5,7 @@ import 'package:mobile/models/treatment_type.dart';
 import 'package:mobile/providers/category_provider.dart';
 import 'package:mobile/providers/treatment_provider.dart';
 import 'package:mobile/providers/treatment_type_provider.dart';
+import 'package:mobile/screens/treatment_detail.dart';
 import 'package:mobile/widgets/app_bar.dart';
 
 class TreatmentOverview extends StatefulWidget {
@@ -111,7 +112,13 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
                           DataCell(
                             Text(data.description),
                             onTap: () {
-                              // Add onTap logic if needed
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => TreatmentDetails(
+                                          data: data,
+                                        )),
+                              );
                             },
                           ),
                         ],

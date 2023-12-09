@@ -3,7 +3,10 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 
 class DatePickerWidget extends StatefulWidget {
-  const DatePickerWidget({Key? key}) : super(key: key);
+  final Function(DateTime) onDateSelected;
+
+  const DatePickerWidget({Key? key, required this.onDateSelected})
+      : super(key: key);
 
   @override
   State<DatePickerWidget> createState() => _DatePickerWidgetState();
@@ -29,6 +32,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
     if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
+        widget.onDateSelected(picked);
       });
     }
   }

@@ -5,6 +5,7 @@ part 'treatment.g.dart';
 @JsonSerializable()
 class Treatment {
   final int id;
+  final String name;
   final String treatmentType;
   final String category;
   final String description;
@@ -16,7 +17,7 @@ class Treatment {
       _$TreatmentFromJson(json);
 
   Treatment(this.id, this.treatmentType, this.category, this.description,
-      this.price, this.picture, this.duration);
+      this.price, this.picture, this.duration, this.name);
 
   Map<String, dynamic> toJson() => _$TreatmentToJson(this);
 }

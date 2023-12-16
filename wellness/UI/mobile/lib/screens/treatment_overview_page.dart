@@ -24,8 +24,8 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
   List<Treatment> myData = [];
   List<Category> categories = [];
   List<TreatmentType> treatmentTypes = [];
-  String? selectedTreatment; 
-  String? selectedCategory; 
+  String? selectedTreatment;
+  String? selectedCategory;
 
   @override
   void initState() {
@@ -110,7 +110,7 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
                       (data) => DataRow(
                         cells: [
                           DataCell(
-                            Text(data.description),
+                            Center(child: Text(data.name)),
                             onTap: () {
                               Navigator.push(
                                 context,
@@ -161,14 +161,14 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
               onChanged: onChanged,
               itemHeight: 50.0,
               underline: Container(
-                width: double.infinity, 
+                width: double.infinity,
                 height: 1,
                 color: Colors.grey,
               ),
-              isExpanded: true, 
+              isExpanded: true,
               hint: const Center(
                 child: Text("Select", textAlign: TextAlign.center),
-              ), 
+              ),
               items: items
                   .map<DropdownMenuItem<String>>(
                     (String value) => DropdownMenuItem<String>(

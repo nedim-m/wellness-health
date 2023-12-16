@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:mobile/screens/membership_page.dart';
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/double_text.dart';
 
@@ -39,7 +40,14 @@ class ProfilPageView extends StatelessWidget {
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const MembershipPageView(),
+                      ),
+                    );
+                  },
                   child: const Text("Uplati/produži članarinu"),
                 ),
               ),

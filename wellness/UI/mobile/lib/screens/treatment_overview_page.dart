@@ -24,8 +24,8 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
   List<Treatment> myData = [];
   List<Category> categories = [];
   List<TreatmentType> treatmentTypes = [];
-  String? selectedTreatment; // Make it nullable
-  String? selectedCategory; // Make it nullable
+  String? selectedTreatment; 
+  String? selectedCategory; 
 
   @override
   void initState() {
@@ -161,14 +161,14 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
               onChanged: onChanged,
               itemHeight: 50.0,
               underline: Container(
-                width: double.infinity, // Ensure the underline takes full width
+                width: double.infinity, 
                 height: 1,
                 color: Colors.grey,
               ),
-              isExpanded: true, // Allow the dropdown to take full width
+              isExpanded: true, 
               hint: const Center(
                 child: Text("Select", textAlign: TextAlign.center),
-              ), // Center the default label
+              ), 
               items: items
                   .map<DropdownMenuItem<String>>(
                     (String value) => DropdownMenuItem<String>(

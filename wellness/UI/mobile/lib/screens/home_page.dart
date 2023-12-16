@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:mobile/screens/login_page.dart';
+import 'package:mobile/screens/profil_page.dart';
 import 'package:mobile/screens/treatment_overview_page.dart';
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/custom_button.dart';
@@ -29,7 +30,7 @@ class HomepageView extends StatelessWidget {
               ),
               CustomButton(
                 text: 'Profil',
-                navigateTo: LoginPageView(),
+                navigateTo: ProfilPageView(),
               ),
               CustomButton(
                 text: 'Odjava',

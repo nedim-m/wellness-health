@@ -12,13 +12,20 @@ class TreatmentProvider extends BaseProvider<Treatment> {
     return Treatment.fromJson(data);
   }
 
-  Future<dynamic> addTreatment(int treatmentTypeId, int categoryId,
-      String description, int duration, double price, String picture) async {
+  Future<dynamic> addTreatment(
+      int treatmentTypeId,
+      int categoryId,
+      String description,
+      int duration,
+      double price,
+      String picture,
+      String name) async {
     var url = "$baseUrl$endpoint";
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token!);
 
     var jsonRequest = jsonEncode(<String, dynamic>{
+      "name": name,
       "treatmentTypeId": treatmentTypeId,
       "categoryId": categoryId,
       "description": description,
@@ -37,13 +44,21 @@ class TreatmentProvider extends BaseProvider<Treatment> {
     }
   }
 
-  Future<dynamic> updateTreatment(int id, int treatmentTypeId, int categoryId,
-      String description, int duration, double price, String picture) async {
+  Future<dynamic> updateTreatment(
+      int id,
+      int treatmentTypeId,
+      int categoryId,
+      String description,
+      int duration,
+      double price,
+      String picture,
+      String name) async {
     var url = "$baseUrl$endpoint/$id";
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token!);
 
     var jsonRequest = jsonEncode(<String, dynamic>{
+      "name": name,
       "treatmentTypeId": treatmentTypeId,
       "categoryId": categoryId,
       "description": description,

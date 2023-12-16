@@ -26,6 +26,11 @@ class TreatmentDetailWidget extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 TextFormField(
+                  controller: TextEditingController(text: data.name),
+                  decoration: const InputDecoration(labelText: "Naziv"),
+                  readOnly: true,
+                ),
+                TextFormField(
                   controller: TextEditingController(text: data.treatmentType),
                   decoration: const InputDecoration(labelText: "Vrsta usluge"),
                   readOnly: true,
@@ -39,6 +44,7 @@ class TreatmentDetailWidget extends StatelessWidget {
                   controller: TextEditingController(text: data.description),
                   decoration: const InputDecoration(labelText: "Opis"),
                   readOnly: true,
+                  maxLines: 5,
                 ),
                 TextFormField(
                   controller:

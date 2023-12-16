@@ -14,10 +14,12 @@ Treatment _$TreatmentFromJson(Map<String, dynamic> json) => Treatment(
       (json['price'] as num).toDouble(),
       json['picture'] as String?,
       json['duration'] as int,
+      json['name'] as String,
     );
 
 Map<String, dynamic> _$TreatmentToJson(Treatment instance) => <String, dynamic>{
       'id': instance.id,
+      'name': instance.name,
       'treatmentType': instance.treatmentType,
       'category': instance.category,
       'description': instance.description,

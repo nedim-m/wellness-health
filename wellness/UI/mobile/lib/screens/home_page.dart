@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:mobile/screens/login_page.dart';
+import 'package:mobile/screens/my_reservation_page.dart';
 import 'package:mobile/screens/profil_page.dart';
 import 'package:mobile/screens/treatment_overview_page.dart';
 import 'package:mobile/widgets/app_bar.dart';
@@ -26,7 +27,7 @@ class HomepageView extends StatelessWidget {
               ),
               CustomButton(
                 text: 'Moje rezervacije',
-                navigateTo: LoginPageView(),
+                navigateTo: MyReservationPageView(),
               ),
               CustomButton(
                 text: 'Profil',

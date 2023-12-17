@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using wellness.Model.Category;
 using wellness.Model.MembershipType;
 using wellness.Model.Record;
+using wellness.Model.Reservation;
 using wellness.Model.Role;
 using wellness.Model.RoleUpsertRequest;
 using wellness.Model.Treatment;
@@ -49,6 +50,10 @@ namespace wellness.Service.Services
             CreateMap<RoleUpsertRequest, Database.Role>();
             CreateMap<Database.Role, Role>();
 
+
+            CreateMap<ReservationPostRequest, Database.Reservation>();
+            CreateMap<Database.Reservation, Reservation>().ForMember(dest => dest.Treatment, opt => opt.MapFrom(src => src.Treatment.Name))
+                                                          .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
 
         }
     }

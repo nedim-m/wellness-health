@@ -43,7 +43,8 @@ class _TreatmenTimeState extends State<TreatmenTime> {
               smallText: formatter.format(widget.selectedDate),
             ),
             const Gap(30),
-            const ColorCodedCalendar(),
+            ColorCodedCalendar(
+                treatmentId: widget.data.id, selectedDate: widget.selectedDate),
           ]),
         ),
       ),

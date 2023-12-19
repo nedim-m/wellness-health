@@ -54,7 +54,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
   Future<T> insert(dynamic request) async {
     var url = "$_baseUrl$_endpoint";
     var uri = Uri.parse(url);
-    var headers = createJwtHeaders(_token!);
+    var headers = createJwtHeaders(_token ?? ''); //zbog testa
 
     var jsonRequest = jsonEncode(request);
     var response = await http!.post(uri, headers: headers, body: jsonRequest);

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/providers/category_provider.dart';
+import 'package:mobile/providers/reservation_provider.dart';
 import 'package:mobile/providers/treatment_provider.dart';
 import 'package:mobile/providers/treatment_type_provider.dart';
 import 'package:mobile/screens/login_page.dart';
@@ -11,6 +12,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => TreatmentProvider()),
       ChangeNotifierProvider(create: (_) => TreatmentTypeProvider()),
       ChangeNotifierProvider(create: (_) => CategoryProvider()),
+      ChangeNotifierProvider(create: (_) => ReservationProvider()),
     ],
     child: const MyApp(),
   ));

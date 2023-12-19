@@ -53,7 +53,8 @@ namespace wellness.Service.Services
 
             CreateMap<ReservationPostRequest, Database.Reservation>();
             CreateMap<Database.Reservation, Reservation>().ForMember(dest => dest.Treatment, opt => opt.MapFrom(src => src.Treatment.Name))
-                                                          .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
+                                                          .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.User.FirstName))
+                                                           .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.User.LastName));
 
         }
     }

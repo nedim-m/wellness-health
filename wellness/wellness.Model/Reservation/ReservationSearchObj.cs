@@ -8,6 +8,7 @@ namespace wellness.Model.Reservation
 {
     public class ReservationSearchObj : BaseSearchObject
     {
-        public DateTime? Date { get; set; } = null!;
+        public string? Date { get; set; } = null!;
+        public int? TreatmentId { get; set; }
     }
 }

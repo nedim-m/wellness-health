@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
+import 'package:mobile/models/reservation.dart';
 import 'package:mobile/providers/reservation_provider.dart';
 import 'package:provider/provider.dart';
 
@@ -19,17 +21,39 @@ class ColorCodedCalendar extends StatefulWidget {
 
 class _ColorCodedCalendarState extends State<ColorCodedCalendar> {
   int? selectedHour;
+  List<Reservation> reservation = [];
+  final DateFormat formatter = DateFormat('dd.MM.yyyy');
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  final ReservationProvider _reservationProvider = ReservationProvider();
 
   void _addReservation() async {
     if (selectedHour != null) {
       final provider = Provider.of<ReservationProvider>(context, listen: false);
       await provider.addReservation(
-        1,
-        widget.selectedDate,
+        3,
+        formatter.format(widget.selectedDate),
         '$selectedHour:00',
         widget.treatmentId,
       );
     }
+  }
+
+  Future<void> fetchData() async {
+    List<Reservation> fetchedReservations = await _reservationProvider.get(
+        filter: {
+          'date': formatter.format(widget.selectedDate),
+          'treatmentId': widget.treatmentId
+        });
+
+    setState(() {
+      reservation = fetchedReservations;
+    });
   }
 
   @override
@@ -47,6 +71,7 @@ class _ColorCodedCalendarState extends State<ColorCodedCalendar> {
               });
             },
             addReservation: _addReservation,
+            reservations: reservation,
           ),
         ],
       ),
@@ -55,9 +80,7 @@ class _ColorCodedCalendarState extends State<ColorCodedCalendar> {
 }
 
 class CalendarHeader extends StatelessWidget {
-  const CalendarHeader({
-    super.key,
-  });
+  const CalendarHeader({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -101,12 +124,14 @@ class CalendarGrid extends StatelessWidget {
   final int? selectedHour;
   final ValueChanged<int>? onHourSelected;
   final VoidCallback? addReservation;
+  final List<Reservation> reservations;
 
   const CalendarGrid({
     Key? key,
     this.selectedHour,
     this.onHourSelected,
     this.addReservation,
+    required this.reservations,
   }) : super(key: key);
 
   @override
@@ -118,6 +143,7 @@ class CalendarGrid extends StatelessWidget {
             hour: hour,
             isSelected: selectedHour == hour,
             onHourSelected: onHourSelected,
+            reservations: reservations,
           ),
         const Gap(15),
         Row(
@@ -125,9 +151,9 @@ class CalendarGrid extends StatelessWidget {
           children: [
             _buildLegendSquare(Colors.red),
             const SizedBox(width: 8),
-            _buildLegendSquare(Colors.green),
-            const SizedBox(width: 8),
             _buildLegendSquare(Colors.yellow),
+            const SizedBox(width: 8),
+            _buildLegendSquare(Colors.green),
           ],
         ),
         const Row(
@@ -135,9 +161,9 @@ class CalendarGrid extends StatelessWidget {
           children: [
             Text('Zauzeto'),
             SizedBox(width: 8),
-            Text('Slobodno'),
+            Text('Nije dostupno'),
             SizedBox(width: 8),
-            Text('Pauza'),
+            Text('Slobodno'),
           ],
         ),
         const Gap(10),
@@ -157,20 +183,38 @@ class HourRow extends StatelessWidget {
   final int hour;
   final bool isSelected;
   final ValueChanged<int>? onHourSelected;
+  final List<Reservation> reservations;
 
   const HourRow({
     Key? key,
     required this.hour,
     required this.isSelected,
     this.onHourSelected,
+    required this.reservations,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
+    bool isReserved = reservations.any((reservation) {
+      return reservation.time == '$hour:00' && reservation.status;
+    });
+
+    bool isTaken = reservations.any((reservation) {
+      return reservation.time == '$hour:00';
+    });
+
+    Color containerColor;
+    if (isTaken) {
+      containerColor = isReserved ? Colors.red : Colors.yellow;
+    } else {
+      containerColor = Colors.green;
+    }
+
+    bool isClickable =
+        containerColor == Colors.green; 
+
     return GestureDetector(
-      onTap: () {
-        onHourSelected?.call(hour);
-      },
+      onTap: isClickable ? () => onHourSelected?.call(hour) : null,
       child: Container(
         decoration: BoxDecoration(
           border: Border.all(
@@ -191,8 +235,8 @@ class HourRow extends StatelessWidget {
               child: Center(
                 child: Container(
                   height: 30,
-                  decoration: const BoxDecoration(
-                    color: Colors.green,
+                  decoration: BoxDecoration(
+                    color: containerColor,
                   ),
                 ),
               ),

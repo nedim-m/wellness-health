@@ -20,7 +20,7 @@ class TreatmenTime extends StatefulWidget {
 class _TreatmenTimeState extends State<TreatmenTime> {
   @override
   Widget build(BuildContext context) {
-    final DateFormat formatter = DateFormat('dd/MM/yyyy');
+    final DateFormat formatter = DateFormat('dd.MM.yyyy');
     return Scaffold(
       appBar: const AppBarWidget(),
       body: SingleChildScrollView(

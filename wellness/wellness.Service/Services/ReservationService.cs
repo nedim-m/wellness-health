@@ -25,5 +25,28 @@ namespace wellness.Service.Services
 
             return base.AddInclude(query, search);
         }
+
+
+        public override IQueryable<Database.Reservation> AddFilter(IQueryable<Database.Reservation> query, ReservationSearchObj? search = null)
+        {
+            if (search?.TreatmentId!=null)
+            {
+                query = query.Where(x => x.TreatmentId==search.TreatmentId);
+            }
+
+
+            if (!string.IsNullOrWhiteSpace(search?.Date))
+            {
+                query = query.Where(x => x.Date.StartsWith(search.Date));
+            }
+
+            if (!string.IsNullOrWhiteSpace(search?.Date))
+            {
+                query = query.Where(x => x.Date.Contains(search.Date));
+            }
+
+
+            return base.AddFilter(query, search);
+        }
     }
 }

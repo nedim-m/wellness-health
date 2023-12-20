@@ -39,7 +39,7 @@ class _DatePickerWidgetState extends State<DatePickerWidget> {
 
   @override
   Widget build(BuildContext context) {
-    final DateFormat formatter = DateFormat('dd/MM/yyyy');
+    final DateFormat formatter = DateFormat('dd.MM.yyyy');
 
     return Column(mainAxisAlignment: MainAxisAlignment.center, children: [
       SizedBox(

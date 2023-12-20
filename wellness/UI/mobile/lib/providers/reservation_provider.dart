@@ -12,14 +12,14 @@ class ReservationProvider extends BaseProvider<Reservation> {
   }
 
   Future<dynamic> addReservation(
-      int userId, DateTime date, String time, int treatmentId) async {
+      int userId, String date, String time, int treatmentId) async {
     var url = "$baseUrl$endpoint";
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token ?? ''); //zbog testa
 
     var jsonRequest = jsonEncode(<String, dynamic>{
       "userId": userId,
-      "date": date.toString(),
+      "date": date,
       "time": time,
       "status": false,
       "treatmentId": treatmentId,

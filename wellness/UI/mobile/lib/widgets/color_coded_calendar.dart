@@ -41,6 +41,9 @@ class _ColorCodedCalendarState extends State<ColorCodedCalendar> {
         '$selectedHour:00',
         widget.treatmentId,
       );
+
+      // After a reservation is added, refresh the screen
+      fetchData();
     }
   }
 
@@ -161,7 +164,7 @@ class CalendarGrid extends StatelessWidget {
           children: [
             Text('Zauzeto'),
             SizedBox(width: 8),
-            Text('Nije dostupno'),
+            Text('Na čekanju'),
             SizedBox(width: 8),
             Text('Slobodno'),
           ],
@@ -210,8 +213,7 @@ class HourRow extends StatelessWidget {
       containerColor = Colors.green;
     }
 
-    bool isClickable =
-        containerColor == Colors.green; 
+    bool isClickable = containerColor == Colors.green;
 
     return GestureDetector(
       onTap: isClickable ? () => onHourSelected?.call(hour) : null,

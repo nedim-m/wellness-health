@@ -32,6 +32,16 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
     });
   }
 
+  Widget _buildStatusIcon(bool? status) {
+    if (status == null) {
+      return const Icon(Icons.access_time, color: Colors.grey);
+    } else if (status == true) {
+      return const Icon(Icons.check, color: Colors.green);
+    } else {
+      return const Icon(Icons.close, color: Colors.red);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -60,9 +70,15 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
                   elevation: 3,
                   margin: const EdgeInsets.symmetric(vertical: 8.0),
                   child: ListTile(
-                    title: Text(
-                      reservations[index].treatment,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    title: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          reservations[index].treatment,
+                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        _buildStatusIcon(reservations[index].status),
+                      ],
                     ),
                     subtitle: Text(
                         'Datum: ${reservations[index].date} vrijeme: ${reservations[index].time}'),

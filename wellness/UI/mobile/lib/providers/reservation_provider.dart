@@ -21,7 +21,7 @@ class ReservationProvider extends BaseProvider<Reservation> {
       "userId": userId,
       "date": date,
       "time": time,
-      "status": false,
+      "status": null,
       "treatmentId": treatmentId,
     });
 

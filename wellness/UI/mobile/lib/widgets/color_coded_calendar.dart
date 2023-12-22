@@ -43,7 +43,6 @@ class _ColorCodedCalendarState extends State<ColorCodedCalendar> {
           widget.treatmentId,
         );
 
-        // ignore: use_build_context_synchronously
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -53,7 +52,6 @@ class _ColorCodedCalendarState extends State<ColorCodedCalendar> {
               TextButton(
                 onPressed: () {
                   Navigator.pop(context);
-
                   fetchData();
                 },
                 child: const Text('OK'),
@@ -62,7 +60,6 @@ class _ColorCodedCalendarState extends State<ColorCodedCalendar> {
           ),
         );
       } catch (e) {
-        // ignore: use_build_context_synchronously
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -231,18 +228,36 @@ class HourRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    bool isReserved = reservations.any((reservation) {
-      return reservation.time == '$hour:00' && reservation.status;
-    });
+    Reservation? currentReservation = reservations.firstWhere(
+      (reservation) => reservation.time == '$hour:00',
+      orElse: () => Reservation(
+        0,
+        '',
+        '',
+        '',
+        '$hour:00',
+        null,
+        '',
+      ),
+    );
+
+    Color containerColor;
+
+    if (currentReservation.status != null) {
+      if (currentReservation.status!) {
+        containerColor = Colors.red;
+      } else {
+        containerColor = Colors.green;
+      }
+    } else {
+      containerColor = Colors.yellow;
+    }
 
     bool isTaken = reservations.any((reservation) {
       return reservation.time == '$hour:00';
     });
 
-    Color containerColor;
-    if (isTaken) {
-      containerColor = isReserved ? Colors.red : Colors.yellow;
-    } else {
+    if (!isTaken) {
       containerColor = Colors.green;
     }
 

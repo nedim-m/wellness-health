@@ -18,7 +18,7 @@ namespace wellness.Model.Reservation
 
         public string Time { get; set; } = null!;
 
-        public bool Status { get; set; }
+        public bool? Status { get; set; }
 
         public string Treatment { get; set; } = null!;
     }

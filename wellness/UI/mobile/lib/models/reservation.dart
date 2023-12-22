@@ -9,7 +9,7 @@ class Reservation {
   final String lastName;
   final String date;
   final String time;
-  final bool status;
+  final bool? status;
   final String treatment;
 
   Reservation(this.id, this.firstName, this.lastName, this.date, this.time,

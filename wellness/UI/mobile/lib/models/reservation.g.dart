@@ -12,7 +12,7 @@ Reservation _$ReservationFromJson(Map<String, dynamic> json) => Reservation(
       json['lastName'] as String,
       json['date'] as String,
       json['time'] as String,
-      json['status'] as bool,
+      json['status'] as bool?,
       json['treatment'] as String,
     );
 

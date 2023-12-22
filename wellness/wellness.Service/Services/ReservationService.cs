@@ -57,14 +57,33 @@ namespace wellness.Service.Services
         public override async Task<Task> BeforeInsert(Database.Reservation entity, ReservationPostRequest insert)
         {
             var context = _context.Set<Database.Reservation>().AsQueryable();
-            var existingReservation = await  context.FirstOrDefaultAsync(r=>r.UserId==entity.UserId && r.Date==insert.Date && r.TreatmentId==insert.TreatmentId );
-            if (existingReservation != null)
+
+
+            var existingReservationSameDateTime = await context.FirstOrDefaultAsync(r => r.UserId == entity.UserId && r.Date == insert.Date && r.TreatmentId == insert.TreatmentId && r.Time == insert.Time);
+            if (existingReservationSameDateTime != null)
             {
-                throw new InvalidOperationException("User has already reserved this treatment on the specified date.");
+                throw new InvalidOperationException("User has already reserved this treatment at the specified date and time.");
             }
 
-            return  base.BeforeInsert(entity, insert);
+
+            var existingReservationDifferentTreatment = await context.FirstOrDefaultAsync(r => r.UserId == entity.UserId && r.Date == insert.Date && r.Time == insert.Time && r.TreatmentId != insert.TreatmentId);
+            if (existingReservationDifferentTreatment != null)
+            {
+                throw new InvalidOperationException("User has already reserved a different treatment at the specified date and time.");
+            }
+
+
+            var existingReservationSameTreatmentDifferentTime = await context.FirstOrDefaultAsync(r => r.UserId == entity.UserId && r.Date == insert.Date && r.TreatmentId == insert.TreatmentId && r.Time != insert.Time);
+            if (existingReservationSameTreatmentDifferentTime != null)
+            {
+                throw new InvalidOperationException("User has already reserved this treatment at the specified date with a different time.");
+            }
+
+            return base.BeforeInsert(entity, insert);
         }
+
+
+
 
     }
 }

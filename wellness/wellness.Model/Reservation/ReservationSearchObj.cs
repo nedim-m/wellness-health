@@ -10,5 +10,7 @@ namespace wellness.Model.Reservation
     {
         public string? Date { get; set; } = null!;
         public int? TreatmentId { get; set; }
+
+        public int? UserId { get; set; }
     }
 }

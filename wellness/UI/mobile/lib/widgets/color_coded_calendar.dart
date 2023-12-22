@@ -43,6 +43,7 @@ class _ColorCodedCalendarState extends State<ColorCodedCalendar> {
           widget.treatmentId,
         );
 
+        // ignore: use_build_context_synchronously
         showDialog(
           context: context,
           builder: (context) => AlertDialog(
@@ -60,6 +61,7 @@ class _ColorCodedCalendarState extends State<ColorCodedCalendar> {
           ),
         );
       } catch (e) {
+        // ignore: use_build_context_synchronously
         showDialog(
           context: context,
           builder: (context) => AlertDialog(

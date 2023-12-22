@@ -33,6 +33,12 @@ namespace wellness.Service.Services
 
         public override IQueryable<Database.Reservation> AddFilter(IQueryable<Database.Reservation> query, ReservationSearchObj? search = null)
         {
+            if (search?.UserId!=null)
+            {
+                query = query.Where(x => x.UserId==search.UserId);
+            }
+
+
             if (search?.TreatmentId!=null)
             {
                 query = query.Where(x => x.TreatmentId==search.TreatmentId);

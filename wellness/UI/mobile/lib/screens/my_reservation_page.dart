@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:mobile/models/reservation.dart';
+import 'package:mobile/providers/reservation_provider.dart';
+import 'package:mobile/widgets/reservation_page.dart';
 import 'package:mobile/widgets/app_bar.dart';
-import 'package:mobile/widgets/double_text.dart';
 
 class MyReservationPageView extends StatefulWidget {
   const MyReservationPageView({super.key});
@@ -11,32 +12,74 @@ class MyReservationPageView extends StatefulWidget {
 }
 
 class _MyReservationPageViewState extends State<MyReservationPageView> {
+  List<Reservation> reservations = [];
+  final ReservationProvider _reservationProvider = ReservationProvider();
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    List<Reservation> fetchedReservations =
+        await _reservationProvider.get(filter: {
+      'userId': 3,
+    });
+
+    setState(() {
+      reservations = fetchedReservations;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: AppBarWidget(),
+    return Scaffold(
+      appBar: const AppBarWidget(),
       body: SingleChildScrollView(
-        child: Padding(
-          padding: EdgeInsets.all(20.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              DoubleTextWidget(
-                bigText: "Tretman: ",
-                smallText: "Tretman jedan",
+        padding: const EdgeInsets.all(16.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const SizedBox(height: 20),
+            const Center(
+              child: Text(
+                'Moje rezervacije',
+                style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue),
               ),
-              Gap(15),
-              DoubleTextWidget(
-                bigText: "Datum: ",
-                smallText: "11.06.2023",
-              ),
-              Gap(15),
-              DoubleTextWidget(
-                bigText: "Vrijeme: ",
-                smallText: "09:00",
-              ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 16),
+            ListView.builder(
+              shrinkWrap: true,
+              itemCount: reservations.length,
+              itemBuilder: (context, index) {
+                return Card(
+                  elevation: 3,
+                  margin: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: ListTile(
+                    title: Text(
+                      reservations[index].treatment,
+                      style: const TextStyle(fontWeight: FontWeight.bold),
+                    ),
+                    subtitle: Text(
+                        'Datum: ${reservations[index].date} vrijeme: ${reservations[index].time}'),
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) =>
+                              ReservationPage(reservation: reservations[index]),
+                        ),
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+          ],
         ),
       ),
     );

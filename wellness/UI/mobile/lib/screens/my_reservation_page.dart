@@ -81,7 +81,7 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
                       ],
                     ),
                     subtitle: Text(
-                        'Datum: ${reservations[index].date} vrijeme: ${reservations[index].time}'),
+                        'Datum: ${reservations[index].date} u ${reservations[index].time} sati'),
                     onTap: () {
                       Navigator.push(
                         context,

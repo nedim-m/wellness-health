@@ -17,6 +17,33 @@ class ReservationPage extends StatefulWidget {
 class _ReservationPageState extends State<ReservationPage> {
   int selectedRating = 0;
 
+  Future<void> _showConfirmationDialog() async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Potvrda"),
+          content:
+              const Text("Jeste li sigurni da želite odjaviti rezervaciju?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Odustani"),
+            ),
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Potvrdi"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -52,16 +79,20 @@ class _ReservationPageState extends State<ReservationPage> {
                   children: List.generate(
                     5,
                     (index) => IconButton(
-                      onPressed: () {
-                        setState(() {
-                          
-                          selectedRating = index + 1;
-                        });
-                      },
+                      onPressed: widget.reservation.status != false
+                          ? () {
+                              setState(() {
+                                selectedRating = index + 1;
+                              });
+                            }
+                          : null,
                       icon: Icon(
                         Icons.star,
-                        color:
-                            index < selectedRating ? Colors.amber : Colors.grey,
+                        color: index < selectedRating
+                            ? Colors.amber
+                            : widget.reservation.status != false
+                                ? Colors.grey
+                                : Colors.grey.shade300, // Disabled color
                       ),
                     ),
                   ),
@@ -72,8 +103,26 @@ class _ReservationPageState extends State<ReservationPage> {
             SizedBox(
               width: double.infinity,
               child: ElevatedButton(
-                onPressed: () {},
-                child: const Text("Odjavi rezervaciju"),
+                onPressed: widget.reservation.status != false
+                    ? () {
+                        _showConfirmationDialog();
+                      }
+                    : null,
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: widget.reservation.status == false
+                      ? Colors.grey.shade700
+                      : Colors.red,
+                ),
+                child: Text(
+                  widget.reservation.status != false
+                      ? "Odjavi rezervaciju"
+                      : "Žao nam je, Vaša rezervacija je odbijena",
+                  style: TextStyle(
+                    color: widget.reservation.status == false
+                        ? Colors.black
+                        : Colors.white,
+                  ),
+                ),
               ),
             ),
           ],

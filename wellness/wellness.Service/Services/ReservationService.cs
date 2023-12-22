@@ -13,9 +13,13 @@ namespace wellness.Service.Services
 {
     public class ReservationService : CrudService<Model.Reservation.Reservation, Database.Reservation, ReservationSearchObj, ReservationPostRequest, ReservationPostRequest>, IReservationService
     {
+
+        private readonly IMapper _mapper;
+        private readonly DbWellnessContext _context;
         public ReservationService(IMapper mapper, DbWellnessContext context) : base(mapper, context)
         {
-
+            _mapper=mapper;
+            _context=context;
         }
 
 
@@ -48,5 +52,19 @@ namespace wellness.Service.Services
 
             return base.AddFilter(query, search);
         }
+
+
+        public override async Task<Task> BeforeInsert(Database.Reservation entity, ReservationPostRequest insert)
+        {
+            var context = _context.Set<Database.Reservation>().AsQueryable();
+            var existingReservation = await  context.FirstOrDefaultAsync(r=>r.UserId==entity.UserId && r.Date==insert.Date && r.TreatmentId==insert.TreatmentId );
+            if (existingReservation != null)
+            {
+                throw new InvalidOperationException("User has already reserved this treatment on the specified date.");
+            }
+
+            return  base.BeforeInsert(entity, insert);
+        }
+
     }
 }

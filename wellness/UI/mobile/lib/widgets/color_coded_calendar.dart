@@ -31,19 +31,52 @@ class _ColorCodedCalendarState extends State<ColorCodedCalendar> {
   }
 
   final ReservationProvider _reservationProvider = ReservationProvider();
-
   void _addReservation() async {
     if (selectedHour != null) {
       final provider = Provider.of<ReservationProvider>(context, listen: false);
-      await provider.addReservation(
-        3,
-        formatter.format(widget.selectedDate),
-        '$selectedHour:00',
-        widget.treatmentId,
-      );
 
-      // After a reservation is added, refresh the screen
-      fetchData();
+      try {
+        await provider.addReservation(
+          3,
+          formatter.format(widget.selectedDate),
+          '$selectedHour:00',
+          widget.treatmentId,
+        );
+
+        // ignore: use_build_context_synchronously
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Uspješno'),
+            content: const Text('Rezervacija uspješno dodana.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context);
+
+                  fetchData();
+                },
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      } catch (e) {
+        // ignore: use_build_context_synchronously
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Neuspješno'),
+            content: const Text('Neuspjela rezervacija. Već ste rezervisali!'),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
     }
   }
 

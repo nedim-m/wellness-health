@@ -46,7 +46,7 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const AppBarWidget(),
-      body: SingleChildScrollView(
+      body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -56,44 +56,48 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
               child: Text(
                 'Moje rezervacije',
                 style: TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.blue),
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
               ),
             ),
             const SizedBox(height: 16),
-            ListView.builder(
-              shrinkWrap: true,
-              itemCount: reservations.length,
-              itemBuilder: (context, index) {
-                return Card(
-                  elevation: 3,
-                  margin: const EdgeInsets.symmetric(vertical: 8.0),
-                  child: ListTile(
-                    title: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          reservations[index].treatment,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
-                        ),
-                        _buildStatusIcon(reservations[index].status),
-                      ],
+            Expanded(
+              child: ListView.builder(
+                itemCount: reservations.length,
+                itemBuilder: (context, index) {
+                  return Card(
+                    elevation: 3,
+                    margin: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: ListTile(
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            reservations[index].treatment,
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          _buildStatusIcon(reservations[index].status),
+                        ],
+                      ),
+                      subtitle: Text(
+                        'Datum: ${reservations[index].date} u ${reservations[index].time} sati',
+                      ),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => ReservationPage(
+                              reservation: reservations[index],
+                            ),
+                          ),
+                        );
+                      },
                     ),
-                    subtitle: Text(
-                        'Datum: ${reservations[index].date} u ${reservations[index].time} sati'),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              ReservationPage(reservation: reservations[index]),
-                        ),
-                      );
-                    },
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ],
         ),

@@ -65,7 +65,7 @@ namespace wellness.Service.Services
             var context = _context.Set<Database.Reservation>().AsQueryable();
 
 
-            var existingReservationSameDateTime = await context.FirstOrDefaultAsync(r => r.UserId == entity.UserId && r.Date == insert.Date && r.TreatmentId == insert.TreatmentId && r.Time == insert.Time);
+            var existingReservationSameDateTime = await context.FirstOrDefaultAsync(r => r.UserId == entity.UserId && r.Date == insert.Date && r.TreatmentId == insert.TreatmentId && r.Time == insert.Time && (r.Status==true || r.Status==null));
             if (existingReservationSameDateTime != null)
             {
                 throw new InvalidOperationException("User has already reserved this treatment at the specified date and time.");
@@ -79,7 +79,7 @@ namespace wellness.Service.Services
             }
 
 
-            var existingReservationSameTreatmentDifferentTime = await context.FirstOrDefaultAsync(r => r.UserId == entity.UserId && r.Date == insert.Date && r.TreatmentId == insert.TreatmentId && r.Time != insert.Time);
+            var existingReservationSameTreatmentDifferentTime = await context.FirstOrDefaultAsync(r => r.UserId == entity.UserId && r.Date == insert.Date && r.TreatmentId == insert.TreatmentId && r.Time != insert.Time && (r.Status==true || r.Status==null));
             if (existingReservationSameTreatmentDifferentTime != null)
             {
                 throw new InvalidOperationException("User has already reserved this treatment at the specified date with a different time.");

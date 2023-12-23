@@ -60,6 +60,7 @@ builder.Services.AddTransient<IMembershipTypeService, MembershipTypeService>();
 builder.Services.AddTransient<IRecordService, RecordService>();
 builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddTransient<IReservationService, ReservationService>();
+builder.Services.AddTransient<IRatingService, RatingService>();
 
 
 

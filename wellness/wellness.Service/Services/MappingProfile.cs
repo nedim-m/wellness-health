@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using wellness.Model.Category;
 using wellness.Model.MembershipType;
+using wellness.Model.Rating;
 using wellness.Model.Record;
 using wellness.Model.Reservation;
 using wellness.Model.Role;
@@ -55,6 +56,10 @@ namespace wellness.Service.Services
             CreateMap<Database.Reservation, Reservation>().ForMember(dest => dest.Treatment, opt => opt.MapFrom(src => src.Treatment.Name))
                                                           .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.User.FirstName))
                                                            .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.User.LastName));
+
+
+            CreateMap<RatingPostRequest, Database.Rating>();
+            CreateMap<Database.Rating, Rating>();
 
         }
     }

@@ -27,10 +27,10 @@ namespace wellness.Service.Services
             CreateMap<UserUpdateRequest, Database.User>();
             CreateMap<UserPostRequest, Database.User>();
 
-            CreateMap<Database.User, User>().ForMember(dest=> dest.Role,opt=>opt.MapFrom(src=>src.Role.Name))
-                                            .ForMember(dest=>dest.ShiftTime,opt=>opt.MapFrom(src=>src.Role.ShiftTime));
+            CreateMap<Database.User, User>().ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.Name))
+                                            .ForMember(dest => dest.ShiftTime, opt => opt.MapFrom(src => src.Role.ShiftTime));
             CreateMap<CategoryPostRequest, Database.Category>();
-            CreateMap<Database.Category,Category>();
+            CreateMap<Database.Category, Category>();
 
             CreateMap<TreatmentTypePostRequest, Database.TreatmentType>();
             CreateMap<Database.TreatmentType, TreatmentType>();
@@ -53,9 +53,11 @@ namespace wellness.Service.Services
 
 
             CreateMap<ReservationPostRequest, Database.Reservation>();
+            CreateMap<ReservationUpdateRequest, Database.Reservation>();
             CreateMap<Database.Reservation, Reservation>().ForMember(dest => dest.Treatment, opt => opt.MapFrom(src => src.Treatment.Name))
+                                                          .ForMember(dest => dest.TreatmentId, opt => opt.MapFrom(src => src.Treatment.Id))
                                                           .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.User.FirstName))
-                                                           .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.User.LastName));
+                                                          .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.User.LastName));
 
 
             CreateMap<RatingPostRequest, Database.Rating>();

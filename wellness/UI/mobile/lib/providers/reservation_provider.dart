@@ -34,4 +34,23 @@ class ReservationProvider extends BaseProvider<Reservation> {
       throw Exception("Unknown error");
     }
   }
+
+  Future<dynamic> cancelReservation(int id) async {
+    var url = "$baseUrl$endpoint/$id";
+    var uri = Uri.parse(url);
+    var headers = createJwtHeaders(token ?? ''); //zbog testa
+
+    var jsonRequest = jsonEncode(<String, dynamic>{
+      "status": false,
+    });
+
+    var response = await http!.put(uri, headers: headers, body: jsonRequest);
+
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+      return fromJson(data);
+    } else {
+      throw Exception("Unknown error");
+    }
+  }
 }

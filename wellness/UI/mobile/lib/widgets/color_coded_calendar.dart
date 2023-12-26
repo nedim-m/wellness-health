@@ -240,6 +240,7 @@ class HourRow extends StatelessWidget {
         '$hour:00',
         null,
         '',
+        0,
       ),
     );
 

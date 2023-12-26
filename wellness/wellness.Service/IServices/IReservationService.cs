@@ -7,7 +7,7 @@ using wellness.Model.Reservation;
 
 namespace wellness.Service.IServices
 {
-    public interface IReservationService:ICrudService<Reservation,ReservationSearchObj,ReservationPostRequest,ReservationPostRequest>
+    public interface IReservationService:ICrudService<Reservation,ReservationSearchObj,ReservationPostRequest,ReservationUpdateRequest>
     {
     }
 }

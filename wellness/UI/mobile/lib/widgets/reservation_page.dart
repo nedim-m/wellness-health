@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:mobile/models/rating.dart';
 import 'package:mobile/models/reservation.dart';
+import 'package:mobile/providers/rating_provider.dart';
+import 'package:mobile/providers/reservation_provider.dart';
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/double_text.dart';
 
@@ -16,6 +19,28 @@ class ReservationPage extends StatefulWidget {
 
 class _ReservationPageState extends State<ReservationPage> {
   int selectedRating = 0;
+
+  final RatingProvider _ratingProvider = RatingProvider();
+  final ReservationProvider _reservationProvider = ReservationProvider();
+
+  /*Future<void> _postRating() async {
+    try {
+      Rating newRating =
+          Rating(0, selectedRating, widget.reservation.treatmentId, 3);
+
+      await _ratingProvider.insert(newRating);
+    } catch (error) {
+      print('Error during rating post: $error');
+    }
+  }*/
+
+  Future<void> _cancelReservation() async {
+    try {
+      await _reservationProvider.cancelReservation(widget.reservation.id);
+    } catch (error) {
+      print('Error during cancel reservation: $error');
+    }
+  }
 
   Future<void> _showConfirmationDialog() async {
     return showDialog(
@@ -34,6 +59,7 @@ class _ReservationPageState extends State<ReservationPage> {
             ),
             TextButton(
               onPressed: () {
+                _cancelReservation();
                 Navigator.of(context).pop();
               },
               child: const Text("Potvrdi"),
@@ -116,7 +142,7 @@ class _ReservationPageState extends State<ReservationPage> {
                 child: Text(
                   widget.reservation.status != false
                       ? "Odjavi rezervaciju"
-                      : "Žao nam je, Vaša rezervacija je odbijena",
+                      : "Žao nam je, Vaša rezervacija je odbijena/odjavljena",
                   style: TextStyle(
                     color: widget.reservation.status == false
                         ? Colors.black

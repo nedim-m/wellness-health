@@ -21,5 +21,6 @@ namespace wellness.Model.Reservation
         public bool? Status { get; set; }
 
         public string Treatment { get; set; } = null!;
+        public int TreatmentId { get; set; }
     }
 }

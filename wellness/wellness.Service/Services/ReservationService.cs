@@ -8,10 +8,11 @@ using System.Threading.Tasks;
 using wellness.Model.Reservation;
 using wellness.Service.Database;
 using wellness.Service.IServices;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace wellness.Service.Services
 {
-    public class ReservationService : CrudService<Model.Reservation.Reservation, Database.Reservation, ReservationSearchObj, ReservationPostRequest, ReservationPostRequest>, IReservationService
+    public class ReservationService : CrudService<Model.Reservation.Reservation, Database.Reservation, ReservationSearchObj, ReservationPostRequest, ReservationUpdateRequest>, IReservationService
     {
 
         private readonly IMapper _mapper;
@@ -88,6 +89,14 @@ namespace wellness.Service.Services
             return base.BeforeInsert(entity, insert);
         }
 
+
+        /*public override async Task<Model.Reservation.Reservation> GetById(int id)
+        {
+            var context = _context.Set<Database.Reservation>().AsQueryable().Include("User").Include("Treatment");
+            var entity = await context.FirstOrDefaultAsync(e => e.Id == id);
+
+            return _mapper.Map<Model.Reservation.Reservation>(entity);
+        }*/
 
 
 

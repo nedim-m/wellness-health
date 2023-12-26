@@ -11,9 +11,10 @@ class Reservation {
   final String time;
   final bool? status;
   final String treatment;
+  final int treatmentId;
 
   Reservation(this.id, this.firstName, this.lastName, this.date, this.time,
-      this.status, this.treatment);
+      this.status, this.treatment, this.treatmentId);
   factory Reservation.fromJson(Map<String, dynamic> json) =>
       _$ReservationFromJson(json);
 

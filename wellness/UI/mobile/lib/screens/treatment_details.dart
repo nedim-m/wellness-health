@@ -17,7 +17,13 @@ class TreatmentDetails extends StatefulWidget {
 }
 
 class _TreatmentDetailsState extends State<TreatmentDetails> {
-  DateTime? selectedDate;
+  late DateTime selectedDate;
+
+  @override
+  void initState() {
+    super.initState();
+    selectedDate = DateTime.now();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +80,7 @@ class _TreatmentDetailsState extends State<TreatmentDetails> {
                       MaterialPageRoute(
                         builder: (context) => TreatmenTime(
                           data: widget.data,
-                          selectedDate: selectedDate!,
+                          selectedDate: selectedDate,
                         ),
                       ),
                     );

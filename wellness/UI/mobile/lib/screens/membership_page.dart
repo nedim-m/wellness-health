@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:mobile/screens/cc_page.dart';
+
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/double_text.dart';
 
@@ -88,8 +90,20 @@ class _MembershipPageViewState extends State<MembershipPageView> {
 
     switch (selectedPaymentOption) {
       case 'Credit Card':
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const CCPageView(),
+          ),
+        );
         break;
       case 'PayPal':
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => CCPageView(),
+          ),
+        );
         break;
       case 'Stripe':
         break;

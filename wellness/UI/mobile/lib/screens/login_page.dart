@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:mobile/screens/home_page.dart';
+import 'package:mobile/screens/register_page.dart';
 
 class LoginPageView extends StatefulWidget {
   const LoginPageView({super.key});
@@ -129,6 +130,21 @@ class _LoginPageViewState extends State<LoginPageView> {
                   onPressed: () {},
                   child: const Text(
                     'Forgot Password?',
+                    style: TextStyle(
+                      color: Colors.black87,
+                    ),
+                  ),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const RegistrationPageView()),
+                    );
+                  },
+                  child: const Text(
+                    'Register',
                     style: TextStyle(
                       color: Colors.black87,
                     ),

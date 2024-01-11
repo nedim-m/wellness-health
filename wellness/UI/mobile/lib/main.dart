@@ -4,6 +4,7 @@ import 'package:mobile/providers/rating_provider.dart';
 import 'package:mobile/providers/reservation_provider.dart';
 import 'package:mobile/providers/treatment_provider.dart';
 import 'package:mobile/providers/treatment_type_provider.dart';
+import 'package:mobile/providers/user_provider.dart';
 import 'package:mobile/screens/login_page.dart';
 import 'package:provider/provider.dart';
 
@@ -15,6 +16,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => CategoryProvider()),
       ChangeNotifierProvider(create: (_) => ReservationProvider()),
       ChangeNotifierProvider(create: (_) => RatingProvider()),
+      ChangeNotifierProvider(create: (_) => UserProvider()),
     ],
     child: const MyApp(),
   ));

@@ -70,7 +70,6 @@ namespace wellness.Service.Services
 
             UpdateStatusForPastReservations(list);
 
-            // Sort the list by date and status
             list = list
                 .OrderByDescending(r => r.Status == true)
                 .ThenByDescending(r => r.Status == null)

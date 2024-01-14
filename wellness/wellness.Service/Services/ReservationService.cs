@@ -70,11 +70,19 @@ namespace wellness.Service.Services
 
             UpdateStatusForPastReservations(list);
 
+            // Sort the list by date and status
+            list = list
+                .OrderByDescending(r => r.Status == true)
+                .ThenByDescending(r => r.Status == null)
+                .ThenBy(r => DateTime.Parse(r.Date + " " + r.Time))
+                .ToList();
+
             var tmp = _mapper.Map<List<Model.Reservation.Reservation>>(list);
             result.Result = tmp;
 
             return result;
         }
+
 
         private void UpdateStatusForPastReservations(List<Database.Reservation> reservations)
         {

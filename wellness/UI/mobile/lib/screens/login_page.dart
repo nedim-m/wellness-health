@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/providers/user_provider.dart';
 
 import 'package:mobile/screens/home_page.dart';
 import 'package:mobile/screens/register_page.dart';
+import 'package:mobile/utils/user_store.dart';
 
 class LoginPageView extends StatefulWidget {
   const LoginPageView({super.key});
@@ -13,15 +15,14 @@ class LoginPageView extends StatefulWidget {
 class _LoginPageViewState extends State<LoginPageView> {
   final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+  final UserProvider _userProvider = UserProvider();
   bool _loginFailed = false;
   final String _errorMessage = "Invalid username or password!";
 
   Future<void> _login() async {
     final String username = _usernameController.text;
     final String password = _passwordController.text;
-
-    const response = true;
-
+    final response = await _userProvider.login(username, password);
     if (response) {
       setState(() {
         _usernameController.clear();
@@ -33,6 +34,7 @@ class _LoginPageViewState extends State<LoginPageView> {
         context,
         MaterialPageRoute(builder: (context) => const HomepageView()),
       );
+      UserManager.getFullNameAsync(); //here is where i use it  first time
     } else {
       setState(() {
         _loginFailed = true;

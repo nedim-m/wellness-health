@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:mobile/models/user.dart';
 import 'package:mobile/providers/base_provider.dart';
+import 'package:mobile/utils/token_store.dart';
 
 class UserProvider extends BaseProvider<User> {
   UserProvider() : super("User");
@@ -40,6 +41,32 @@ class UserProvider extends BaseProvider<User> {
       return (data);
     } else {
       throw Exception("Unknown error");
+    }
+  }
+
+  Future<bool> login(String username, String password) async {
+    var url = "${baseUrl}Auth/login";
+    var uri = Uri.parse(url);
+
+    var jsonRequest = jsonEncode(<String, dynamic>{
+      "userName": username,
+      "password": password,
+      "desktop": false,
+    });
+
+    var response = await http!.post(uri,
+        headers: {'Content-Type': 'application/json'}, body: jsonRequest);
+
+    try {
+      if (isValidResponse(response)) {
+        var data = jsonDecode(response.body);
+        TokenManager.saveToken(data['token']);
+        return true;
+      } else {
+        throw Exception("Unknown error");
+      }
+    } catch (e) {
+      return false;
     }
   }
 }

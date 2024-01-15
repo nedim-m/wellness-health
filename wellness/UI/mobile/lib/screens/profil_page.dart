@@ -10,7 +10,7 @@ class ProfilPageView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarWidget(),
+      appBar: AppBarWidget(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),

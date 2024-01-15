@@ -18,7 +18,7 @@ class _MembershipPageViewState extends State<MembershipPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarWidget(),
+      appBar:  const AppBarWidget(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -101,7 +101,7 @@ class _MembershipPageViewState extends State<MembershipPageView> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => CCPageView(),
+            builder: (context) => const CCPageView(),
           ),
         );
         break;

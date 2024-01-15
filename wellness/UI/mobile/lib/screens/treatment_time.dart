@@ -22,7 +22,7 @@ class _TreatmenTimeState extends State<TreatmenTime> {
   Widget build(BuildContext context) {
     final DateFormat formatter = DateFormat('dd.MM.yyyy');
     return Scaffold(
-      appBar: const AppBarWidget(),
+      appBar: AppBarWidget(),
       body: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.all(20.0),

@@ -51,7 +51,7 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarWidget(),
+      appBar: AppBarWidget(),
       body: SingleChildScrollView(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

@@ -45,7 +45,7 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const AppBarWidget(),
+      appBar:  AppBarWidget(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

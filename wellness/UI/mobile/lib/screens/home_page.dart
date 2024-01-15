@@ -14,30 +14,32 @@ class HomepageView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const AppBarWidget(),
-      body: Container(
-        margin: const EdgeInsets.only(bottom: 100.0),
-        child: const Padding(
-          padding: EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomButton(
-                text: 'Pregled Tretmana',
-                navigateTo: TreatmentOverview(),
-              ),
-              CustomButton(
-                text: 'Moje rezervacije',
-                navigateTo: MyReservationPageView(),
-              ),
-              CustomButton(
-                text: 'Profil',
-                navigateTo: ProfilPageView(),
-              ),
-              CustomButton(
-                text: 'Odjava',
-                navigateTo: LoginPageView(),
-              ),
-            ],
+      body: SingleChildScrollView(
+        child: Container(
+          margin: const EdgeInsets.only(bottom: 100.0),
+          child: const Padding(
+            padding: EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                CustomButton(
+                  text: 'Pregled Tretmana',
+                  navigateTo: TreatmentOverview(),
+                ),
+                CustomButton(
+                  text: 'Moje rezervacije',
+                  navigateTo: MyReservationPageView(),
+                ),
+                CustomButton(
+                  text: 'Profil',
+                  navigateTo: ProfilPageView(),
+                ),
+                CustomButton(
+                  text: 'Odjava',
+                  navigateTo: LoginPageView(),
+                ),
+              ],
+            ),
           ),
         ),
       ),

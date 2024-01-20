@@ -3,7 +3,7 @@ import 'package:mobile/providers/user_provider.dart';
 import 'package:mobile/screens/login_page.dart';
 
 class RegistrationPageView extends StatefulWidget {
-  const RegistrationPageView({Key? key});
+  const RegistrationPageView({super.key});
 
   @override
   State<RegistrationPageView> createState() => _RegistrationPageViewState();
@@ -35,14 +35,11 @@ class _RegistrationPageViewState extends State<RegistrationPageView> {
           _phoneController.text,
         );
 
-       
         _showRegistrationAlert(response);
       } catch (error) {
-       
         print("Error during registration: $error");
       }
     } else {
-    
       setState(() {
         _passwordsMatch = false;
       });
@@ -54,13 +51,11 @@ class _RegistrationPageViewState extends State<RegistrationPageView> {
     bool isSuccess = false;
 
     if (response != null) {
-   
       isSuccess = true;
       message = 'Registration Successful';
     } else {
       message = 'Registration Failed';
     }
-
 
     showDialog(
       context: context,
@@ -73,12 +68,10 @@ class _RegistrationPageViewState extends State<RegistrationPageView> {
               onPressed: () {
                 Navigator.of(context).pop();
 
-                
                 if (isSuccess) {
                   Navigator.of(context).pushReplacement(
                     MaterialPageRoute(
-                      builder: (context) =>
-                          const LoginPageView(), 
+                      builder: (context) => const LoginPageView(),
                     ),
                   );
                 }

@@ -11,7 +11,6 @@ TreatmentType _$TreatmentTypeFromJson(Map<String, dynamic> json) =>
       json['id'] as int,
       json['name'] as String,
       json['description'] as String,
-      (json['price'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$TreatmentTypeToJson(TreatmentType instance) =>
@@ -19,5 +18,4 @@ Map<String, dynamic> _$TreatmentTypeToJson(TreatmentType instance) =>
       'id': instance.id,
       'name': instance.name,
       'description': instance.description,
-      'price': instance.price,
     };

@@ -125,15 +125,7 @@ class _TreatmentTypePageViewState extends State<TreatmentTypePageView> {
                       ),
                     ),
                   ),
-                  DataColumn(
-                    label: Text(
-                      "Cijena",
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                      ),
-                    ),
-                  ),
+                 
                   DataColumn(
                     label: Text(
                       "Akcija",
@@ -216,7 +208,6 @@ DataRow recentFileDataRow(BuildContext context, var data,
     cells: [
       DataCell(Text(data.name)),
       DataCell(Text(data.description)),
-      DataCell(Text(data.price.toString())),
       DataCell(
         Row(
           children: [

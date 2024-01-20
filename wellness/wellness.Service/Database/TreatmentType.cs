@@ -11,7 +11,7 @@ public partial class TreatmentType
 
     public string Description { get; set; } = null!;
 
-    public float Price { get; set; }
+    
 
     public virtual ICollection<Treatment> Treatments { get; } = new List<Treatment>();
 }

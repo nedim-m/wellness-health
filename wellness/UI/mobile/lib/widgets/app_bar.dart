@@ -23,7 +23,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
               const Text('Wellness Center - Health'),
               const Gap(10),
               Text(
-                'Dobro došli, $_fullName' ?? '',
+                'Dobro došli, $_fullName',
                 style: const TextStyle(fontSize: 16.0),
               ),
             ],

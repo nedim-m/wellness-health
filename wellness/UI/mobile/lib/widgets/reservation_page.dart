@@ -4,6 +4,8 @@ import 'package:mobile/models/rating.dart';
 import 'package:mobile/models/reservation.dart';
 import 'package:mobile/providers/rating_provider.dart';
 import 'package:mobile/providers/reservation_provider.dart';
+import 'package:mobile/screens/my_reservation_page.dart';
+import 'package:mobile/utils/user_store.dart';
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/double_text.dart';
 
@@ -19,20 +21,31 @@ class ReservationPage extends StatefulWidget {
 
 class _ReservationPageState extends State<ReservationPage> {
   int selectedRating = 0;
+  int? _userId;
+
+  @override
+  void initState() {
+    super.initState();
+    _userId = int.parse(UserManager.getUserId()!);
+  }
 
   final RatingProvider _ratingProvider = RatingProvider();
   final ReservationProvider _reservationProvider = ReservationProvider();
 
-  /*Future<void> _postRating() async {
+  Future<void> _postRating(int numberOfSelectedStars) async {
     try {
-      Rating newRating =
-          Rating(0, selectedRating, widget.reservation.treatmentId, 3);
+      Rating newRating = Rating(
+        0,
+        numberOfSelectedStars,
+        widget.reservation.treatmentId,
+        _userId!,
+      );
 
       await _ratingProvider.insert(newRating);
     } catch (error) {
       print('Error during rating post: $error');
     }
-  }*/
+  }
 
   Future<void> _cancelReservation() async {
     try {
@@ -52,17 +65,54 @@ class _ReservationPageState extends State<ReservationPage> {
               const Text("Jeste li sigurni da želite odjaviti rezervaciju?"),
           actions: [
             TextButton(
+              onPressed: () async {
+                await _cancelReservation();
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop();
+                // ignore: use_build_context_synchronously
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const MyReservationPageView()),
+                );
+              },
+              child: const Text("Potvrdi"),
+            ),
+            TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
               },
               child: const Text("Odustani"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _showStarRatingDialog(int numberOfSelectedStars) async {
+    return showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Potvrda"),
+          content: Text(
+              "Ocijenili ste tretman sa $numberOfSelectedStars zvjezdica."),
+          actions: [
+            TextButton(
+              onPressed: () async {
+                await _postRating(numberOfSelectedStars);
+                // ignore: use_build_context_synchronously
+                Navigator.of(context).pop();
+              },
+              child: const Text("Potvrdi"),
             ),
             TextButton(
               onPressed: () {
                 _cancelReservation();
                 Navigator.of(context).pop();
               },
-              child: const Text("Potvrdi"),
+              child: const Text("Odustani"),
             ),
           ],
         );
@@ -110,6 +160,7 @@ class _ReservationPageState extends State<ReservationPage> {
                               setState(() {
                                 selectedRating = index + 1;
                               });
+                              _showStarRatingDialog(selectedRating);
                             }
                           : null,
                       icon: Icon(
@@ -118,7 +169,7 @@ class _ReservationPageState extends State<ReservationPage> {
                             ? Colors.amber
                             : widget.reservation.status != false
                                 ? Colors.grey
-                                : Colors.grey.shade300, // Disabled color
+                                : Colors.grey.shade300,
                       ),
                     ),
                   ),

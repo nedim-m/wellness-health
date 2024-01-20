@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/models/reservation.dart';
 import 'package:mobile/providers/reservation_provider.dart';
+import 'package:mobile/utils/user_store.dart';
 import 'package:provider/provider.dart';
 
 class ColorCodedCalendar extends StatefulWidget {
@@ -23,10 +24,12 @@ class _ColorCodedCalendarState extends State<ColorCodedCalendar> {
   int? selectedHour;
   List<Reservation> reservation = [];
   final DateFormat formatter = DateFormat('dd.MM.yyyy');
+  int? _userId;
 
   @override
   void initState() {
     super.initState();
+    _userId = int.parse(UserManager.getUserId()!);
     fetchData();
   }
 
@@ -37,7 +40,7 @@ class _ColorCodedCalendarState extends State<ColorCodedCalendar> {
 
       try {
         await provider.addReservation(
-          3,
+          _userId!,
           formatter.format(widget.selectedDate),
           '$selectedHour:00',
           widget.treatmentId,

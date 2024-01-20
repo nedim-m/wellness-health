@@ -7,12 +7,11 @@ class TreatmentType {
   final int id;
   final String name;
   final String description;
-  final double price;
 
   factory TreatmentType.fromJson(Map<String, dynamic> json) =>
       _$TreatmentTypeFromJson(json);
 
-  TreatmentType(this.id, this.name, this.description, this.price);
+  TreatmentType(this.id, this.name, this.description);
 
   Map<String, dynamic> toJson() => _$TreatmentTypeToJson(this);
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/reservation.dart';
 import 'package:mobile/providers/reservation_provider.dart';
+import 'package:mobile/utils/user_store.dart';
 import 'package:mobile/widgets/reservation_page.dart';
 import 'package:mobile/widgets/app_bar.dart';
 
@@ -14,17 +15,19 @@ class MyReservationPageView extends StatefulWidget {
 class _MyReservationPageViewState extends State<MyReservationPageView> {
   List<Reservation> reservations = [];
   final ReservationProvider _reservationProvider = ReservationProvider();
+  int? _userId;
 
   @override
   void initState() {
     super.initState();
+    _userId = int.parse(UserManager.getUserId()!);
     fetchData();
   }
 
   Future<void> fetchData() async {
     List<Reservation> fetchedReservations =
         await _reservationProvider.get(filter: {
-      'userId': 3,
+      'userId': _userId,
     });
 
     setState(() {
@@ -45,7 +48,7 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  AppBarWidget(),
+      appBar: const AppBarWidget(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(

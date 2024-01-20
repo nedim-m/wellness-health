@@ -22,7 +22,7 @@ class UserProvider extends BaseProvider<User> {
       String phone) async {
     var url = "${baseUrl}Auth/register";
     var uri = Uri.parse(url);
-    var headers = createJwtHeaders(token ?? ''); //zbog testa
+    var headers = createJwtHeaders(token);
 
     var jsonRequest = jsonEncode(<String, dynamic>{
       "firstName": firstName,

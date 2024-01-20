@@ -34,7 +34,8 @@ class _LoginPageViewState extends State<LoginPageView> {
         context,
         MaterialPageRoute(builder: (context) => const HomepageView()),
       );
-      UserManager.getFullNameAsync(); //here is where i use it  first time
+      UserManager.removeCredentials();
+      UserManager.getFullNameAsync();
     } else {
       setState(() {
         _loginFailed = true;

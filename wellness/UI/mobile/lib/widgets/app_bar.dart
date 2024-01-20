@@ -13,7 +13,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
     return FutureBuilder<String?>(
       future: UserManager.getFullNameAsync(),
       builder: (context, snapshot) {
-        final String? _fullName = snapshot.data;
+        final String? fullName = snapshot.data;
 
         return AppBar(
           title: Column(
@@ -23,7 +23,7 @@ class AppBarWidget extends StatelessWidget implements PreferredSizeWidget {
               const Text('Wellness Center - Health'),
               const Gap(10),
               Text(
-                'Dobro došli, $_fullName',
+                'Dobro došli, $fullName',
                 style: const TextStyle(fontSize: 16.0),
               ),
             ],

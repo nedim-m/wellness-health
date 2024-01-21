@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/user.dart';
 import 'package:mobile/providers/user_provider.dart';
-
+import 'package:mobile/screens/login_page.dart';
 import 'package:mobile/widgets/app_bar.dart';
 
 class ProfilPageView extends StatefulWidget {
@@ -17,8 +17,8 @@ class _ProfilPageViewState extends State<ProfilPageView> {
   TextEditingController _emailController = TextEditingController();
   TextEditingController _userNameController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
-  TextEditingController _passwordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _confirmPasswordController = TextEditingController();
   final UserProvider _userProvider = UserProvider();
 
   @override
@@ -49,14 +49,70 @@ class _ProfilPageViewState extends State<ProfilPageView> {
   }
 
   void _saveChanges() async {
-    await _userProvider.updateUser(
+    try {
+      await _userProvider.updateUser(
         _firstNameController.text,
         _lastNameController.text,
         _emailController.text,
         _userNameController.text,
         _passwordController.text,
         _confirmPasswordController.text,
-        _phoneController.text);
+        _phoneController.text,
+      );
+
+      _showSuccessDialog();
+    } catch (error) {
+      print("Error updating user data: $error");
+
+      _showErrorDialog();
+    }
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Uspjesno"),
+          content: const Text(
+              "Izmjena profila uspjesna! Molimo Vas ponovo se logirajte!"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const LoginPageView()),
+                );
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _showErrorDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Greška"),
+          content: const Text("Desila se greška. Molim Vas pokušajte ponovo."),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override

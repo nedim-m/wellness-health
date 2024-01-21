@@ -57,7 +57,8 @@ namespace wellness.Service.Services
             CreateMap<Database.Reservation, Reservation>().ForMember(dest => dest.Treatment, opt => opt.MapFrom(src => src.Treatment.Name))
                                                           .ForMember(dest => dest.TreatmentId, opt => opt.MapFrom(src => src.Treatment.Id))
                                                           .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.User.FirstName))
-                                                          .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.User.LastName));
+                                                          .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.User.LastName))
+                                                          .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.User.Phone));
 
 
             CreateMap<RatingPostRequest, Database.Rating>();

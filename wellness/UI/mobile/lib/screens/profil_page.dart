@@ -1,102 +1,126 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
+import 'package:mobile/models/user.dart';
+import 'package:mobile/providers/user_provider.dart';
+
 import 'package:mobile/widgets/app_bar.dart';
 
-class ProfilPageView extends StatelessWidget {
-  const ProfilPageView({Key? key}) : super(key: key);
+class ProfilPageView extends StatefulWidget {
+  const ProfilPageView({super.key});
+
+  @override
+  State<ProfilPageView> createState() => _ProfilPageViewState();
+}
+
+class _ProfilPageViewState extends State<ProfilPageView> {
+  TextEditingController _firstNameController = TextEditingController();
+  TextEditingController _lastNameController = TextEditingController();
+  TextEditingController _emailController = TextEditingController();
+  TextEditingController _userNameController = TextEditingController();
+  TextEditingController _phoneController = TextEditingController();
+  TextEditingController _passwordController = TextEditingController();
+  TextEditingController _confirmPasswordController = TextEditingController();
+  final UserProvider _userProvider = UserProvider();
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    try {
+      User userData = await _userProvider.getById();
+
+      setState(() {
+        _firstNameController =
+            TextEditingController(text: userData.firstName.toString());
+        _lastNameController =
+            TextEditingController(text: userData.lastName.toString());
+        _emailController =
+            TextEditingController(text: userData.email.toString());
+        _userNameController =
+            TextEditingController(text: userData.userName.toString());
+        _phoneController =
+            TextEditingController(text: userData.phone.toString());
+      });
+    } catch (error) {
+      print("Error loading user data: $error");
+    }
+  }
+
+  void _saveChanges() async {
+    await _userProvider.updateUser(
+        _firstNameController.text,
+        _lastNameController.text,
+        _emailController.text,
+        _userNameController.text,
+        _passwordController.text,
+        _confirmPasswordController.text,
+        _phoneController.text);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
-      appBar: AppBarWidget(),
+    return Scaffold(
+      appBar: const AppBarWidget(),
       body: SingleChildScrollView(
         child: Padding(
-          padding: EdgeInsets.all(20.0),
-          child: ProfilePage(), // Include the ProfilePage here
-        ),
-      ),
-    );
-  }
-}
-
-class ProfilePage extends StatefulWidget {
-  const ProfilePage({super.key});
-
-  @override
-  _ProfilePageState createState() => _ProfilePageState();
-}
-
-class _ProfilePageState extends State<ProfilePage> {
-  final TextEditingController _firstNameController = TextEditingController();
-  final TextEditingController _lastNameController = TextEditingController();
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _userNameController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController =
-      TextEditingController();
-  final TextEditingController _pictureController = TextEditingController();
-  final TextEditingController _phoneController = TextEditingController();
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.stretch,
-      children: [
-        Container(
-          width: 120,
-          height: 120,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            image: DecorationImage(
-              fit: BoxFit.cover,
-              image: NetworkImage(_pictureController.text),
-            ),
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 20),
+              const Center(
+                child: Text(
+                  'Izmjena profila',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              TextField(
+                controller: _firstNameController,
+                decoration: const InputDecoration(labelText: 'First Name'),
+              ),
+              TextField(
+                controller: _lastNameController,
+                decoration: const InputDecoration(labelText: 'Last Name'),
+              ),
+              TextField(
+                controller: _emailController,
+                decoration: const InputDecoration(labelText: 'Email'),
+              ),
+              TextField(
+                controller: _userNameController,
+                decoration: const InputDecoration(labelText: 'Username'),
+              ),
+              TextField(
+                controller: _passwordController,
+                obscureText: true,
+                decoration: const InputDecoration(labelText: 'Password'),
+              ),
+              TextField(
+                controller: _confirmPasswordController,
+                obscureText: true,
+                decoration:
+                    const InputDecoration(labelText: 'Confirm Password'),
+              ),
+              TextField(
+                controller: _phoneController,
+                decoration: const InputDecoration(labelText: 'Phone'),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: _saveChanges,
+                child: const Text('Update Profile'),
+              ),
+            ],
           ),
         ),
-        SizedBox(height: 20),
-        TextField(
-          controller: _pictureController,
-          decoration: InputDecoration(labelText: 'Profile Picture URL'),
-        ),
-        TextField(
-          controller: _firstNameController,
-          decoration: InputDecoration(labelText: 'First Name'),
-        ),
-        TextField(
-          controller: _lastNameController,
-          decoration: InputDecoration(labelText: 'Last Name'),
-        ),
-        TextField(
-          controller: _emailController,
-          decoration: InputDecoration(labelText: 'Email'),
-        ),
-        TextField(
-          controller: _userNameController,
-          decoration: InputDecoration(labelText: 'Username'),
-        ),
-        TextField(
-          controller: _passwordController,
-          obscureText: true,
-          decoration: InputDecoration(labelText: 'Password'),
-        ),
-        TextField(
-          controller: _confirmPasswordController,
-          obscureText: true,
-          decoration: InputDecoration(labelText: 'Confirm Password'),
-        ),
-        TextField(
-          controller: _phoneController,
-          decoration: InputDecoration(labelText: 'Phone'),
-        ),
-        SizedBox(height: 20),
-        ElevatedButton(
-          onPressed: () {
-            // Handle profile update here
-            // You can access the entered values using _firstNameController.text, _lastNameController.text, etc.
-          },
-          child: Text('Update Profile'),
-        ),
-      ],
+      ),
     );
   }
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using wellness.Model.Category;
+using wellness.Model.Membership;
 using wellness.Model.MembershipType;
 using wellness.Model.Rating;
 using wellness.Model.Record;
@@ -63,6 +64,13 @@ namespace wellness.Service.Services
 
             CreateMap<RatingPostRequest, Database.Rating>();
             CreateMap<Database.Rating, Rating>();
+
+            CreateMap<MembershipPostRequest, Database.Membership>();
+            CreateMap<Database.Membership, Membership>().ForMember(dest=>dest.MemberShipTypeName,opt=>opt.MapFrom(src=>src.MemberShipType.Name))
+                                                        .ForMember(dest=>dest.UserName,opt=>opt.MapFrom(src=>src.User.UserName));
+
+
+
 
         }
     }

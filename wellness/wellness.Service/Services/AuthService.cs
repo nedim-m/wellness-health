@@ -101,8 +101,13 @@ namespace wellness.Service.Services
                
                 return null;
             }
+            if (_context.Users.Any(u => u.Email == request.Email))
+            {
 
-      
+                return null;
+            }
+
+
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
     

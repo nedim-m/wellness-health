@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/providers/user_provider.dart';
 import 'package:mobile/screens/login_page.dart';
+import 'package:mobile/utils/validation_rules.dart';
 
 class RegistrationPageView extends StatefulWidget {
-  const RegistrationPageView({super.key});
+  const RegistrationPageView({Key? key}) : super(key: key);
 
   @override
   State<RegistrationPageView> createState() => _RegistrationPageViewState();
@@ -18,14 +19,34 @@ class _RegistrationPageViewState extends State<RegistrationPageView> {
   final TextEditingController _confirmPasswordController =
       TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
+  final _validation = ValidationRules();
 
   final UserProvider _userProvider = UserProvider();
-  bool _passwordsMatch = true;
+
+  Map<String, String?> _errorMessages = {};
 
   void _saveChanges() async {
-    if (_passwordController.text == _confirmPasswordController.text) {
+    setState(() {
+      _errorMessages = {
+        'firstName': _validation.validateTextInput(
+            _firstNameController.text, 'Please enter your first name.'),
+        'lastName': _validation.validateTextInput(
+            _lastNameController.text, 'Please enter your last name.'),
+        'email': _validation.validateEmail(_emailController.text),
+        'userName': _validation.validateTextInput(
+            _userNameController.text, 'Please enter your username.'),
+        'password': _validation.validatePassword(_passwordController.text),
+        'confirmPassword':
+            _passwordController.text == _confirmPasswordController.text
+                ? null
+                : 'Passwords do not match',
+        'phone': _validation.validatePhone(_phoneController.text),
+      };
+    });
+
+    if (_errorMessages.values.every((element) => element == null)) {
       try {
-        dynamic response = await _userProvider.register(
+        await _userProvider.register(
           _firstNameController.text,
           _lastNameController.text,
           _emailController.text,
@@ -35,26 +56,23 @@ class _RegistrationPageViewState extends State<RegistrationPageView> {
           _phoneController.text,
         );
 
-        _showRegistrationAlert(response);
+        _showRegistrationAlert(true);
       } catch (error) {
-        print("Error during registration: $error");
+        _showRegistrationAlert(false);
       }
-    } else {
-      setState(() {
-        _passwordsMatch = false;
-      });
     }
   }
 
-  void _showRegistrationAlert(dynamic response) {
+  void _showRegistrationAlert(bool response) {
     String message = 'Unknown error';
     bool isSuccess = false;
 
-    if (response != null) {
+    if (response) {
       isSuccess = true;
       message = 'Registration Successful';
     } else {
-      message = 'Registration Failed';
+      message =
+          'Registration failed, User with that Username or Mail already exists';
     }
 
     showDialog(
@@ -97,24 +115,49 @@ class _RegistrationPageViewState extends State<RegistrationPageView> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _buildTextField(_firstNameController, 'First Name'),
+              _buildTextField(
+                _firstNameController,
+                'First Name',
+                errorText: _errorMessages['firstName'],
+              ),
               const SizedBox(height: 8.0),
-              _buildTextField(_lastNameController, 'Last Name'),
+              _buildTextField(
+                _lastNameController,
+                'Last Name',
+                errorText: _errorMessages['lastName'],
+              ),
               const SizedBox(height: 8.0),
-              _buildTextField(_emailController, 'Email'),
+              _buildTextField(
+                _emailController,
+                'Email',
+                errorText: _errorMessages['email'],
+              ),
               const SizedBox(height: 8.0),
-              _buildTextField(_userNameController, 'Username'),
+              _buildTextField(
+                _userNameController,
+                'Username',
+                errorText: _errorMessages['userName'],
+              ),
               const SizedBox(height: 8.0),
-              _buildTextField(_passwordController, 'Password', isObscure: true),
+              _buildTextField(
+                _passwordController,
+                'Password',
+                isObscure: true,
+                errorText: _errorMessages['password'],
+              ),
               const SizedBox(height: 8.0),
               _buildTextField(
                 _confirmPasswordController,
                 'Confirm Password',
                 isObscure: true,
-                errorText: !_passwordsMatch ? 'Passwords do not match' : null,
+                errorText: _errorMessages['confirmPassword'],
               ),
               const SizedBox(height: 8.0),
-              _buildTextField(_phoneController, 'Phone'),
+              _buildTextField(
+                _phoneController,
+                'Phone',
+                errorText: _errorMessages['phone'],
+              ),
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: _saveChanges,
@@ -127,14 +170,19 @@ class _RegistrationPageViewState extends State<RegistrationPageView> {
     );
   }
 
-  Widget _buildTextField(TextEditingController controller, String label,
-      {bool isObscure = false, String? errorText}) {
+  Widget _buildTextField(
+    TextEditingController controller,
+    String label, {
+    bool isObscure = false,
+    String? errorText,
+  }) {
     return TextField(
       controller: controller,
       obscureText: isObscure,
       decoration: InputDecoration(
         labelText: label,
         errorText: errorText,
+        errorStyle: const TextStyle(color: Colors.red),
       ),
     );
   }

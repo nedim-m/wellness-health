@@ -13,18 +13,18 @@ class UserProvider extends BaseProvider<User> {
     return User.fromJson(data);
   }
 
-  
   Future<dynamic> register(
-      String firstName,
-      String lastName,
-      String email,
-      String userName,
-      String password,
-      String confrimPassword,
-      String phone) async {
+    String firstName,
+    String lastName,
+    String email,
+    String userName,
+    String password,
+    String confirmPassword,
+    String phone,
+  ) async {
     var url = "${baseUrl}Auth/register";
     var uri = Uri.parse(url);
-    var headers = createJwtHeaders(token);
+    var headers = createJwtHeaders(token ?? '');
 
     var jsonRequest = jsonEncode(<String, dynamic>{
       "firstName": firstName,
@@ -32,7 +32,7 @@ class UserProvider extends BaseProvider<User> {
       "email": email,
       "userName": userName,
       "password": password,
-      "confrimPassword": confrimPassword,
+      "confrimPassword": confirmPassword,
       "phone": phone
     });
 
@@ -96,7 +96,7 @@ class UserProvider extends BaseProvider<User> {
       String password,
       String confrimPassword,
       String phone) async {
-        int id = int.parse(UserManager.getUserId()!);
+    int id = int.parse(UserManager.getUserId()!);
     var url = "$baseUrl$endpoint/$id";
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token!);

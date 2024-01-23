@@ -3,9 +3,10 @@ import 'package:mobile/models/user.dart';
 import 'package:mobile/providers/user_provider.dart';
 import 'package:mobile/screens/login_page.dart';
 import 'package:mobile/widgets/app_bar.dart';
+import 'package:mobile/utils/validation_rules.dart';
 
 class ProfilPageView extends StatefulWidget {
-  const ProfilPageView({super.key});
+  const ProfilPageView({Key? key}) : super(key: key);
 
   @override
   State<ProfilPageView> createState() => _ProfilPageViewState();
@@ -18,8 +19,12 @@ class _ProfilPageViewState extends State<ProfilPageView> {
   TextEditingController _userNameController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+  final TextEditingController _confirmPasswordController =
+      TextEditingController();
   final UserProvider _userProvider = UserProvider();
+  final ValidationRules _validation = ValidationRules();
+
+  Map<String, String?> _errorMessages = {};
 
   @override
   void initState() {
@@ -49,22 +54,41 @@ class _ProfilPageViewState extends State<ProfilPageView> {
   }
 
   void _saveChanges() async {
-    try {
-      await _userProvider.updateUser(
-        _firstNameController.text,
-        _lastNameController.text,
-        _emailController.text,
-        _userNameController.text,
-        _passwordController.text,
-        _confirmPasswordController.text,
-        _phoneController.text,
-      );
+    setState(() {
+      _errorMessages = {
+        'firstName': _validation.validateTextInput(
+            _firstNameController.text, 'Please enter your first name.'),
+        'lastName': _validation.validateTextInput(
+            _lastNameController.text, 'Please enter your last name.'),
+        'email': _validation.validateEmail(_emailController.text),
+        'userName': _validation.validateTextInput(
+            _userNameController.text, 'Please enter your username.'),
+        'password': _validation.validatePassword(_passwordController.text),
+        'confirmPassword':
+            _passwordController.text == _confirmPasswordController.text
+                ? null
+                : 'Passwords do not match',
+        'phone': _validation.validatePhone(_phoneController.text),
+      };
+    });
 
-      _showSuccessDialog();
-    } catch (error) {
-      print("Error updating user data: $error");
+    if (_errorMessages.values.every((element) => element == null)) {
+      try {
+        await _userProvider.updateUser(
+          _firstNameController.text,
+          _lastNameController.text,
+          _emailController.text,
+          _userNameController.text,
+          _passwordController.text,
+          _confirmPasswordController.text,
+          _phoneController.text,
+        );
 
-      _showErrorDialog();
+        _showSuccessDialog();
+      } catch (error) {
+        print("Error updating user data: $error");
+        _showErrorDialog();
+      }
     }
   }
 
@@ -73,14 +97,13 @@ class _ProfilPageViewState extends State<ProfilPageView> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Uspjesno"),
-          content: const Text(
-              "Izmjena profila uspjesna! Molimo Vas ponovo se logirajte!"),
+          title: const Text("Success"),
+          content:
+              const Text("Profile update successful! Please log in again."),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
-
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -100,8 +123,8 @@ class _ProfilPageViewState extends State<ProfilPageView> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Greška"),
-          content: const Text("Desila se greška. Molim Vas pokušajte ponovo."),
+          title: const Text("Error"),
+          content: const Text("An error occurred. Please try again."),
           actions: [
             TextButton(
               onPressed: () {
@@ -128,7 +151,7 @@ class _ProfilPageViewState extends State<ProfilPageView> {
               const SizedBox(height: 20),
               const Center(
                 child: Text(
-                  'Izmjena profila',
+                  'Profile Update',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -137,36 +160,42 @@ class _ProfilPageViewState extends State<ProfilPageView> {
                 ),
               ),
               const SizedBox(height: 16),
-              TextField(
-                controller: _firstNameController,
-                decoration: const InputDecoration(labelText: 'First Name'),
+              _buildTextField(
+                _firstNameController,
+                'First Name',
+                errorText: _errorMessages['firstName'],
               ),
-              TextField(
-                controller: _lastNameController,
-                decoration: const InputDecoration(labelText: 'Last Name'),
+              _buildTextField(
+                _lastNameController,
+                'Last Name',
+                errorText: _errorMessages['lastName'],
               ),
-              TextField(
-                controller: _emailController,
-                decoration: const InputDecoration(labelText: 'Email'),
+              _buildTextField(
+                _emailController,
+                'Email',
+                errorText: _errorMessages['email'],
               ),
-              TextField(
-                controller: _userNameController,
-                decoration: const InputDecoration(labelText: 'Username'),
+              _buildTextField(
+                _userNameController,
+                'Username',
+                errorText: _errorMessages['userName'],
               ),
-              TextField(
-                controller: _passwordController,
-                obscureText: true,
-                decoration: const InputDecoration(labelText: 'Password'),
+              _buildTextField(
+                _passwordController,
+                'Password',
+                isObscure: true,
+                errorText: _errorMessages['password'],
               ),
-              TextField(
-                controller: _confirmPasswordController,
-                obscureText: true,
-                decoration:
-                    const InputDecoration(labelText: 'Confirm Password'),
+              _buildTextField(
+                _confirmPasswordController,
+                'Confirm Password',
+                isObscure: true,
+                errorText: _errorMessages['confirmPassword'],
               ),
-              TextField(
-                controller: _phoneController,
-                decoration: const InputDecoration(labelText: 'Phone'),
+              _buildTextField(
+                _phoneController,
+                'Phone',
+                errorText: _errorMessages['phone'],
               ),
               const SizedBox(height: 20),
               ElevatedButton(
@@ -176,6 +205,23 @@ class _ProfilPageViewState extends State<ProfilPageView> {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildTextField(
+    TextEditingController controller,
+    String label, {
+    bool isObscure = false,
+    String? errorText,
+  }) {
+    return TextField(
+      controller: controller,
+      obscureText: isObscure,
+      decoration: InputDecoration(
+        labelText: label,
+        errorText: errorText,
+        errorStyle: const TextStyle(color: Colors.red),
       ),
     );
   }

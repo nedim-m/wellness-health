@@ -8,9 +8,9 @@ namespace wellness.Model.Membership
 {
     public class MembershipPostRequest
     {
-        public DateTime ExpirationDate { get; set; }
+        public string ExpirationDate { get; set; } = null!;
 
-        public DateTime StartDate { get; set; }
+        public string StartDate { get; set; } = null!;
 
         public int UserId { get; set; }
 

@@ -23,6 +23,7 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
     _userId = int.parse(UserManager.getUserId()!);
     fetchData();
   }
+  
 
   Future<void> fetchData() async {
     List<Reservation> fetchedReservations =

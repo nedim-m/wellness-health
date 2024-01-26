@@ -94,7 +94,7 @@ class _ChoseMembershipPageViewState extends State<ChoseMembershipPageView> {
         DoubleTextWidget(
           bigText: "Trajanje: ",
           smallText: selectedMembershipType != null
-              ? "${selectedMembershipType!.duration.toString()} mjeseci"
+              ? "${selectedMembershipType!.duration.toString()} dana"
               : "N/A",
         ),
         const Gap(15),

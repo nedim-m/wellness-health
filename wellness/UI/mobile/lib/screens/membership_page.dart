@@ -63,7 +63,7 @@ class _MemberShipPageViewState extends State<MemberShipPageView> {
               const SizedBox(height: 16),
               if (data != null) ...[
                 DoubleTextWidget(
-                  bigText: "Tip članarine: ",
+                  bigText: "Trenutno aktivni tip članarine: ",
                   smallText: data!.memberShipTypeName,
                 ),
                 const Gap(15),

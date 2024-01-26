@@ -9,7 +9,7 @@ using wellness.Model.MembershipType;
 
 namespace wellness.Service.IServices
 {
-    public interface IMembershipService:ICrudService<Membership, MembershipSearchObj, MembershipPostRequest,MembershipPostRequest>
+    public interface IMembershipService:ICrudService<Membership, MembershipSearchObj, MembershipPostRequest,MembershipUpdateRequest>
     {
     }
 }

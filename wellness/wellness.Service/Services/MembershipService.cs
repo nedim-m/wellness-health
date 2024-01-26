@@ -13,12 +13,14 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace wellness.Service.Services
 {
-    public class MembershipService : CrudService<Model.Membership.Membership, Database.Membership, MembershipSearchObj, MembershipPostRequest, MembershipPostRequest>, IMembershipService
+    public class MembershipService : CrudService<Model.Membership.Membership, Database.Membership, MembershipSearchObj, MembershipPostRequest, MembershipUpdateRequest>, IMembershipService
     {
         private readonly DbWellnessContext _context;
+        private readonly IMapper _mapper;
         public MembershipService(IMapper mapper, Database.DbWellnessContext context) : base(mapper, context)
         {
             _context=context;
+            _mapper=mapper;
         }
 
 
@@ -54,6 +56,50 @@ namespace wellness.Service.Services
             }
 
              _context.SaveChangesAsync();
+        }
+
+        public override async Task<Model.Membership.Membership> Update(int id, MembershipUpdateRequest update)
+        {
+            var membershipType = await _context.MembershipTypes.FindAsync(update.MemberShipTypeId);
+            DateTime currentDate = DateTime.Now;
+
+            var membershipToUpdate = await _context.Memberships.FindAsync(id);
+            if (membershipToUpdate == null)
+            {
+                return null;
+            }
+
+            if (DateTime.Parse(membershipToUpdate.ExpirationDate)<currentDate)
+            {
+
+                var dateToSet = currentDate.AddDays(membershipType!.Duration);
+                membershipToUpdate.ExpirationDate = dateToSet.ToString("dd.MM.yyyy");
+                membershipToUpdate.StartDate=currentDate.ToString("dd.MM.yyyy");
+                membershipToUpdate.Status=true;
+
+
+            }
+            else
+            {
+
+                var dateToSet = DateTime.Parse(membershipToUpdate.ExpirationDate).AddDays(membershipType!.Duration);
+                membershipToUpdate.ExpirationDate = dateToSet.ToString("dd.MM.yyyy");
+                membershipToUpdate.Status=true;
+            }
+            
+
+
+
+
+
+            _mapper.Map(update, membershipToUpdate);
+
+
+
+
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<Model.Membership.Membership>(membershipToUpdate);
         }
 
 

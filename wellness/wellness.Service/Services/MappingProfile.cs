@@ -67,6 +67,7 @@ namespace wellness.Service.Services
             CreateMap<Database.Rating, Rating>();
 
             CreateMap<MembershipPostRequest, Database.Membership>();
+            CreateMap<MembershipUpdateRequest, Database.Membership>();
             CreateMap<Database.Membership, Membership>().ForMember(dest => dest.MemberShipTypeName, opt => opt.MapFrom(src => src.MemberShipType.Name))
                                                         .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
                                                         .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.MemberShipType.Price));

@@ -45,7 +45,7 @@ namespace wellness.Service.Services
             {
                 if (search.Role.Equals("notmember"))
                 {
-                    filteredEntity = filteredEntity.Where(x => !x.Role.Name.Equals("member") && !x.Role.Name.Equals("administrator"));
+                    filteredEntity = filteredEntity.Where(x => !x.Role.Name.Equals("Member") && !x.Role.Name.Equals("Administrator"));
                 }
                 else
                 {
@@ -56,9 +56,9 @@ namespace wellness.Service.Services
             if (!string.IsNullOrWhiteSpace(search?.Prisutan))
             {
                 if (search.Prisutan=="DA")
-                filteredEntity=filteredEntity.Where(x => x.Role.Name.Equals("member")&& x.Prisutan==true);
+                filteredEntity=filteredEntity.Where(x => x.Role.Name.Equals("Member")&& x.Prisutan==true);
                 else
-                filteredEntity=filteredEntity.Where(x => x.Role.Name.Equals("member")&& x.Prisutan!=true);
+                filteredEntity=filteredEntity.Where(x => x.Role.Name.Equals("Member")&& x.Prisutan!=true);
                 
             }
 

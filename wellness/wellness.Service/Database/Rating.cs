@@ -7,8 +7,6 @@ public partial class Rating
 {
     public int Id { get; set; }
 
-    public string? Description { get; set; }
-
     public int StarRating { get; set; }
 
     public int TreatmentId { get; set; }

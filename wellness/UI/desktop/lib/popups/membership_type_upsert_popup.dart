@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../models/membership_type.dart';
-import '../models/treatment_type.dart';
+
 import '../providers/membership_type.provider.dart';
 
 import '../utils/validation_rules.dart';
@@ -57,12 +57,12 @@ class _MembershipTypeEditPopUpWidgetState
       if (widget.edit == true && widget.data != null) {
         await provider.update(
           widget.data!.id,
-          TreatmentType(widget.data!.id, name.text, description.text,
+          MembershipType(widget.data!.id, name.text, description.text,
               double.parse(price.text)),
         );
       } else {
         await provider.insert(
-          TreatmentType(
+          MembershipType(
               0, name.text, description.text, double.parse(price.text)),
         );
       }

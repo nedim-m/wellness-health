@@ -89,27 +89,43 @@ namespace wellness.Service.Services
 
         public async Task<Models.User.User?> RegisterUser(UserRegisterRequest request)
         {
-            if (request.Password!=request.ConfrimPassword)
+
+            if (request.Password != request.ConfrimPassword)
             {
                 return null;
             }
+
+           
+            if (_context.Users.Any(u => u.UserName == request.UserName))
+            {
+               
+                return null;
+            }
+            if (_context.Users.Any(u => u.Email == request.Email))
+            {
+
+                return null;
+            }
+
+
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
+    
             var user = _mapper.Map<Database.User>(request);
-            user.PasswordHash= passwordHash;
-            user.PasswordSalt=passwordSalt;
-            user.RoleId=3;
+            user.PasswordHash = passwordHash;
+            user.PasswordSalt = passwordSalt;
+            user.RoleId = 3;
+
+       
             _context.Users.Add(user);
 
-
-
+           
             await _context.SaveChangesAsync();
 
            
-            
-
             return _mapper.Map<Models.User.User>(user);
         }
+
 
         private static bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
@@ -133,7 +149,7 @@ namespace wellness.Service.Services
             List<Claim> claims = new()
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
-                new Claim(ClaimTypes.Name, user.UserName),
+                new Claim(ClaimTypes.Name, (user.FirstName +" "+ user.LastName)),
                 new Claim(ClaimTypes.Role,userRole)
             };
 

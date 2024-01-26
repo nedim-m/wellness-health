@@ -9,11 +9,11 @@ public partial class Reservation
 
     public int UserId { get; set; }
 
-    public DateTime DateOf { get; set; }
+    public string Date { get; set; } = null!;
 
-    public DateTime DateTo { get; set; }
+    public string Time { get; set; } = null!;
 
-    public bool Status { get; set; }
+    public bool? Status { get; set; }
 
     public int TreatmentId { get; set; }
 

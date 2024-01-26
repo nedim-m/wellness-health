@@ -24,7 +24,6 @@ class TreatmentEditPopUpWidget extends StatefulWidget {
 class _TreatmentEditPopUpWidgetState extends State<TreatmentEditPopUpWidget> {
   TextEditingController name = TextEditingController();
   TextEditingController description = TextEditingController();
-  TextEditingController price = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
   final _validation = ValidationRules();
@@ -34,7 +33,6 @@ class _TreatmentEditPopUpWidgetState extends State<TreatmentEditPopUpWidget> {
     if (widget.edit == true && widget.data != null) {
       name = TextEditingController(text: widget.data!.name);
       description = TextEditingController(text: widget.data!.description);
-      price = TextEditingController(text: widget.data!.price.toString());
     }
     super.initState();
   }
@@ -43,7 +41,7 @@ class _TreatmentEditPopUpWidgetState extends State<TreatmentEditPopUpWidget> {
   void dispose() {
     name.dispose();
     description.dispose();
-    price.dispose();
+
     super.dispose();
   }
 
@@ -53,13 +51,19 @@ class _TreatmentEditPopUpWidgetState extends State<TreatmentEditPopUpWidget> {
       if (widget.edit == true && widget.data != null) {
         await provider.update(
           widget.data!.id,
-          TreatmentType(widget.data!.id, name.text, description.text,
-              double.parse(price.text)),
+          TreatmentType(
+            widget.data!.id,
+            name.text,
+            description.text,
+          ),
         );
       } else {
         await provider.insert(
           TreatmentType(
-              0, name.text, description.text, double.parse(price.text)),
+            0,
+            name.text,
+            description.text,
+          ),
         );
       }
       widget.refreshCallback();
@@ -88,12 +92,6 @@ class _TreatmentEditPopUpWidgetState extends State<TreatmentEditPopUpWidget> {
               decoration: const InputDecoration(labelText: "Opis"),
               validator: (value) => _validation.validateTextInput(
                   value, 'Please enter Description.'),
-            ),
-            TextFormField(
-              controller: price,
-              decoration: const InputDecoration(labelText: "Cijena"),
-              keyboardType: TextInputType.number,
-              validator: _validation.validatePrice,
             ),
           ],
         ),

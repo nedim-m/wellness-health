@@ -12,6 +12,6 @@ namespace wellness.Model.TreatmentType
 
         public string Description { get; set; } = null!;
 
-        public float Price { get; set; }
+     
     }
 }

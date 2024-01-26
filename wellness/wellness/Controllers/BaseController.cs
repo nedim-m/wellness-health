@@ -26,7 +26,8 @@ namespace wellness.Controllers
             return await _service.Get(search);
         }
 
-        [HttpGet("{id}"),Authorize(Roles = "Administrator")]
+        //[HttpGet("{id}"),Authorize(Roles = "Administrator")]
+        [HttpGet("{id}")]
         public virtual async Task<T> GetById(int id)
         {
             return await _service.GetById(id);

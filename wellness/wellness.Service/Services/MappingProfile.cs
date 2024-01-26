@@ -2,11 +2,15 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection.Emit;
 using System.Text;
 using System.Threading.Tasks;
 using wellness.Model.Category;
+using wellness.Model.Membership;
 using wellness.Model.MembershipType;
+using wellness.Model.Rating;
 using wellness.Model.Record;
+using wellness.Model.Reservation;
 using wellness.Model.Role;
 using wellness.Model.RoleUpsertRequest;
 using wellness.Model.Treatment;
@@ -25,10 +29,10 @@ namespace wellness.Service.Services
             CreateMap<UserUpdateRequest, Database.User>();
             CreateMap<UserPostRequest, Database.User>();
 
-            CreateMap<Database.User, User>().ForMember(dest=> dest.Role,opt=>opt.MapFrom(src=>src.Role.Name))
-                                            .ForMember(dest=>dest.ShiftTime,opt=>opt.MapFrom(src=>src.Role.ShiftTime));
+            CreateMap<Database.User, User>().ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.Name))
+                                            .ForMember(dest => dest.ShiftTime, opt => opt.MapFrom(src => src.Role.ShiftTime));
             CreateMap<CategoryPostRequest, Database.Category>();
-            CreateMap<Database.Category,Category>();
+            CreateMap<Database.Category, Category>();
 
             CreateMap<TreatmentTypePostRequest, Database.TreatmentType>();
             CreateMap<Database.TreatmentType, TreatmentType>();
@@ -48,6 +52,27 @@ namespace wellness.Service.Services
 
             CreateMap<RoleUpsertRequest, Database.Role>();
             CreateMap<Database.Role, Role>();
+
+
+            CreateMap<ReservationPostRequest, Database.Reservation>();
+            CreateMap<ReservationUpdateRequest, Database.Reservation>();
+            CreateMap<Database.Reservation, Reservation>().ForMember(dest => dest.Treatment, opt => opt.MapFrom(src => src.Treatment.Name))
+                                                          .ForMember(dest => dest.TreatmentId, opt => opt.MapFrom(src => src.Treatment.Id))
+                                                          .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.User.FirstName))
+                                                          .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.User.LastName))
+                                                          .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.User.Phone));
+
+
+            CreateMap<RatingPostRequest, Database.Rating>();
+            CreateMap<Database.Rating, Rating>();
+
+            CreateMap<MembershipPostRequest, Database.Membership>();
+            CreateMap<MembershipUpdateRequest, Database.Membership>();
+            CreateMap<Database.Membership, Membership>().ForMember(dest => dest.MemberShipTypeName, opt => opt.MapFrom(src => src.MemberShipType.Name))
+                                                        .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
+                                                        .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.MemberShipType.Price));
+
+
 
 
         }

@@ -7,7 +7,7 @@ import '../providers/user_provider.dart';
 import '../utils/validation_rules.dart';
 
 class RecordAddPopupWidget extends StatefulWidget {
-   final Function() refreshCallback;
+  final Function() refreshCallback;
 
   const RecordAddPopupWidget({super.key, required this.refreshCallback});
 

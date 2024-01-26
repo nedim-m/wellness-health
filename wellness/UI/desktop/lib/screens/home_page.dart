@@ -1,5 +1,6 @@
 import 'package:desktop/screens/category_page.dart';
 import 'package:desktop/screens/record_page.dart';
+import 'package:desktop/screens/reservation_page.dart';
 import 'package:desktop/screens/treatment_page.dart';
 import 'package:desktop/screens/treatment_type_page.dart';
 import 'package:desktop/screens/user_page.dart';
@@ -79,6 +80,12 @@ class _HomepageViewState extends State<HomepageView> {
           title: const Text('Članarina'),
           body: const MembershipTypePageView(),
         ),
+        if (!isAdmin)
+          PaneItem(
+            icon: const Icon(FluentIcons.reservation_orders),
+            title: const Text('Rezervacije'),
+            body: const ReservationPageView(),
+          ),
         if (isAdmin)
           PaneItemExpander(
             title: const Text('Izvjestaj'),

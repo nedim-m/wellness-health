@@ -54,14 +54,16 @@ namespace wellness.Service.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("ExpirationDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("ExpirationDate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MemberShipTypeId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("StartDate")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("StartDate")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("Status")
                         .HasColumnType("bit");
@@ -90,6 +92,9 @@ namespace wellness.Service.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("Duration")
+                        .HasColumnType("int");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -109,9 +114,6 @@ namespace wellness.Service.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StarRating")
                         .HasColumnType("int");
@@ -163,14 +165,16 @@ namespace wellness.Service.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("DateOf")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Date")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("DateTo")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Status")
+                    b.Property<bool?>("Status")
                         .HasColumnType("bit");
+
+                    b.Property<string>("Time")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TreatmentId")
                         .HasColumnType("int");
@@ -242,7 +246,7 @@ namespace wellness.Service.Migrations
                             Description = "Evidencija prisutnih, rezervacija i tretmana",
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Worker-second-shift",
-                            ShiftTime = "od 08:00 do 16:00"
+                            ShiftTime = "od 16:00 do 23:00"
                         },
                         new
                         {
@@ -255,10 +259,10 @@ namespace wellness.Service.Migrations
                         new
                         {
                             Id = 6,
-                            Description = "Fitnes trener, rezervacija i tretmana",
+                            Description = "Fitnes trener",
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Trainer-second-shift",
-                            ShiftTime = "od 08:00 do 16:00"
+                            ShiftTime = "od 16:00 do 23:00"
                         },
                         new
                         {
@@ -271,10 +275,10 @@ namespace wellness.Service.Migrations
                         new
                         {
                             Id = 8,
-                            Description = "Fizijatar, rezervacija i tretmana",
+                            Description = "Fizijatar",
                             ModifiedDate = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Physiotherapist-second-shift",
-                            ShiftTime = "od 08:00 do 16:00"
+                            ShiftTime = "od 16:00 do 23:00"
                         });
                 });
 
@@ -295,6 +299,10 @@ namespace wellness.Service.Migrations
 
                     b.Property<int>("Duration")
                         .HasColumnType("int");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Picture")
                         .IsRequired()
@@ -330,9 +338,6 @@ namespace wellness.Service.Migrations
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<float>("Price")
-                        .HasColumnType("real");
 
                     b.HasKey("Id");
 
@@ -400,6 +405,56 @@ namespace wellness.Service.Migrations
                     b.HasIndex(new[] { "RoleId" }, "IX_Users_RoleId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Email = "admin@admin.com",
+                            FirstName = "Admin",
+                            LastName = "Admin",
+                            PasswordHash = new byte[] { 121, 196, 229, 226, 156, 226, 132, 65, 207, 254, 90, 152, 15, 48, 147, 10, 89, 188, 65, 118, 220, 95, 122, 84, 106, 251, 167, 20, 10, 222, 210, 1, 240, 243, 68, 22, 243, 36, 222, 42, 114, 207, 117, 174, 34, 135, 67, 30, 40, 144, 21, 250, 33, 24, 220, 142, 39, 23, 128, 238, 188, 139, 4, 78 },
+                            PasswordSalt = new byte[] { 75, 42, 158, 170, 242, 143, 49, 217, 11, 31, 60, 110, 3, 162, 244, 15, 64, 94, 80, 27, 194, 224, 95, 84, 48, 137, 97, 152, 191, 77, 4, 64, 228, 187, 93, 203, 209, 195, 10, 79, 104, 102, 93, 239, 221, 198, 205, 163, 233, 41, 66, 94, 12, 94, 221, 83, 37, 109, 174, 4, 57, 130, 84, 173, 232, 26, 71, 252, 179, 190, 224, 34, 89, 148, 191, 140, 142, 144, 249, 67, 210, 95, 74, 103, 212, 227, 49, 150, 210, 201, 150, 249, 28, 214, 117, 144, 115, 247, 175, 249, 6, 143, 5, 220, 125, 177, 84, 227, 243, 230, 189, 223, 14, 6, 213, 241, 83, 211, 21, 122, 147, 225, 62, 239, 53, 224, 105, 160 },
+                            Phone = "061111222",
+                            RefreshToken = "",
+                            RoleId = 1,
+                            Status = true,
+                            TokenCreated = new DateTime(2024, 1, 26, 15, 50, 38, 335, DateTimeKind.Utc).AddTicks(666),
+                            TokenExpires = new DateTime(2024, 1, 26, 16, 50, 38, 335, DateTimeKind.Utc).AddTicks(669),
+                            UserName = "admin"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Email = "worker@admin.com",
+                            FirstName = "Worker",
+                            LastName = "Worker",
+                            PasswordHash = new byte[] { 121, 196, 229, 226, 156, 226, 132, 65, 207, 254, 90, 152, 15, 48, 147, 10, 89, 188, 65, 118, 220, 95, 122, 84, 106, 251, 167, 20, 10, 222, 210, 1, 240, 243, 68, 22, 243, 36, 222, 42, 114, 207, 117, 174, 34, 135, 67, 30, 40, 144, 21, 250, 33, 24, 220, 142, 39, 23, 128, 238, 188, 139, 4, 78 },
+                            PasswordSalt = new byte[] { 75, 42, 158, 170, 242, 143, 49, 217, 11, 31, 60, 110, 3, 162, 244, 15, 64, 94, 80, 27, 194, 224, 95, 84, 48, 137, 97, 152, 191, 77, 4, 64, 228, 187, 93, 203, 209, 195, 10, 79, 104, 102, 93, 239, 221, 198, 205, 163, 233, 41, 66, 94, 12, 94, 221, 83, 37, 109, 174, 4, 57, 130, 84, 173, 232, 26, 71, 252, 179, 190, 224, 34, 89, 148, 191, 140, 142, 144, 249, 67, 210, 95, 74, 103, 212, 227, 49, 150, 210, 201, 150, 249, 28, 214, 117, 144, 115, 247, 175, 249, 6, 143, 5, 220, 125, 177, 84, 227, 243, 230, 189, 223, 14, 6, 213, 241, 83, 211, 21, 122, 147, 225, 62, 239, 53, 224, 105, 160 },
+                            Phone = "061112333",
+                            RefreshToken = "",
+                            RoleId = 2,
+                            Status = true,
+                            TokenCreated = new DateTime(2024, 1, 26, 15, 50, 38, 335, DateTimeKind.Utc).AddTicks(965),
+                            TokenExpires = new DateTime(2024, 1, 26, 16, 50, 38, 335, DateTimeKind.Utc).AddTicks(965),
+                            UserName = "worker"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Email = "member@admin.com",
+                            FirstName = "Member",
+                            LastName = "Member",
+                            PasswordHash = new byte[] { 121, 196, 229, 226, 156, 226, 132, 65, 207, 254, 90, 152, 15, 48, 147, 10, 89, 188, 65, 118, 220, 95, 122, 84, 106, 251, 167, 20, 10, 222, 210, 1, 240, 243, 68, 22, 243, 36, 222, 42, 114, 207, 117, 174, 34, 135, 67, 30, 40, 144, 21, 250, 33, 24, 220, 142, 39, 23, 128, 238, 188, 139, 4, 78 },
+                            PasswordSalt = new byte[] { 75, 42, 158, 170, 242, 143, 49, 217, 11, 31, 60, 110, 3, 162, 244, 15, 64, 94, 80, 27, 194, 224, 95, 84, 48, 137, 97, 152, 191, 77, 4, 64, 228, 187, 93, 203, 209, 195, 10, 79, 104, 102, 93, 239, 221, 198, 205, 163, 233, 41, 66, 94, 12, 94, 221, 83, 37, 109, 174, 4, 57, 130, 84, 173, 232, 26, 71, 252, 179, 190, 224, 34, 89, 148, 191, 140, 142, 144, 249, 67, 210, 95, 74, 103, 212, 227, 49, 150, 210, 201, 150, 249, 28, 214, 117, 144, 115, 247, 175, 249, 6, 143, 5, 220, 125, 177, 84, 227, 243, 230, 189, 223, 14, 6, 213, 241, 83, 211, 21, 122, 147, 225, 62, 239, 53, 224, 105, 160 },
+                            Phone = "061110121",
+                            RefreshToken = "",
+                            RoleId = 3,
+                            Status = true,
+                            TokenCreated = new DateTime(2024, 1, 26, 15, 50, 38, 335, DateTimeKind.Utc).AddTicks(1228),
+                            TokenExpires = new DateTime(2024, 1, 26, 16, 50, 38, 335, DateTimeKind.Utc).AddTicks(1229),
+                            UserName = "worker"
+                        });
                 });
 
             modelBuilder.Entity("wellness.Service.Database.Membership", b =>

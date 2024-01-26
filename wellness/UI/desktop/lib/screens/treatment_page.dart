@@ -164,6 +164,15 @@ class _TreatmentPageViewState extends State<TreatmentPageView> {
                 columns: const [
                   DataColumn(
                     label: Text(
+                      "Naziv",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
                       "Vrsta usluge",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
@@ -278,10 +287,23 @@ DataRow recentFileDataRow(BuildContext context, var data,
     Function() refreshCallback, Function(int) deleteCallback) {
   return DataRow(
     cells: [
+      DataCell(Text(data.name)),
       DataCell(Text(data.treatmentType)),
       DataCell(Text(data.category)),
       DataCell(Text("${data.duration} minuta")),
-      DataCell(Text(data.description)),
+      DataCell(
+        SizedBox(
+          width: 150,
+          child: Tooltip(
+            message: data.description,
+            child: Text(
+              data.description,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ),
+        ),
+      ),
       DataCell(
         Row(
           children: [

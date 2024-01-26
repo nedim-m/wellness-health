@@ -88,7 +88,9 @@ class _MemberShipPageViewState extends State<MemberShipPageView> {
                     Navigator.push(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => const PaymentPageView(),
+                        builder: (context) => PaymentPageView(
+                            memberShipTypeName: data!.memberShipTypeName,
+                            currentExpDate: data!.expirationDate),
                       ),
                     );
                   },

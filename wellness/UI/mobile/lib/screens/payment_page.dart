@@ -6,7 +6,12 @@ import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/double_text.dart';
 
 class PaymentPageView extends StatefulWidget {
-  const PaymentPageView({super.key});
+  const PaymentPageView(
+      {super.key,
+      required this.memberShipTypeName,
+      required this.currentExpDate});
+  final String memberShipTypeName;
+  final String currentExpDate;
 
   @override
   State<PaymentPageView> createState() => _PaymentPageViewState();
@@ -37,14 +42,14 @@ class _PaymentPageViewState extends State<PaymentPageView> {
                 ),
               ),
               const SizedBox(height: 16),
-              const DoubleTextWidget(
+              DoubleTextWidget(
                 bigText: "Tip članarine: ",
-                smallText: "Tip 1",
+                smallText: widget.memberShipTypeName,
               ),
               const Gap(15),
-              const DoubleTextWidget(
-                bigText: "Datum isteka: ",
-                smallText: "11.06.2023",
+              DoubleTextWidget(
+                bigText: "Trenutni datum isteka: ",
+                smallText: widget.currentExpDate,
               ),
               const Gap(10),
               _buildPaymentOption('Credit Card', 'assets/images/cclogo.jpg'),

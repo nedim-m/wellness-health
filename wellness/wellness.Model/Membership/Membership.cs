@@ -17,6 +17,7 @@ namespace wellness.Model.Membership
         public bool Status { get; set; }
 
         public string UserName { get; set; } = null!;
+        public float Price { get; set; }
 
         public string? MemberShipTypeName { get; set; }
     }

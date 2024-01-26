@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:mobile/screens/cc_page.dart';
+import 'package:mobile/utils/current_date.dart';
 
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/double_text.dart';
 
 class PaymentPageView extends StatefulWidget {
   const PaymentPageView(
-      {super.key,
-      required this.memberShipTypeName,
-      required this.currentExpDate});
+      {super.key, required this.memberShipTypeName, required this.price});
   final String memberShipTypeName;
-  final String currentExpDate;
+
+  final String price;
 
   @override
   State<PaymentPageView> createState() => _PaymentPageViewState();
@@ -19,6 +19,7 @@ class PaymentPageView extends StatefulWidget {
 
 class _PaymentPageViewState extends State<PaymentPageView> {
   String selectedPaymentOption = '';
+  var currentDate = CurrentDate();
 
   @override
   Widget build(BuildContext context) {
@@ -48,8 +49,13 @@ class _PaymentPageViewState extends State<PaymentPageView> {
               ),
               const Gap(15),
               DoubleTextWidget(
-                bigText: "Trenutni datum isteka: ",
-                smallText: widget.currentExpDate,
+                bigText: "Datum aktivacije: ",
+                smallText: currentDate.currentDate,
+              ),
+              const SizedBox(height: 16),
+              DoubleTextWidget(
+                bigText: "Cijena: ",
+                smallText: "${widget.price} BAM",
               ),
               const Gap(10),
               _buildPaymentOption('Credit Card', 'assets/images/cclogo.jpg'),

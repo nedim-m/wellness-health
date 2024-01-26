@@ -13,5 +13,7 @@ public partial class MembershipType
 
     public float Price { get; set; }
 
+    public int Duration { get; set; }
+
     public virtual ICollection<Membership> Memberships { get; } = new List<Membership>();
 }

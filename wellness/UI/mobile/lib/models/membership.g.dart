@@ -13,6 +13,7 @@ Membership _$MembershipFromJson(Map<String, dynamic> json) => Membership(
       json['status'] as bool,
       json['userName'] as String,
       json['memberShipTypeName'] as String,
+      (json['price'] as num).toDouble(),
     );
 
 Map<String, dynamic> _$MembershipToJson(Membership instance) =>
@@ -23,4 +24,5 @@ Map<String, dynamic> _$MembershipToJson(Membership instance) =>
       'status': instance.status,
       'userName': instance.userName,
       'memberShipTypeName': instance.memberShipTypeName,
+      'price': instance.price,
     };

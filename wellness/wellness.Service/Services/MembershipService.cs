@@ -33,7 +33,7 @@ namespace wellness.Service.Services
             if (search?.UserId != null)
             {
                 query = query.Where(x => x.UserId == search.UserId);
-                UpdateStatusForMembership(query.ToList()); 
+                UpdateStatusForMembership(query.ToList());
             }
 
             return base.AddFilter(query, search);
@@ -41,20 +41,21 @@ namespace wellness.Service.Services
 
         private void UpdateStatusForMembership(List<Database.Membership> memberships)
         {
+
+           DateTime currentDate = DateTime.Now;
+           
+
             foreach (var membership in memberships)
             {
-
-                if (DateTime.TryParse(membership.ExpirationDate, out DateTime parsedExpDate) &&
-                    DateTime.TryParse(membership.StartDate, out DateTime parsedStartDate))
-                {
-                    if (parsedExpDate > parsedStartDate)
+              
+                    if (DateTime.Parse(membership.ExpirationDate) <currentDate)
                         membership.Status = false;
-                }
-
+              
             }
 
-            _context.SaveChangesAsync();
+             _context.SaveChangesAsync();
         }
+
 
 
     }

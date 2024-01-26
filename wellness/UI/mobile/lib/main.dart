@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/providers/category_provider.dart';
 import 'package:mobile/providers/membership_provider.dart';
+import 'package:mobile/providers/membership_type_provider.dart';
 import 'package:mobile/providers/rating_provider.dart';
 import 'package:mobile/providers/reservation_provider.dart';
 import 'package:mobile/providers/treatment_provider.dart';
@@ -19,6 +20,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => RatingProvider()),
       ChangeNotifierProvider(create: (_) => UserProvider()),
       ChangeNotifierProvider(create: (_) => MembershipProvider()),
+      ChangeNotifierProvider(create: (_) => MembershipTypeProvider()),
     ],
     child: const MyApp(),
   ));

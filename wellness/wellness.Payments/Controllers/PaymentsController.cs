@@ -29,15 +29,14 @@ namespace wellness.Payments.Controllers
                     return BadRequest("Invalid payment request");
                 }
 
-                // You might want to validate other properties of the payment request here
+           
 
                 var paymentIntentClientSecret = await _paymentService.ProcessPaymentAsync(request.Amount, request.Currency, request.PaymentMethod);
 
                 return Ok(new { ClientSecret = paymentIntentClientSecret });
             }
-            catch (Exception ex)
-            {
-                // Log the exception and return an appropriate response
+            catch (Exception ex) { 
+         
                 Console.WriteLine($"Error processing payment: {ex.Message}");
                 return StatusCode(500, "Internal Server Error");
             }

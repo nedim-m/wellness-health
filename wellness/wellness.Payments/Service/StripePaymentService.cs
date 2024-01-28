@@ -22,7 +22,7 @@ public class StripePaymentService : IStripePaymentService
         {
             var options = new PaymentIntentCreateOptions
             {
-                Amount = (long)amount * 100, // Stripe amounts are in cents
+                Amount = (long)amount * 100, 
                 Currency = currency,
             };
 
@@ -33,11 +33,11 @@ public class StripePaymentService : IStripePaymentService
         }
         catch (Exception ex)
         {
-            // Handle exceptions appropriately for your application
+            
             Console.WriteLine($"Error creating payment intent: {ex.Message}");
             throw;
         }
     }
 
-    // Add other methods for handling Stripe-related operations as needed
+   
 }

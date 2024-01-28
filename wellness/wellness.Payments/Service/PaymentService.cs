@@ -20,25 +20,24 @@ namespace wellness.Payments.Service
         {
             if (!string.IsNullOrEmpty(paymentMethod) && paymentMethod == "Stripe")
             {
-                // Assuming CreatePaymentIntent returns a Task<string>
+                
                 var paymentIntentClientSecret = await _stripePaymentService.CreatePaymentIntent(amount, currency);
 
-                // Use the ITransactionService to save transaction data
+ 
                 await _transactionService.SaveTransactionAsync(new wellness.Model.Transaction.Transaction
                 {
                     Amount = amount,
                     Currency = currency,
                     PaymentGateway = paymentMethod,
                     Timestamp=DateTime.UtcNow,
-                    MemberShipId=3,
-                    
-                    // Add other properties as needed
+                    MemberShipId=1,
+                  
                 });
 
                 return paymentIntentClientSecret;
             }
 
-            // Handle other payment methods or throw an exception for unsupported methods
+            
             throw new NotSupportedException($"Unsupported payment method: {paymentMethod}");
         }
     }

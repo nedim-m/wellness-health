@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:mobile/screens/cc_page.dart';
+import 'package:mobile/screens/stripe_page.dart';
+
 import 'package:mobile/utils/current_date.dart';
 
 import 'package:mobile/widgets/app_bar.dart';
@@ -129,6 +131,12 @@ class _PaymentPageViewState extends State<PaymentPageView> {
         );
         break;
       case 'Stripe':
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => const StripePaymentPage(),
+          ),
+        );
         break;
     }
   }

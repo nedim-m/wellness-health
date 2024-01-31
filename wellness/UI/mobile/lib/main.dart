@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:mobile/providers/category_provider.dart';
 import 'package:mobile/providers/membership_provider.dart';
 import 'package:mobile/providers/membership_type_provider.dart';
@@ -10,7 +12,12 @@ import 'package:mobile/providers/user_provider.dart';
 import 'package:mobile/screens/login_page.dart';
 import 'package:provider/provider.dart';
 
-void main() {
+Future<void> main() async {
+  await dotenv.load();
+  WidgetsFlutterBinding.ensureInitialized();
+  Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY']!;
+  await Stripe.instance.applySettings();
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => TreatmentProvider()),

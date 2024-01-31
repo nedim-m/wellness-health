@@ -28,9 +28,9 @@ namespace wellness.Payments.Service
                 {
                     Amount = amount,
                     Currency = currency,
-                    PaymentGateway = paymentMethod,
+                    PaymentMethod = paymentMethod,
                     Timestamp=DateTime.UtcNow,
-                    MemberShipId=1,
+                    MemberShipTypeId=1,
                   
                 });
 

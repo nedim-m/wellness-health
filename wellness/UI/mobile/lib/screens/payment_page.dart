@@ -134,7 +134,7 @@ class _PaymentPageViewState extends State<PaymentPageView> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) => const StripePaymentPage(),
+            builder: (context) =>  StripePaymentPage(),
           ),
         );
         break;

@@ -5,17 +5,21 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/io_client.dart';
+import 'package:mobile/utils/user_store.dart';
 
 part 'payment_event.dart';
 part 'payment_state.dart';
 
 class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
   PaymentBloc() : super(const PaymentState()) {
+    userId = int.parse(UserManager.getUserId()!);
     on<PaymentStart>(_onPaymentStart);
     on<PaymentCreateIntent>(_onPaymentCreateIntent);
     on<PaymentConfirmIntent>(_onPaymentConfirmIntent);
   }
 
+  late int userId;
+  
   HttpClient client = HttpClient();
   IOClient? http;
 
@@ -45,6 +49,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
       paymentMethodId: paymentMethod.id,
       currency: 'BAM',
       item: event.items,
+      userId: userId,
     );
 
     if (paymentIntentResult['error'] != null) {
@@ -96,11 +101,12 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     required String paymentMethodId,
     required String currency,
     required item,
+    required userId,
   }) async {
     client.badCertificateCallback = (cert, host, port) => true;
     http = IOClient(client);
     final url = Uri.parse(
-      'https://10.0.2.2:7012/StripePayment/StripePayEndpointMethodId/',
+      'https://10.0.2.2:7012/StripePayment/process-payment/',
     );
     final response = await http!.post(
       url,
@@ -109,7 +115,8 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
         'useStripeSdk': useStripeSdk,
         'paymentMethodId': paymentMethodId,
         'currency': currency,
-        'memberShipTypeId': item
+        'memberShipTypeId': item,
+        'userId': userId
       }),
     );
     return json.decode(response.body);
@@ -122,7 +129,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     http = IOClient(client);
 
     final url = Uri.parse(
-      'https://10.0.2.2:7012/StripePayment/StripePayEndpointIntentId/',
+      'https://10.0.2.2:7012/StripePayment/confirm-payment/',
     );
     final response = await http!.post(
       url,

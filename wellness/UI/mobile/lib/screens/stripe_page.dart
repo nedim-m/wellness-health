@@ -1,11 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:mobile/models/user.dart';
+import 'package:mobile/providers/user_provider.dart';
 
 import '/blocs/blocs.dart';
 
-class StripePaymentPage extends StatelessWidget {
-  const StripePaymentPage({super.key});
+class StripePaymentPage extends StatefulWidget {
+  const StripePaymentPage({Key? key}) : super(key: key);
+
+  @override
+  _StripePaymentPageState createState() => _StripePaymentPageState();
+}
+
+class _StripePaymentPageState extends State<StripePaymentPage> {
+  final UserProvider _userProvider = UserProvider();
+  late User loggedUser;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    loggedUser = await _userProvider.getById();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,11 +58,14 @@ class StripePaymentPage extends StatelessWidget {
                       onPressed: () {
                         (controller.details.complete)
                             ? context.read<PaymentBloc>().add(
-                                  const PaymentCreateIntent(
-                                      billingDetails: BillingDetails(
-                                          email: 'test@test.com',
-                                          name: "test test"),
-                                      items: 1),
+                                  PaymentCreateIntent(
+                                    billingDetails: BillingDetails(
+                                        email: loggedUser.email,
+                                        name:
+                                            '${loggedUser.firstName} ${loggedUser.lastName}',
+                                        phone: loggedUser.phone),
+                                    items: 1,
+                                  ),
                                 )
                             : ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(

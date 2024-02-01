@@ -14,7 +14,7 @@ public class StripePaymentController : ControllerBase
         _stripePaymentService = stripePaymentService;
     }
 
-    [HttpPost("StripePayEndpointMethodId")]
+    [HttpPost("process-payment")]
     public async Task<IActionResult> StripePayEndpointMethodId([FromBody] PaymentRequestModel requestModel)
     {
         if (requestModel != null)
@@ -32,7 +32,7 @@ public class StripePaymentController : ControllerBase
         return BadRequest("Invalid request");
     }
 
-    [HttpPost("StripePayEndpointIntentId")]
+    [HttpPost("confirm-payment")]
     public async Task<IActionResult> StripePayEndpointIntentId([FromBody] PaymentIntentRequestModel requestModel)
     {
         if (requestModel != null)

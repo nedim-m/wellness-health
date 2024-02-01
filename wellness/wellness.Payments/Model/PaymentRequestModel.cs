@@ -9,6 +9,7 @@ namespace wellness.Payments.Model
         public string PaymentMethodId { get; set; }
         public string Currency { get; set; }
         public int MemberShipTypeId { get; set; } 
+        public int UserId { get; set; }
     }
 
 }

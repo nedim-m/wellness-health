@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
+import 'package:mobile/blocs/payment/payment_bloc.dart';
 import 'package:mobile/providers/category_provider.dart';
 import 'package:mobile/providers/membership_provider.dart';
 import 'package:mobile/providers/membership_type_provider.dart';
@@ -29,7 +31,14 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) => MembershipProvider()),
       ChangeNotifierProvider(create: (_) => MembershipTypeProvider()),
     ],
-    child: const MyApp(),
+    child: MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (context) => PaymentBloc(),
+        ),
+      ],
+      child: const MyApp(),
+    ),
   ));
 }
 

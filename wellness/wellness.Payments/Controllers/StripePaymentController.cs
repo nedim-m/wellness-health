@@ -23,7 +23,8 @@ public class StripePaymentController : ControllerBase
                 requestModel.PaymentMethodId,
                 requestModel.MemberShipTypeId,
                 requestModel.Currency,
-                requestModel.UseStripeSdk
+                requestModel.UseStripeSdk,
+                requestModel.UserId
             );
 
             return Ok(response);

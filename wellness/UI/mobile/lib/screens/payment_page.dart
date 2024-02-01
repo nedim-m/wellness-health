@@ -10,8 +10,12 @@ import 'package:mobile/widgets/double_text.dart';
 
 class PaymentPageView extends StatefulWidget {
   const PaymentPageView(
-      {super.key, required this.memberShipTypeName, required this.price});
+      {super.key,
+      required this.memberShipTypeName,
+      required this.price,
+      required this.memberShipTypeId});
   final String memberShipTypeName;
+  final int memberShipTypeId;
 
   final String price;
 
@@ -134,7 +138,9 @@ class _PaymentPageViewState extends State<PaymentPageView> {
         Navigator.push(
           context,
           MaterialPageRoute(
-            builder: (context) =>  StripePaymentPage(),
+            builder: (context) => StripePaymentPage(
+              memberShipTypeId: widget.memberShipTypeId,
+            ),
           ),
         );
         break;

@@ -7,7 +7,8 @@ public interface IStripePaymentService
         string paymentMethodId,
        int items,
         string currency,
-        bool useStripeSdk
+        bool useStripeSdk,
+        int userId
     );
 
     Task<Dictionary<string, object>> ProcessPaymentIntentIdAsync(string paymentIntentId);

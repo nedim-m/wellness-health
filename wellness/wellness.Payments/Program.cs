@@ -8,9 +8,10 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-//builder.Services.AddScoped<IPaymentService, PaymentService>();
+
 builder.Services.AddScoped<IStripePaymentService, StripePaymentService>();
 builder.Services.AddScoped<ITransactionService, wellness.Service.Services.TransactionService>();
+builder.Services.AddScoped<IMembershipService, wellness.Service.Services.MembershipService>();
 
 
 builder.Services.AddAutoMapper(typeof(AuthService));
@@ -25,7 +26,7 @@ builder.Services.AddLogging(builder => builder.AddConsole());
 
 
 builder.Services.AddDbContext<DbWellnessContext>(options =>
-   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+   options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")),ServiceLifetime.Scoped);
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

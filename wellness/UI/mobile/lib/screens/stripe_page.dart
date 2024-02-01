@@ -7,8 +7,9 @@ import 'package:mobile/providers/user_provider.dart';
 import '/blocs/blocs.dart';
 
 class StripePaymentPage extends StatefulWidget {
-  const StripePaymentPage({Key? key}) : super(key: key);
-
+  const StripePaymentPage({Key? key, required this.memberShipTypeId})
+      : super(key: key);
+  final int memberShipTypeId;
   @override
   _StripePaymentPageState createState() => _StripePaymentPageState();
 }
@@ -64,7 +65,7 @@ class _StripePaymentPageState extends State<StripePaymentPage> {
                                         name:
                                             '${loggedUser.firstName} ${loggedUser.lastName}',
                                         phone: loggedUser.phone),
-                                    items: 1,
+                                    items: widget.memberShipTypeId,
                                   ),
                                 )
                             : ScaffoldMessenger.of(context).showSnackBar(

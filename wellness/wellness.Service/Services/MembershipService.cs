@@ -17,10 +17,12 @@ namespace wellness.Service.Services
     {
         private readonly DbWellnessContext _context;
         private readonly IMapper _mapper;
+      
         public MembershipService(IMapper mapper, Database.DbWellnessContext context) : base(mapper, context)
         {
             _context=context;
             _mapper=mapper;
+           
         }
 
 

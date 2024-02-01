@@ -17,7 +17,7 @@ namespace wellness.Service.Services
             _mapper = mapper;
         }
 
-        public async Task SaveTransactionAsync(Model.Transaction.Transaction transaction)
+        /*public async Task SaveTransactionAsync(Model.Transaction.Transaction transaction)
         {
             if (transaction == null)
             {
@@ -25,6 +25,22 @@ namespace wellness.Service.Services
             }
 
             var obj = _mapper.Map<Database.Transaction>(transaction);
+
+            _context.Transactions.Add(obj);
+
+            await _context.SaveChangesAsync();
+        }*/
+
+        public async Task SaveTransactionAsync(object transaction)
+        {
+            if (transaction == null)
+            {
+                throw new ArgumentNullException(nameof(transaction), "Transaction cannot be null");
+            }
+
+            var transactiontoInsert= transaction as Model.Transaction.Transaction;
+
+            var obj = _mapper.Map<Database.Transaction>(transactiontoInsert);
 
             _context.Transactions.Add(obj);
 

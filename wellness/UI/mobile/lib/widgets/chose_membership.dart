@@ -121,6 +121,7 @@ class _ChoseMembershipPageViewState extends State<ChoseMembershipPageView> {
                   builder: (context) => PaymentPageView(
                     memberShipTypeName: selectedMembershipType?.name ?? "N/A",
                     price: selectedMembershipType!.price.toString(),
+                    memberShipTypeId: selectedMembershipType!.id,
                   ),
                 ),
               );

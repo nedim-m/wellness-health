@@ -74,6 +74,7 @@ namespace wellness.Service.Services
                                                         .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.MemberShipType.Price));
 
             CreateMap<Transaction, Database.Transaction>();
+            CreateMap<Database.Transaction, Transaction>();
 
 
         }

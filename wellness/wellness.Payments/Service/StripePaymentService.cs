@@ -2,28 +2,39 @@
 using System.Threading.Tasks;
 using Stripe;
 using Microsoft.Extensions.Configuration;
-
+using wellness.Service.Database;
+using wellness.Service.IServices;
+using Microsoft.EntityFrameworkCore;
+using wellness.Model.Membership;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 public class StripePaymentService : IStripePaymentService
 {
     private readonly IConfiguration _configuration;
+    private readonly DbWellnessContext _context;
+    private readonly ITransactionService _transactionService;
+    private readonly IMembershipService _membershipService;
+   
 
-    public StripePaymentService(IConfiguration configuration)
+    public StripePaymentService(IConfiguration configuration, DbWellnessContext context, ITransactionService transactionService, IMembershipService membershipService)
     {
         _configuration = configuration;
         StripeConfiguration.ApiKey = _configuration["Stripe:SecretKey"];
+        _context=context;
+        _transactionService=transactionService;
+        _membershipService=membershipService;
     }
 
     public async Task<Dictionary<string, object>> ProcessPaymentMethodIdAsync(
          string paymentMethodId,
          int items,
          string currency,
-         bool useStripeSdk)
+         bool useStripeSdk, int userId)
     {
         // Implement the logic to process payment by payment method ID
         // Call your actual business logic or Stripe API calls here
 
-        var orderAmount = CalculateOrderAmount(items);
+        var amount = await CalculateOrderAmount(items);
 
         try
         {
@@ -32,7 +43,7 @@ public class StripePaymentService : IStripePaymentService
                 // Create new PaymentIntent with a PaymentMethod ID
                 var parameters = new PaymentIntentCreateOptions
                 {
-                    Amount = orderAmount,
+                    Amount = amount,
                     Confirm = true,
                     ConfirmationMethod = "manual",
                     Currency = currency,
@@ -45,7 +56,7 @@ public class StripePaymentService : IStripePaymentService
 
                 // After create, if the PaymentIntent's status is succeeded, fulfill the order
                 Console.WriteLine($"Intent: {intent}");
-                return GenerateResponse(intent);
+                return GenerateResponse(intent,amount,userId,items);
             }
 
             throw new ArgumentException("Payment method ID is invalid");
@@ -70,7 +81,7 @@ public class StripePaymentService : IStripePaymentService
                 var intent = await CallYourStripeApiForPaymentIntentConfirmation(paymentIntentId);
 
                 // After confirm, if the PaymentIntent's status is succeeded, fulfill the order
-                return GenerateResponse(intent);
+                return GenerateResponse(intent,0,0,0);
             }
 
             throw new ArgumentException("Payment intent ID is invalid");
@@ -82,12 +93,21 @@ public class StripePaymentService : IStripePaymentService
         }
     }
 
-    // Replace the following methods with your actual implementation
-    private int CalculateOrderAmount(int membershiptypId)
+
+    private async Task<int> CalculateOrderAmount(int membershipTypeId)
     {
-        // Implement your order amount calculation logic
-        return 100; // Replace with your actual calculation
+        var membershipType = await _context.MembershipTypes.FindAsync(membershipTypeId);
+
+        if (membershipType == null)
+        {
+            throw new ArgumentException("There is no this type of membership");
+        }
+
+        int amount = Convert.ToInt32(membershipType.Price * 100);
+
+        return amount;
     }
+
 
     private async Task<dynamic> CallYourStripeApiForPaymentIntentCreation(object parameters)
     {
@@ -129,7 +149,7 @@ public class StripePaymentService : IStripePaymentService
         return await service.ConfirmAsync(paymentIntentId);
     }
 
-    private Dictionary<string, object> GenerateResponse(dynamic intent)
+    private Dictionary<string, object> GenerateResponse(dynamic intent, int amount, int userId,int membershiptypeId)
     {
         // Implement your response generation logic
         switch (intent.status)
@@ -148,6 +168,10 @@ public class StripePaymentService : IStripePaymentService
                 };
             case "succeeded":
                 Console.WriteLine("💰 Payment received!");
+
+               // if (userId!=0|| membershiptypeId!=0|| amount!=0)
+                     //AddMembership(userId,membershiptypeId,amount);
+
                 return new Dictionary<string, object>
                 {
                     { "clientSecret", intent.client_secret },
@@ -157,4 +181,60 @@ public class StripePaymentService : IStripePaymentService
                 return new Dictionary<string, object> { { "error", "Failed" } };
         }
     }
+
+
+
+    private async void AddMembership(int userId,int membershiptypeId, int amount)
+    {
+       
+        var search = new MembershipSearchObj
+        {
+            UserId=userId,
+        };
+
+        var membership = await _membershipService.Get(search);
+
+        if(membership == null)
+        {
+            var insert = new MembershipPostRequest
+            {
+                UserId = userId!,
+                MemberShipTypeId=membershiptypeId!
+            };
+          await _membershipService.Insert(insert);
+        }
+        else
+        {
+            var membershipId = membership.Result!.FirstOrDefault()!.Id;
+            var update = new MembershipUpdateRequest
+            {
+                MemberShipTypeId=membershiptypeId
+            };
+            await _membershipService.Update(membershipId, update);
+        }
+
+        var transaction = new 
+        {
+            Amount=amount,
+            PaymentMethod="Stripe",
+            Currency="BAM",
+            Timestamp=DateTime.Now,
+            MemberShipTypeId= membershiptypeId,
+        };
+        
+        
+        await _transactionService.SaveTransactionAsync(transaction);
+
+
+
+       
+
+    }
+
+
+    
+
+
+   
+
 }

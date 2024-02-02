@@ -16,17 +16,15 @@ public class StripePaymentService : IStripePaymentService
     private readonly DbWellnessContext _context;
     private readonly ITransactionService _transactionService;
     private readonly IMembershipService _membershipService;
-    private readonly IHttpContextAccessor _httpContextAccessor;
 
 
-    public StripePaymentService(IConfiguration configuration, DbWellnessContext context, ITransactionService transactionService, IMembershipService membershipService, IHttpContextAccessor httpContextAccessor)
+    public StripePaymentService(IConfiguration configuration, DbWellnessContext context, ITransactionService transactionService, IMembershipService membershipService)
     {
         _configuration = configuration;
         StripeConfiguration.ApiKey = _configuration["Stripe:SecretKey"];
         _context=context;
         _transactionService=transactionService;
         _membershipService=membershipService;
-        _httpContextAccessor=httpContextAccessor;
     }
 
     public async Task<Dictionary<string, object>> ProcessPaymentMethodIdAsync(
@@ -39,12 +37,6 @@ public class StripePaymentService : IStripePaymentService
         // Call your actual business logic or Stripe API calls here
 
         var amount = await CalculateOrderAmount(items);
-
-        _httpContextAccessor.HttpContext.Session.SetInt32("UserId", userId);
-        _httpContextAccessor.HttpContext.Session.SetInt32("Amount", amount);
-        _httpContextAccessor.HttpContext.Session.SetInt32("Items", items);
-
-
 
         try
         {
@@ -71,7 +63,7 @@ public class StripePaymentService : IStripePaymentService
                 // Check if membership should be added
                 if (ShouldAddMembership(response))
                 {
-                    await AddMembership();
+                    await AddMembership(userId, items, amount);
                 }
 
                 return response;
@@ -115,7 +107,7 @@ public class StripePaymentService : IStripePaymentService
                 var response = GenerateResponseAfterConfirmation(intent);
                 if (ShouldAddMembership(response))
                 {
-                    await AddMembership(); 
+                    //await AddMembership(userId, items, amount); //can you refactor this code?
                 }
                 return response;
             }
@@ -157,7 +149,7 @@ public class StripePaymentService : IStripePaymentService
                 // Ensure that return_url is set
                 options.ReturnUrl = "https://your-website.com/success"; // Replace with your actual success URL
 
-                
+
 
                 var service = new PaymentIntentService();
                 var intent = await service.CreateAsync(options);
@@ -240,7 +232,7 @@ public class StripePaymentService : IStripePaymentService
     private Dictionary<string, object> GenerateResponseAfterConfirmation(dynamic intent)
     {
 
-        
+
 
 
         switch (intent.Status)
@@ -273,18 +265,8 @@ public class StripePaymentService : IStripePaymentService
     }
 
 
-    private async Task AddMembership()
+    private async Task AddMembership(int userId, int membershipTypeId, int amount)
     {
-
-        int userId= _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
-        int membershipTypeId = _httpContextAccessor.HttpContext.Session.GetInt32("Items") ?? 0;
-        int amount= _httpContextAccessor.HttpContext.Session.GetInt32("Amount") ?? 0;
-
-        if (userId == 0 || membershipTypeId == 0 || amount == 0)
-        {
-            throw new InvalidOperationException("Invalid session data. UserId, membershipTypeId, and amount must be greater than 0.");
-        }
-
         var search = new MembershipSearchObj
         {
             UserId = userId,
@@ -296,8 +278,8 @@ public class StripePaymentService : IStripePaymentService
         {
             var insert = new MembershipPostRequest
             {
-                UserId = userId,
-                MemberShipTypeId = membershipTypeId
+                UserId = userId!,
+                MemberShipTypeId = membershipTypeId!
             };
 
             try
@@ -345,8 +327,6 @@ public class StripePaymentService : IStripePaymentService
         try
         {
             await _transactionService.SaveTransactionAsync(transaction);
-
-
         }
         catch (Exception ex)
         {

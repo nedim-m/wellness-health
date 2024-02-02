@@ -11,14 +11,7 @@ builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IMembershipService, MembershipService>();
 builder.Services.AddAutoMapper(typeof(AuthService));
 
-builder.Services.AddDistributedMemoryCache(); 
-builder.Services.AddSession(options =>
-{
-    options.Cookie.HttpOnly = true;
-    options.Cookie.IsEssential = true;
-    options.IdleTimeout = TimeSpan.FromMinutes(20); 
-});
-builder.Services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+
 
 builder.Services.AddControllers();
 

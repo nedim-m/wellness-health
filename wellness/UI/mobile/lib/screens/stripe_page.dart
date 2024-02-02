@@ -91,7 +91,8 @@ class _StripePaymentPageState extends State<StripePaymentPage> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<PaymentBloc>().add(PaymentStart());
+                      context.read<PaymentBloc>().add(
+                          PaymentStart());
                     },
                     child: const Text('Back to Home'),
                   ),

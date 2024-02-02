@@ -20,7 +20,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY']!;
   await Stripe.instance.applySettings();
-  
+
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => TreatmentProvider()),

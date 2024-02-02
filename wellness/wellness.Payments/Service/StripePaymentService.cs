@@ -7,6 +7,8 @@ using wellness.Service.IServices;
 using Microsoft.EntityFrameworkCore;
 using wellness.Model.Membership;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using Stripe.FinancialConnections;
+using wellness.Models.User;
 
 public class StripePaymentService : IStripePaymentService
 {
@@ -14,27 +16,35 @@ public class StripePaymentService : IStripePaymentService
     private readonly DbWellnessContext _context;
     private readonly ITransactionService _transactionService;
     private readonly IMembershipService _membershipService;
-   
+    private readonly IHttpContextAccessor _httpContextAccessor;
 
-    public StripePaymentService(IConfiguration configuration, DbWellnessContext context, ITransactionService transactionService, IMembershipService membershipService)
+
+    public StripePaymentService(IConfiguration configuration, DbWellnessContext context, ITransactionService transactionService, IMembershipService membershipService, IHttpContextAccessor httpContextAccessor)
     {
         _configuration = configuration;
         StripeConfiguration.ApiKey = _configuration["Stripe:SecretKey"];
         _context=context;
         _transactionService=transactionService;
         _membershipService=membershipService;
+        _httpContextAccessor=httpContextAccessor;
     }
 
     public async Task<Dictionary<string, object>> ProcessPaymentMethodIdAsync(
-         string paymentMethodId,
-         int items,
-         string currency,
-         bool useStripeSdk, int userId)
+     string paymentMethodId,
+     int items,
+     string currency,
+     bool useStripeSdk, int userId)
     {
         // Implement the logic to process payment by payment method ID
         // Call your actual business logic or Stripe API calls here
 
         var amount = await CalculateOrderAmount(items);
+
+        _httpContextAccessor.HttpContext.Session.SetInt32("UserId", userId);
+        _httpContextAccessor.HttpContext.Session.SetInt32("Amount", amount);
+        _httpContextAccessor.HttpContext.Session.SetInt32("Items", items);
+
+
 
         try
         {
@@ -56,7 +66,15 @@ public class StripePaymentService : IStripePaymentService
 
                 // After create, if the PaymentIntent's status is succeeded, fulfill the order
                 Console.WriteLine($"Intent: {intent}");
-                return GenerateResponse(intent,amount,userId,items);
+                var response = GenerateResponse(intent);
+
+                // Check if membership should be added
+                if (ShouldAddMembership(response))
+                {
+                    await AddMembership();
+                }
+
+                return response;
             }
 
             throw new ArgumentException("Payment method ID is invalid");
@@ -67,6 +85,18 @@ public class StripePaymentService : IStripePaymentService
             return new Dictionary<string, object> { { "error", e.Message } };
         }
     }
+
+    private bool ShouldAddMembership(Dictionary<string, object> response)
+    {
+
+        if (response.TryGetValue("status", out var status) && status.ToString() == "succeeded")
+        {
+            return true;
+        }
+
+        return false;
+    }
+
 
     public async Task<Dictionary<string, object>> ProcessPaymentIntentIdAsync(string paymentIntentId)
     {
@@ -81,7 +111,13 @@ public class StripePaymentService : IStripePaymentService
                 var intent = await CallYourStripeApiForPaymentIntentConfirmation(paymentIntentId);
 
                 // After confirm, if the PaymentIntent's status is succeeded, fulfill the order
-                return GenerateResponse(intent,0,0,0);
+
+                var response = GenerateResponseAfterConfirmation(intent);
+                if (ShouldAddMembership(response))
+                {
+                    await AddMembership(); 
+                }
+                return response;
             }
 
             throw new ArgumentException("Payment intent ID is invalid");
@@ -121,6 +157,8 @@ public class StripePaymentService : IStripePaymentService
                 // Ensure that return_url is set
                 options.ReturnUrl = "https://your-website.com/success"; // Replace with your actual success URL
 
+                
+
                 var service = new PaymentIntentService();
                 var intent = await service.CreateAsync(options);
 
@@ -144,14 +182,32 @@ public class StripePaymentService : IStripePaymentService
 
     private async Task<dynamic> CallYourStripeApiForPaymentIntentConfirmation(string paymentIntentId)
     {
-        // Implement your actual Stripe API call for PaymentIntent confirmation
-        var service = new PaymentIntentService();
-        return await service.ConfirmAsync(paymentIntentId);
+        try
+        {
+            // Set the return_url for the confirmation
+            var options = new PaymentIntentConfirmOptions
+            {
+                ReturnUrl = "https://your-website.com/success", // Replace with your custom URL scheme
+            };
+
+            var service = new PaymentIntentService();
+            return await service.ConfirmAsync(paymentIntentId, options);
+        }
+        catch (Exception e)
+        {
+            // Handle exceptions, log errors, etc.
+            Console.WriteLine($"Error confirming PaymentIntent: {e.Message}");
+            throw;
+        }
     }
 
-    private Dictionary<string, object> GenerateResponse(dynamic intent, int amount, int userId,int membershiptypeId)
+
+
+
+    private Dictionary<string, object> GenerateResponse(dynamic intent)
     {
-        // Implement your response generation logic
+
+
         switch (intent.status)
         {
             case "requires_action":
@@ -169,8 +225,7 @@ public class StripePaymentService : IStripePaymentService
             case "succeeded":
                 Console.WriteLine("💰 Payment received!");
 
-               // if (userId!=0|| membershiptypeId!=0|| amount!=0)
-                     //AddMembership(userId,membershiptypeId,amount);
+
 
                 return new Dictionary<string, object>
                 {
@@ -182,59 +237,129 @@ public class StripePaymentService : IStripePaymentService
         }
     }
 
-
-
-    private async void AddMembership(int userId,int membershiptypeId, int amount)
+    private Dictionary<string, object> GenerateResponseAfterConfirmation(dynamic intent)
     {
-       
+
+        
+
+
+        switch (intent.Status)
+        {
+            case "requires_action":
+                return new Dictionary<string, object>
+                {
+                    { "clientSecret", intent.ClientSecret },
+                    { "requiresAction", true },
+                    { "status", intent.Status }
+                };
+            case "requires_payment_method":
+                return new Dictionary<string, object>
+                {
+                    { "error", "Your card was denied, please provide a new payment method" }
+                };
+            case "succeeded":
+                Console.WriteLine("💰 Payment received!");
+
+
+
+                return new Dictionary<string, object>
+                {
+                    { "clientSecret", intent.ClientSecret },
+                    { "status", intent.Status }
+                };
+            default:
+                return new Dictionary<string, object> { { "error", "Failed" } };
+        }
+    }
+
+
+    private async Task AddMembership()
+    {
+
+        int userId= _httpContextAccessor.HttpContext.Session.GetInt32("UserId") ?? 0;
+        int membershipTypeId = _httpContextAccessor.HttpContext.Session.GetInt32("Items") ?? 0;
+        int amount= _httpContextAccessor.HttpContext.Session.GetInt32("Amount") ?? 0;
+
+        if (userId == 0 || membershipTypeId == 0 || amount == 0)
+        {
+            throw new InvalidOperationException("Invalid session data. UserId, membershipTypeId, and amount must be greater than 0.");
+        }
+
         var search = new MembershipSearchObj
         {
-            UserId=userId,
+            UserId = userId,
         };
 
         var membership = await _membershipService.Get(search);
 
-        if(membership == null)
+        if (membership.Count==0)
         {
             var insert = new MembershipPostRequest
             {
-                UserId = userId!,
-                MemberShipTypeId=membershiptypeId!
+                UserId = userId,
+                MemberShipTypeId = membershipTypeId
             };
-          await _membershipService.Insert(insert);
+
+            try
+            {
+                await _membershipService.Insert(insert);
+            }
+            catch (Exception ex)
+            {
+                // Handle the exception (log, rethrow, etc.)
+                Console.WriteLine($"Error inserting membership: {ex.Message}");
+            }
         }
         else
         {
-            var membershipId = membership.Result!.FirstOrDefault()!.Id;
-            var update = new MembershipUpdateRequest
+            var membershipId = membership.Result?.FirstOrDefault()?.Id;
+
+            if (membershipId.HasValue)
             {
-                MemberShipTypeId=membershiptypeId
-            };
-            await _membershipService.Update(membershipId, update);
+                var update = new MembershipUpdateRequest
+                {
+                    MemberShipTypeId = membershipTypeId
+                };
+
+                try
+                {
+                    await _membershipService.Update(membershipId.Value, update);
+                }
+                catch (Exception ex)
+                {
+                    // Handle the exception (log, rethrow, etc.)
+                    Console.WriteLine($"Error updating membership: {ex.Message}");
+                }
+            }
         }
 
-        var transaction = new 
+        var transaction = new
         {
-            Amount=amount,
-            PaymentMethod="Stripe",
-            Currency="BAM",
-            Timestamp=DateTime.Now,
-            MemberShipTypeId= membershiptypeId,
+            Amount = amount,
+            PaymentMethod = "Stripe",
+            Currency = "BAM",
+            Timestamp = DateTime.Now,
+            MemberShipTypeId = membershipTypeId,
         };
-        
-        
-        await _transactionService.SaveTransactionAsync(transaction);
+
+        try
+        {
+            await _transactionService.SaveTransactionAsync(transaction);
 
 
-
-       
-
+        }
+        catch (Exception ex)
+        {
+            // Handle the exception (log, rethrow, etc.)
+            Console.WriteLine($"Error saving transaction: {ex.Message}");
+        }
     }
 
 
-    
 
 
-   
+
+
+
 
 }

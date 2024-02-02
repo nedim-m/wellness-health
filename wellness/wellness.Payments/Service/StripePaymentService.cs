@@ -77,7 +77,7 @@ public class StripePaymentService : IStripePaymentService
         }
         catch (Exception e)
         {
-            // Handle exceptions, log errors, etc.
+            
             return new Dictionary<string, object> { { "error", e.Message } };
         }
     }

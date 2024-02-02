@@ -9,6 +9,7 @@ using wellness.Model.Membership;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Stripe.FinancialConnections;
 using wellness.Models.User;
+using wellness.Payments.Model;
 
 public class StripePaymentService : IStripePaymentService
 {
@@ -33,8 +34,7 @@ public class StripePaymentService : IStripePaymentService
      string currency,
      bool useStripeSdk, int userId)
     {
-        // Implement the logic to process payment by payment method ID
-        // Call your actual business logic or Stripe API calls here
+        
 
         var amount = await CalculateOrderAmount(items);
 
@@ -42,7 +42,11 @@ public class StripePaymentService : IStripePaymentService
         {
             if (!string.IsNullOrEmpty(paymentMethodId))
             {
-                // Create new PaymentIntent with a PaymentMethod ID
+
+                Helper.Instance.UserId = userId;
+                Helper.Instance.Items = items;
+                Helper.Instance.Amount = amount;
+
                 var parameters = new PaymentIntentCreateOptions
                 {
                     Amount = amount,
@@ -53,14 +57,14 @@ public class StripePaymentService : IStripePaymentService
                     UseStripeSdk = useStripeSdk
                 };
 
-                // Replace the following line with your actual Stripe API call
+                
                 var intent = await CallYourStripeApiForPaymentIntentCreation(parameters);
 
-                // After create, if the PaymentIntent's status is succeeded, fulfill the order
+      
                 Console.WriteLine($"Intent: {intent}");
                 var response = GenerateResponse(intent);
 
-                // Check if membership should be added
+         
                 if (ShouldAddMembership(response))
                 {
                     await AddMembership(userId, items, amount);
@@ -92,22 +96,21 @@ public class StripePaymentService : IStripePaymentService
 
     public async Task<Dictionary<string, object>> ProcessPaymentIntentIdAsync(string paymentIntentId)
     {
-        // Implement the logic to process payment by payment intent ID
-        // Call your actual business logic or Stripe API calls here
+        
 
         try
         {
             if (!string.IsNullOrEmpty(paymentIntentId))
             {
-                // Confirm the PaymentIntent to finalize payment
+               
                 var intent = await CallYourStripeApiForPaymentIntentConfirmation(paymentIntentId);
 
-                // After confirm, if the PaymentIntent's status is succeeded, fulfill the order
+                
 
                 var response = GenerateResponseAfterConfirmation(intent);
                 if (ShouldAddMembership(response))
                 {
-                    //await AddMembership(userId, items, amount); //can you refactor this code?
+                    await AddMembership(Helper.Instance.UserId, Helper.Instance.Items, Helper.Instance.Amount);
                 }
                 return response;
             }
@@ -116,7 +119,7 @@ public class StripePaymentService : IStripePaymentService
         }
         catch (Exception e)
         {
-            // Handle exceptions, log errors, etc.
+           
             return new Dictionary<string, object> { { "error", e.Message } };
         }
     }
@@ -141,13 +144,12 @@ public class StripePaymentService : IStripePaymentService
     {
         try
         {
-            // Log the type information for debugging
+           
             Console.WriteLine($"Type of parameters: {parameters.GetType().FullName}");
 
             if (parameters is Stripe.PaymentIntentCreateOptions options)
             {
-                // Ensure that return_url is set
-                options.ReturnUrl = "https://your-website.com/success"; // Replace with your actual success URL
+                options.ReturnUrl = "https://your-website.com/success";
 
 
 
@@ -163,7 +165,7 @@ public class StripePaymentService : IStripePaymentService
         }
         catch (Exception e)
         {
-            // Handle exceptions, log errors, etc.
+          
             Console.WriteLine($"Error creating PaymentIntent: {e.Message}");
             throw;
         }
@@ -176,10 +178,10 @@ public class StripePaymentService : IStripePaymentService
     {
         try
         {
-            // Set the return_url for the confirmation
+            
             var options = new PaymentIntentConfirmOptions
             {
-                ReturnUrl = "https://your-website.com/success", // Replace with your custom URL scheme
+                ReturnUrl = "https://your-website.com/success", 
             };
 
             var service = new PaymentIntentService();
@@ -187,7 +189,7 @@ public class StripePaymentService : IStripePaymentService
         }
         catch (Exception e)
         {
-            // Handle exceptions, log errors, etc.
+           
             Console.WriteLine($"Error confirming PaymentIntent: {e.Message}");
             throw;
         }
@@ -288,7 +290,7 @@ public class StripePaymentService : IStripePaymentService
             }
             catch (Exception ex)
             {
-                // Handle the exception (log, rethrow, etc.)
+                
                 Console.WriteLine($"Error inserting membership: {ex.Message}");
             }
         }
@@ -309,7 +311,7 @@ public class StripePaymentService : IStripePaymentService
                 }
                 catch (Exception ex)
                 {
-                    // Handle the exception (log, rethrow, etc.)
+       
                     Console.WriteLine($"Error updating membership: {ex.Message}");
                 }
             }
@@ -330,7 +332,7 @@ public class StripePaymentService : IStripePaymentService
         }
         catch (Exception ex)
         {
-            // Handle the exception (log, rethrow, etc.)
+          
             Console.WriteLine($"Error saving transaction: {ex.Message}");
         }
     }

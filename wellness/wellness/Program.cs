@@ -62,10 +62,14 @@ builder.Services.AddTransient<IRoleService, RoleService>();
 builder.Services.AddTransient<IReservationService, ReservationService>();
 builder.Services.AddTransient<IRatingService, RatingService>();
 builder.Services.AddTransient<IMembershipService, MembershipService>();
+builder.Services.AddScoped<ITransactionService, TransactionService>();
+
 
 
 
 builder.Services.AddAutoMapper(typeof(AuthService));
+
+builder.Services.AddLogging(builder => builder.AddConsole());
 
 
 builder.Services.AddDbContext<DbWellnessContext>(options =>

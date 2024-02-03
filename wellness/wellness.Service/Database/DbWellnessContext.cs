@@ -34,8 +34,9 @@ public partial class DbWellnessContext : DbContext
     public virtual DbSet<TreatmentType> TreatmentTypes { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Transaction>Transactions  { get; set; }
 
-  
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

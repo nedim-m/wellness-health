@@ -17,10 +17,12 @@ namespace wellness.Service.Services
     {
         private readonly DbWellnessContext _context;
         private readonly IMapper _mapper;
+      
         public MembershipService(IMapper mapper, Database.DbWellnessContext context) : base(mapper, context)
         {
             _context=context;
             _mapper=mapper;
+           
         }
 
 
@@ -100,6 +102,30 @@ namespace wellness.Service.Services
             await _context.SaveChangesAsync();
 
             return _mapper.Map<Model.Membership.Membership>(membershipToUpdate);
+        }
+
+        public override async Task<Model.Membership.Membership> Insert(MembershipPostRequest insert)
+        {
+            var membershipType = await _context.MembershipTypes.FindAsync(insert.MemberShipTypeId);
+            DateTime currentDate = DateTime.Now;
+            var dateToSet = currentDate.AddDays(membershipType!.Duration);
+
+            var membershipToInsert = new Database.Membership
+            {
+                StartDate=currentDate.ToString("dd.MM.yyyy"),
+                ExpirationDate=dateToSet.ToString("dd.MM.yyyy"),
+                Status=true,
+                MemberShipTypeId=insert.MemberShipTypeId,
+                UserId=insert.UserId
+
+
+            };
+
+             _context.Memberships.Add(membershipToInsert);
+
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<Model.Membership.Membership>(membershipToInsert);
         }
 
 

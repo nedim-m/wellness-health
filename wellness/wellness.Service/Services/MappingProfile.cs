@@ -13,6 +13,7 @@ using wellness.Model.Record;
 using wellness.Model.Reservation;
 using wellness.Model.Role;
 using wellness.Model.RoleUpsertRequest;
+using wellness.Model.Transaction;
 using wellness.Model.Treatment;
 using wellness.Model.TreatmentType;
 using wellness.Model.User;
@@ -72,7 +73,8 @@ namespace wellness.Service.Services
                                                         .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName))
                                                         .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.MemberShipType.Price));
 
-
+            CreateMap<Transaction, Database.Transaction>();
+            CreateMap<Database.Transaction, Transaction>();
 
 
         }

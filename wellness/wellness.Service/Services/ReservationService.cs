@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using wellness.Model;
 using wellness.Model.Reservation;
+using wellness.RabbitMQ;
 using wellness.Service.Database;
 using wellness.Service.IServices;
 
@@ -15,11 +16,13 @@ namespace wellness.Service.Services
     {
         private readonly IMapper _mapper;
         private readonly DbWellnessContext _context;
+        private readonly RabbitMQService _rabbitMQService;
 
-        public ReservationService(IMapper mapper, DbWellnessContext context) : base(mapper, context)
+        public ReservationService(IMapper mapper, DbWellnessContext context, RabbitMQService rabbitMQService) : base(mapper, context)
         {
             _mapper = mapper;
             _context = context;
+            _rabbitMQService=rabbitMQService;
         }
 
         public override IQueryable<Database.Reservation> AddInclude(IQueryable<Database.Reservation> query, ReservationSearchObj? search = null)
@@ -103,7 +106,7 @@ namespace wellness.Service.Services
             _context.SaveChangesAsync();
         }
 
-        public override async Task<Task> BeforeInsert(Database.Reservation entity, ReservationPostRequest insert)
+        public override async Task BeforeInsert(Database.Reservation entity, ReservationPostRequest insert)
         {
             var context = _context.Set<Database.Reservation>().AsQueryable();
 
@@ -125,7 +128,45 @@ namespace wellness.Service.Services
                 throw new InvalidOperationException("User has already reserved this treatment at the specified date with a different time.");
             }
 
-            return base.BeforeInsert(entity, insert);
+           
         }
+
+        public override async Task<Model.Reservation.Reservation> Insert(ReservationPostRequest insert)
+        {
+            var set = _context.Set<Database.Reservation>();
+
+            Database.Reservation entity = _mapper.Map<Database.Reservation>(insert);
+
+            set.Add(entity);
+
+            try
+            {
+                await BeforeInsert(entity, insert);
+                await _context.SaveChangesAsync();
+                _rabbitMQService.SendNotification("Nova rezervacija!");
+            }
+            catch (Exception ex)
+            {
+               
+            }
+
+            return _mapper.Map<Model.Reservation.Reservation>(entity);
+        }
+        public override async Task<Model.Reservation.Reservation> Update(int id, ReservationUpdateRequest update)
+        {
+
+            var set = _context.Set<Database.Reservation>();
+
+            var entity = await set.FindAsync(id);
+            _mapper.Map(update, entity);
+
+            await _context.SaveChangesAsync();
+
+            _rabbitMQService.SendNotification("Odbijena/odjavljena rezervacija!");
+            return _mapper.Map<Model.Reservation.Reservation>(entity);
+
+            
+        }
+
     }
 }

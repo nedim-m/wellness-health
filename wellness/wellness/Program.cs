@@ -4,6 +4,7 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using wellness.RabbitMQ;
 using wellness.Service.Database;
 using wellness.Service.IServices;
 using wellness.Service.Services;
@@ -63,6 +64,8 @@ builder.Services.AddTransient<IReservationService, ReservationService>();
 builder.Services.AddTransient<IRatingService, RatingService>();
 builder.Services.AddTransient<IMembershipService, MembershipService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
+builder.Services.AddTransient<RabbitMQService>();
+
 
 
 

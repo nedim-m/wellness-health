@@ -11,7 +11,7 @@ namespace wellness.RabbitMQ
     {
         public async Task ReceiveNotification(string message)
         {
-            // Implementirajte logiku slanja notifikacija klijentima
+            
             await Clients.All.SendAsync("ReceiveNotification", message);
         }
     }

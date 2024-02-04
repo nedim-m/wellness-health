@@ -14,11 +14,25 @@ public class Startup
 
     public void ConfigureServices(IServiceCollection services)
     {
-        services.AddSignalR();
+        services.AddCors(options =>
+        {
+            options.AddPolicy("CorsPolicy",
+                builder => builder
+                    .AllowAnyMethod()
+                    .AllowAnyHeader()
+                    .WithOrigins("http://10.0.2.2:5000")  
+                    .AllowCredentials());
+        });
+
+        services.AddSignalR(hubOptions =>
+        {
+            hubOptions.EnableDetailedErrors = true;
+        });
     }
 
     public void Configure(IApplicationBuilder app)
     {
+        app.UseCors("CorsPolicy");
         app.UseRouting();
         app.UseEndpoints(endpoints =>
         {

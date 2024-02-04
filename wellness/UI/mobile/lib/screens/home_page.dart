@@ -69,9 +69,9 @@ class _HomepageViewState extends State<HomepageView> {
                   navigateTo: TreatmentOverview(),
                 ),
                 CustomButton(
-                  text:
-                      'Moje rezervacije ${_numberOfNotifications > 0 ? '($_numberOfNotifications)' : ''}',
+                  text: 'Moje rezervacije',
                   navigateTo: const MyReservationPageView(),
+                  notificationCount: _numberOfNotifications,
                 ),
                 const CustomButton(
                   text: 'Članarina',

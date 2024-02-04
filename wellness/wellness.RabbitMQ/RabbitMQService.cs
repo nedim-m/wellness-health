@@ -24,25 +24,27 @@ public class RabbitMQService
         _hubConnection.StartAsync().Wait();
     }
 
-    public void SendNotification(string message)
+    public  void SendNotification(string message)
     {
         _channel.BasicPublish(exchange: "", routingKey: "notifications_queue", basicProperties: null, body: Encoding.UTF8.GetBytes(message));
 
-        _hubConnection.InvokeAsync("ReceiveNotification", message).Wait();
+        //await _hubConnection.InvokeAsync("ReceiveNotification", message);
     }
+
 
     public void ConsumeNotifications()
     {
         var consumer = new EventingBasicConsumer(_channel);
-        consumer.Received += (model, ea) =>
+        consumer.Received += async (model, ea) =>
         {
             var receivedBody = ea.Body.ToArray();
             var receivedMessage = Encoding.UTF8.GetString(receivedBody);
             Console.WriteLine($" [x] Received notification: {receivedMessage}");
 
-            _hubConnection.InvokeAsync("ReceiveNotification", receivedMessage).Wait();
+            await _hubConnection.InvokeAsync("ReceiveNotification", receivedMessage);
         };
 
         _channel.BasicConsume(queue: "notifications_queue", autoAck: true, consumer: consumer);
     }
+
 }

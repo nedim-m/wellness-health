@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton(
-      {super.key,
-      required this.text,
-      required this.navigateTo,
-      this.notificationCount = 0});
+  const CustomButton({
+    Key? key, 
+    required this.text,
+    required this.navigateTo,
+    this.notificationCount = 0,
+  }) : super(key: key); 
+
   final String text;
   final Widget navigateTo;
   final int notificationCount;

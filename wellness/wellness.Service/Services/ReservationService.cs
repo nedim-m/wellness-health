@@ -143,7 +143,7 @@ namespace wellness.Service.Services
             {
                 await BeforeInsert(entity, insert);
                 await _context.SaveChangesAsync();
-                _rabbitMQService.SendNotification("Nova rezervacija!");
+                _rabbitMQService.SendNotification("Mobilna");
             }
             catch (Exception ex)
             {

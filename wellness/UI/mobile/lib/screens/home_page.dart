@@ -4,6 +4,7 @@ import 'package:mobile/screens/my_reservation_page.dart';
 import 'package:mobile/screens/membership_page.dart';
 import 'package:mobile/screens/profil_page.dart';
 import 'package:mobile/screens/treatment_overview_page.dart';
+import 'package:mobile/utils/user_store.dart';
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/custom_button.dart';
 import 'package:signalr_netcore/signalr_client.dart';
@@ -37,18 +38,31 @@ class _HomepageViewState extends State<HomepageView> {
   }
 
   void _onNewMessage(List<dynamic>? parameters) {
-  
     if (parameters != null && parameters.isNotEmpty) {
       print("Received notification: ${parameters.first}");
+      String notification = parameters.first;
+      String idString = notification.replaceAll(RegExp(r'[^0-9]'), '');
+      print('Received notification with id: $idString');
+      var userId = UserManager.getUserId()!;
+      print("Logged user id is: $userId");
 
-    
-      _updateNotifications();
+      if (notification.contains("Mobile")) {
+        if (userId == idString) {
+          _updateNotifications();
+        }
+      }
     }
   }
 
   void _updateNotifications() {
     setState(() {
       _numberOfNotifications++;
+    });
+  }
+
+  void _resetNotifications() {
+    setState(() {
+      _numberOfNotifications = 0;
     });
   }
 
@@ -72,6 +86,7 @@ class _HomepageViewState extends State<HomepageView> {
                   text: 'Moje rezervacije',
                   navigateTo: const MyReservationPageView(),
                   notificationCount: _numberOfNotifications,
+                  onPressed: _resetNotifications,
                 ),
                 const CustomButton(
                   text: 'Članarina',

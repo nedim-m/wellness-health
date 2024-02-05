@@ -2,16 +2,17 @@ import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({
-    Key? key, 
+    Key? key,
     required this.text,
     required this.navigateTo,
     this.notificationCount = 0,
-  }) : super(key: key); 
+    this.onPressed,
+  }) : super(key: key);
 
   final String text;
   final Widget navigateTo;
   final int notificationCount;
-
+  final VoidCallback? onPressed;
   @override
   Widget build(BuildContext context) {
     return Container(

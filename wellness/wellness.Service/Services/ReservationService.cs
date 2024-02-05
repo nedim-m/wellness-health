@@ -143,7 +143,7 @@ namespace wellness.Service.Services
             {
                 await BeforeInsert(entity, insert);
                 await _context.SaveChangesAsync();
-                _rabbitMQService.SendNotification("Mobilna");
+                _rabbitMQService.SendNotification("Desktop");
             }
             catch (Exception ex)
             {
@@ -162,7 +162,7 @@ namespace wellness.Service.Services
 
             await _context.SaveChangesAsync();
 
-            _rabbitMQService.SendNotification("Odbijena/odjavljena rezervacija!");
+            _rabbitMQService.SendNotification($"Mobile id: {entity!.UserId}");
             return _mapper.Map<Model.Reservation.Reservation>(entity);
 
             

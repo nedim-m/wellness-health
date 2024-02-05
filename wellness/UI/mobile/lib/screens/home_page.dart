@@ -37,11 +37,11 @@ class _HomepageViewState extends State<HomepageView> {
   }
 
   void _onNewMessage(List<dynamic>? parameters) {
-    // Ovdje možete obraditi parametre dobivene iz signalR poruke
+  
     if (parameters != null && parameters.isNotEmpty) {
       print("Received notification: ${parameters.first}");
 
-      // Ažurirajte broj notifikacija
+    
       _updateNotifications();
     }
   }

@@ -28,7 +28,7 @@ public class RabbitMQService
     {
         _channel.BasicPublish(exchange: "", routingKey: "notifications_queue", basicProperties: null, body: Encoding.UTF8.GetBytes(message));
 
-        //await _hubConnection.InvokeAsync("ReceiveNotification", message);
+       
     }
 
 
@@ -45,6 +45,7 @@ public class RabbitMQService
         };
 
         _channel.BasicConsume(queue: "notifications_queue", autoAck: true, consumer: consumer);
+        
     }
 
 }

@@ -39,12 +39,10 @@ class _HomepageViewState extends State<HomepageView> {
 
   void _onNewMessage(List<dynamic>? parameters) {
     if (parameters != null && parameters.isNotEmpty) {
-      print("Received notification: ${parameters.first}");
       String notification = parameters.first;
       String idString = notification.replaceAll(RegExp(r'[^0-9]'), '');
-      print('Received notification with id: $idString');
+
       var userId = UserManager.getUserId()!;
-      print("Logged user id is: $userId");
 
       if (notification.contains("Mobile")) {
         if (userId == idString) {
@@ -68,39 +66,47 @@ class _HomepageViewState extends State<HomepageView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const AppBarWidget(),
-      body: SingleChildScrollView(
-        child: Container(
-          margin: const EdgeInsets.only(bottom: 100.0),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CustomButton(
-                  text: 'Pregled Tretmana',
-                  navigateTo: TreatmentOverview(),
-                ),
-                CustomButton(
-                  text: 'Moje rezervacije',
-                  navigateTo: const MyReservationPageView(),
-                  notificationCount: _numberOfNotifications,
-                  onPressed: _resetNotifications,
-                ),
-                const CustomButton(
-                  text: 'Članarina',
-                  navigateTo: MemberShipPageView(),
-                ),
-                const CustomButton(
-                  text: 'Profil',
-                  navigateTo: ProfilPageView(),
-                ),
-                const CustomButton(
-                  text: 'Odjava',
-                  navigateTo: LoginPageView(),
-                ),
-              ],
+    return WillPopScope(
+      onWillPop: () async {
+        _resetNotifications();
+        return true;
+      },
+      child: Scaffold(
+        appBar: const AppBarWidget(),
+        body: SingleChildScrollView(
+          child: Container(
+            margin: const EdgeInsets.only(bottom: 100.0),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CustomButton(
+                    text: 'Pregled Tretmana',
+                    navigateTo: TreatmentOverview(),
+                  ),
+                  CustomButton(
+                    text: 'Moje rezervacije',
+                    navigateTo: const MyReservationPageView(),
+                    notificationCount: _numberOfNotifications,
+                    onPressedCustom: () {
+                      _resetNotifications();
+                    },
+                  ),
+                  const CustomButton(
+                    text: 'Članarina',
+                    navigateTo: MemberShipPageView(),
+                  ),
+                  const CustomButton(
+                    text: 'Profil',
+                    navigateTo: ProfilPageView(),
+                  ),
+                  const CustomButton(
+                    text: 'Odjava',
+                    navigateTo: LoginPageView(),
+                  ),
+                ],
+              ),
             ),
           ),
         ),

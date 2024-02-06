@@ -38,10 +38,11 @@ class ReservationProvider extends BaseProvider<Reservation> {
   Future<dynamic> cancelReservation(int id) async {
     var url = "$baseUrl$endpoint/$id";
     var uri = Uri.parse(url);
-    var headers = createJwtHeaders(token); 
+    var headers = createJwtHeaders(token);
 
     var jsonRequest = jsonEncode(<String, dynamic>{
       "status": false,
+      "sentFromMobile": true,
     });
 
     var response = await http!.put(uri, headers: headers, body: jsonRequest);

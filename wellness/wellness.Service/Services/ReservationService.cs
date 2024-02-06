@@ -154,19 +154,32 @@ namespace wellness.Service.Services
         }
         public override async Task<Model.Reservation.Reservation> Update(int id, ReservationUpdateRequest update)
         {
-
             var set = _context.Set<Database.Reservation>();
 
-            var entity = await set.FindAsync(id);
+            var entity = await set.FindAsync(id)??throw new InvalidOperationException("Reservation doesnt exist!");
             _mapper.Map(update, entity);
 
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                
+                throw new InvalidOperationException("Error");
+            }
 
-            _rabbitMQService.SendNotification($"Mobile id: {entity!.UserId}");
-            return _mapper.Map<Model.Reservation.Reservation>(entity);
+            var notificationMessage = update.SentFromMobile
+                ? "Desktop"
+                : $"Mobile id: {entity.UserId}";
 
             
+
+            _rabbitMQService.SendNotification(notificationMessage);
+
+            return _mapper.Map<Model.Reservation.Reservation>(entity);
         }
+
 
     }
 }

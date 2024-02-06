@@ -39,9 +39,10 @@ class _HomepageViewState extends State<HomepageView> {
 
   void _onNewMessage(List<dynamic>? parameters) {
     if (parameters != null && parameters.isNotEmpty) {
+      print("Received notification: ${parameters.first}");
       String notification = parameters.first;
       String idString = notification.replaceAll(RegExp(r'[^0-9]'), '');
-
+      print('Received notification with id: $idString');
       var userId = UserManager.getUserId()!;
 
       if (notification.contains("Mobile")) {

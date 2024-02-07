@@ -121,4 +121,25 @@ class UserProvider extends BaseProvider<User> {
       throw Exception("Unknown error");
     }
   }
+
+  Future<dynamic> forgotPassword(
+    String userName,
+    String email,
+  ) async {
+    var url = "$baseUrl$endpoint/reset";
+    var uri = Uri.parse(url);
+    var headers = createJwtHeaders(token ?? '');
+
+    var jsonRequest =
+        jsonEncode(<String, dynamic>{"userName": userName, "email": email});
+
+    var response = await http!.post(uri, headers: headers, body: jsonRequest);
+
+    if (isValidResponse(response)) {
+      var data = response.body;
+      return data;
+    } else {
+      throw Exception("Unknown error");
+    }
+  }
 }

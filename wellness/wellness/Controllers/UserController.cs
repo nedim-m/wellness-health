@@ -13,8 +13,19 @@ namespace wellness.Controllers
   
     public class UserController : CrudController<Models.User.User, UserSearchObj, UserPostRequest, UserPostRequest>
     {
+        private new readonly IUserService _service;
         public UserController(ILogger<BaseController<User, UserSearchObj>> logger, IUserService service) : base(logger, service)
         {
+            _service=service;
+        }
+
+        [HttpPost("reset")]
+        public async Task<ActionResult> ForgotPassword([FromBody] UserForgotPassword request)
+        {
+            var response = await _service.ForgotPassword(request);
+            if (response!=null)
+                return Ok(response);
+            return BadRequest();
         }
     }
 }

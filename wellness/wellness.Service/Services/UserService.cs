@@ -1,5 +1,7 @@
 ﻿using AutoMapper;
 using Azure.Core;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -12,8 +14,10 @@ using wellness.Model;
 using wellness.Model.User;
 using wellness.Models.User;
 using wellness.Models.UserPostRequest;
+using wellness.RabbitMQ;
 using wellness.Service.Database;
 using wellness.Service.IServices;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace wellness.Service.Services
 {
@@ -21,12 +25,14 @@ namespace wellness.Service.Services
     {
         private readonly IMapper _mapper;
         private readonly DbWellnessContext _context;
+        private static readonly Random Random = new Random();
+        private readonly MailService _mailService;
 
-
-        public UserService(IMapper mapper, DbWellnessContext context) : base(mapper, context)
+        public UserService(IMapper mapper, DbWellnessContext context, MailService mailService) : base(mapper, context)
         {
             _mapper=mapper;
             _context=context;
+            _mailService=mailService;
         }
 
 
@@ -56,15 +62,15 @@ namespace wellness.Service.Services
             if (!string.IsNullOrWhiteSpace(search?.Prisutan))
             {
                 if (search.Prisutan=="DA")
-                filteredEntity=filteredEntity.Where(x => x.Role.Name.Equals("Member")&& x.Prisutan==true);
+                    filteredEntity=filteredEntity.Where(x => x.Role.Name.Equals("Member")&& x.Prisutan==true);
                 else
-                filteredEntity=filteredEntity.Where(x => x.Role.Name.Equals("Member")&& x.Prisutan!=true);
-                
+                    filteredEntity=filteredEntity.Where(x => x.Role.Name.Equals("Member")&& x.Prisutan!=true);
+
             }
 
 
 
-                var list = await filteredEntity.ToListAsync();
+            var list = await filteredEntity.ToListAsync();
 
             var mappedList = _mapper.Map<List<Models.User.User>>(list);
 
@@ -107,7 +113,7 @@ namespace wellness.Service.Services
 
 
 
-            
+
             await _context.SaveChangesAsync();
 
             return _mapper.Map<Models.User.User>(userToUpdate);
@@ -153,9 +159,48 @@ namespace wellness.Service.Services
             passwordHash = hmac.ComputeHash(Encoding.UTF8.GetBytes(password));
         }
 
+        public async Task<string> ForgotPassword(UserForgotPassword request)
+        {
+            var filteredEntity = await _context.Set<Database.User>()
+       .Where(x => x.UserName == request.UserName && x.Email == request.Email)
+       .FirstOrDefaultAsync();
+            if (filteredEntity!=null)
+            {
+                string password = GeneratePassword();
 
 
+                var userToUpdate = await _context.Users.FindAsync(filteredEntity.Id);
+                if (userToUpdate == null)
+                {
+                    return null;
+                }
 
+            
+                CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
+                userToUpdate.PasswordHash= passwordHash;
+                userToUpdate.PasswordSalt=passwordSalt;
+
+                await _context.SaveChangesAsync();
+
+                string subject = "Resetiranje lozinke";
+                string body = $"Poštovanje, Vaša nova lozinka za username: {request.UserName} je uspješno postavljena. Molimo Vas da odmah istu postavite na željenu. Nova lozinka: {password}  .Lijep pozdrav. Wellness centar - Health.";
+
+                _mailService.SendEmail(request.Email, subject, body);
+
+                return "Password reset initiated. Check your email for instructions.";
+            }
+
+            return null;
+        }
+
+        
+
+        public static string GeneratePassword(int length = 8)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789*#%&$!?#";
+            return new string(Enumerable.Repeat(chars, length)
+                .Select(s => s[Random.Next(s.Length)]).ToArray());
+        }
     }
 }

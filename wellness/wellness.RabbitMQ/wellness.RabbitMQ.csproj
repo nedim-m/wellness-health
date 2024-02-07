@@ -9,6 +9,7 @@
 
   <ItemGroup>
 	<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	<PackageReference Include="MailKit" Version="4.3.0" />
 	<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="8.0.1" />	  
     <PackageReference Include="RabbitMQ.Client" Version="6.8.1" />
 	  

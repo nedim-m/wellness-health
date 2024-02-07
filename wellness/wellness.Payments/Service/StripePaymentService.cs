@@ -10,6 +10,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using Stripe.FinancialConnections;
 using wellness.Models.User;
 using wellness.Payments.Model;
+using wellness.RabbitMQ;
 
 public class StripePaymentService : IStripePaymentService
 {
@@ -17,15 +18,17 @@ public class StripePaymentService : IStripePaymentService
     private readonly DbWellnessContext _context;
     private readonly ITransactionService _transactionService;
     private readonly IMembershipService _membershipService;
+    private readonly MailService _mailService;
 
 
-    public StripePaymentService(IConfiguration configuration, DbWellnessContext context, ITransactionService transactionService, IMembershipService membershipService)
+    public StripePaymentService(IConfiguration configuration, DbWellnessContext context, ITransactionService transactionService, IMembershipService membershipService, MailService mailService)
     {
         _configuration = configuration;
         StripeConfiguration.ApiKey = _configuration["Stripe:SecretKey"];
         _context=context;
         _transactionService=transactionService;
         _membershipService=membershipService;
+        _mailService=mailService;
     }
 
     public async Task<Dictionary<string, object>> ProcessPaymentMethodIdAsync(
@@ -274,7 +277,9 @@ public class StripePaymentService : IStripePaymentService
             UserId = userId,
         };
 
+        var user = await _context.Users.FindAsync(userId);
         var membership = await _membershipService.Get(search);
+        
 
         if (membership.Count==0)
         {
@@ -329,6 +334,7 @@ public class StripePaymentService : IStripePaymentService
         try
         {
             await _transactionService.SaveTransactionAsync(transaction);
+            await SendMail(user!.Email, membershipTypeId, amount);
         }
         catch (Exception ex)
         {
@@ -338,6 +344,17 @@ public class StripePaymentService : IStripePaymentService
     }
 
 
+    private async Task SendMail(string email, int membershipTypeId, int amount)
+    {
+        var membershipType = await _context.MembershipTypes.FindAsync(membershipTypeId);
+        var timestamp = DateTime.Now;
+
+        float price = amount/100;
+        string subject = "Potvrda plačanja članstva";
+        string body = $"Hvala Vam na uplati članarine : {membershipType!.Name}. \n Uspješno ste uplatili {price} BAM putem Stripe! \n Datum uplate: {timestamp.ToShortDateString()}, \n vrijeme uplate: {timestamp.ToShortTimeString()}.";
+
+        _mailService.SendEmail(email, subject, body);
+    }
 
 
 

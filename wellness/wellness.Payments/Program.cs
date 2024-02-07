@@ -1,4 +1,7 @@
+using MailKit;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Pkix;
+using wellness.RabbitMQ;
 using wellness.Service.Database;
 using wellness.Service.IServices;
 using wellness.Service.Services;
@@ -10,6 +13,7 @@ builder.Services.AddScoped<IStripePaymentService, StripePaymentService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IMembershipService, MembershipService>();
 builder.Services.AddAutoMapper(typeof(AuthService));
+builder.Services.AddScoped<wellness.RabbitMQ.MailService>();
 
 
 

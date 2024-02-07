@@ -3,11 +3,14 @@ using RabbitMQ.Client;
 using System;
 using System.Text;
 using Microsoft.AspNetCore.SignalR.Client;
+using Newtonsoft.Json;
+using wellness.RabbitMQ;
 
 public class RabbitMQService
 {
     private readonly IModel _channel;
     private readonly HubConnection _hubConnection;
+    private MailService _mailService;
 
     public RabbitMQService()
     {
@@ -20,17 +23,25 @@ public class RabbitMQService
         _hubConnection = new HubConnectionBuilder()
             .WithUrl("http://localhost:5000/notificationHub")
             .Build();
+       
 
         _hubConnection.StartAsync().Wait();
     }
 
-    public  void SendNotification(string message)
+    public MailService MailServiceInstance
     {
-        _channel.BasicPublish(exchange: "", routingKey: "notifications_queue", basicProperties: null, body: Encoding.UTF8.GetBytes(message));
-
-       
+        get
+        {
+            _mailService ??= new MailService();
+            return _mailService;
+        }
     }
 
+    public void SendNotification(NotificationData notificationData)
+    {
+        var message = JsonConvert.SerializeObject(notificationData);
+        _channel.BasicPublish(exchange: "", routingKey: "notifications_queue", basicProperties: null, body: Encoding.UTF8.GetBytes(message));
+    }
 
     public void ConsumeNotifications()
     {
@@ -39,13 +50,27 @@ public class RabbitMQService
         {
             var receivedBody = ea.Body.ToArray();
             var receivedMessage = Encoding.UTF8.GetString(receivedBody);
-            Console.WriteLine($" [x] Received notification: {receivedMessage}");
 
-            await _hubConnection.InvokeAsync("ReceiveNotification", receivedMessage);
+            
+            var notificationData = JsonConvert.DeserializeObject<NotificationData>(receivedMessage);
+
+            Console.WriteLine($" [x] Received notification: {notificationData}");
+
+
+            string signalRnotification = $"Mobile id: {notificationData!.UserID}";
+            if (notificationData.SentFromMobile) {
+
+                signalRnotification="Desktop";
+            }
+            
+
+            await _hubConnection.InvokeAsync("ReceiveNotification", signalRnotification);
+
+            MailServiceInstance.SendMailNotification(notificationData!);
         };
 
         _channel.BasicConsume(queue: "notifications_queue", autoAck: true, consumer: consumer);
-        
     }
-
 }
+
+

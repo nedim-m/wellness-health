@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using Microsoft.VisualBasic;
+using System.Net;
 using System.Net.Mail;
 
 namespace wellness.RabbitMQ
@@ -9,6 +10,7 @@ namespace wellness.RabbitMQ
         private readonly int _smtpPort;
         private readonly string _smtpUsername;
         private readonly string _smtpPassword;
+
 
         public MailService(string smtpServer = "smtp.gmail.com", int smtpPort = 587, string smtpUsername = "wellnes.centar.health@gmail.com", string smtpPassword = "nkli naol eubd pmmw")
         {
@@ -38,6 +40,22 @@ namespace wellness.RabbitMQ
 
                 client.Send(mailMessage);
             }
+        }
+
+        public void SendMailNotification(NotificationData data)
+        {
+
+            string subject = "Potvrda o rezervaciji";
+            string body = $"Poštovanje, Vaša rezervacija za tretman: '{data.TretmentName}' datuma: {data.Date} u {data.Time} je odobrena. Možete provjeriti na našoj mobilnoj aplikaciji. Vidimo se u dogovoreno vrijeme. Lijep pozdrav. Wellness centar - Health";
+            if (data!=null && data.Status==false)
+                body=$"Poštovanje, Vaša rezervacija za tretman: '{data.TretmentName}' datuma: {data.Date} u {data.Time} je odbijena. Možete provjeriti na našoj mobilnoj aplikaciji. Molimo Vas za razumijevanje i nadamo se da će te pronaći novi termin. Lijep pozdrav. Wellness centar - Health";
+
+
+            if (data!.Email!=null)
+            {
+                SendEmail(data.Email, subject, body);
+            }
+
         }
     }
 }

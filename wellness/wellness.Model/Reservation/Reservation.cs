@@ -14,8 +14,6 @@ namespace wellness.Model.Reservation
 
         public string LastName { get; set; } = null!;
 
-        
-
         public string Date { get; set; } = null!;
 
         public string Time { get; set; } = null!;

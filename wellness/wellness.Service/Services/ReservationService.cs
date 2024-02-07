@@ -138,12 +138,19 @@ namespace wellness.Service.Services
             Database.Reservation entity = _mapper.Map<Database.Reservation>(insert);
 
             set.Add(entity);
+            var data = new NotificationData
+            {
+                Status=insert.Status,
+                SentFromMobile=true,
+                Date=entity.Date,
+                Time=entity.Time
+            };
 
             try
             {
                 await BeforeInsert(entity, insert);
                 await _context.SaveChangesAsync();
-                _rabbitMQService.SendNotification("Desktop");
+                _rabbitMQService.SendNotification(data);
             }
             catch (Exception ex)
             {
@@ -169,13 +176,25 @@ namespace wellness.Service.Services
                 throw new InvalidOperationException("Error");
             }
 
-            var notificationMessage = update.SentFromMobile
-                ? "Desktop"
-                : $"Mobile id: {entity.UserId}";
+            var user = await _context.Users.FindAsync(entity.UserId);
+            var treatment = await _context.Treatments.FindAsync(entity.TreatmentId);
+           
 
-            
 
-            _rabbitMQService.SendNotification(notificationMessage);
+           
+
+            var data = new NotificationData
+            {
+                Email=user!.Email,
+                SentFromMobile=update.SentFromMobile,
+                Status=update.Status,
+                TretmentName=treatment!.Name,
+                UserID=user!.Id,
+                Date=entity.Date,
+                Time=entity.Time
+            };
+
+            _rabbitMQService.SendNotification(data);
 
             return _mapper.Map<Model.Reservation.Reservation>(entity);
         }

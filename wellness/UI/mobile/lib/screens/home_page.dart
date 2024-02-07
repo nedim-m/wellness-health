@@ -39,6 +39,7 @@ class _HomepageViewState extends State<HomepageView> {
 
   void _onNewMessage(List<dynamic>? parameters) {
     if (parameters != null && parameters.isNotEmpty) {
+      print("print svih parametara: $parameters");
       print("Received notification: ${parameters.first}");
       String notification = parameters.first;
       String idString = notification.replaceAll(RegExp(r'[^0-9]'), '');
@@ -54,9 +55,11 @@ class _HomepageViewState extends State<HomepageView> {
   }
 
   void _updateNotifications() {
-    setState(() {
-      _numberOfNotifications++;
-    });
+    if (mounted) {
+      setState(() {
+        _numberOfNotifications++;
+      });
+    }
   }
 
   void _resetNotifications() {

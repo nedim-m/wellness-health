@@ -9,7 +9,6 @@ public partial class Rating
 
     public int StarRating { get; set; }
 
-    public int TreatmentId { get; set; }
 
     public int ReservationId { get; set; }
 

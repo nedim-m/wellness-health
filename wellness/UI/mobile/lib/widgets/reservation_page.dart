@@ -5,7 +5,6 @@ import 'package:mobile/models/reservation.dart';
 import 'package:mobile/providers/rating_provider.dart';
 import 'package:mobile/providers/reservation_provider.dart';
 import 'package:mobile/screens/my_reservation_page.dart';
-import 'package:mobile/utils/user_store.dart';
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/double_text.dart';
 
@@ -21,12 +20,14 @@ class ReservationPage extends StatefulWidget {
 
 class _ReservationPageState extends State<ReservationPage> {
   int selectedRating = 0;
-  int? _userId;
+  bool rated = false;
+
+  String? errorText;
 
   @override
   void initState() {
     super.initState();
-    _userId = int.parse(UserManager.getUserId()!);
+    checkAndSetRating();
   }
 
   final RatingProvider _ratingProvider = RatingProvider();
@@ -37,13 +38,37 @@ class _ReservationPageState extends State<ReservationPage> {
       Rating newRating = Rating(
         0,
         numberOfSelectedStars,
-        widget.reservation.treatmentId,
-        _userId!,
+        widget.reservation.id,
       );
 
       await _ratingProvider.insert(newRating);
     } catch (error) {
       print('Error during rating post: $error');
+      showError();
+    }
+  }
+
+  void showError() {
+    setState(() {
+      errorText = rated
+          ? "Već ste ocijenuli tretma!"
+          : "Ne možete ocijeniti ako niste bili na tretmanu!";
+    });
+  }
+
+  Future<void> checkAndSetRating() async {
+    try {
+      var hasRating = await _ratingProvider
+          .get(filter: {'reservationId': widget.reservation.id});
+
+      if (hasRating.isNotEmpty) {
+        rated = true;
+        setState(() {
+          selectedRating = hasRating.first.starRating;
+        });
+      }
+    } catch (error) {
+      print('Error during rating check: $error');
     }
   }
 
@@ -144,36 +169,46 @@ class _ReservationPageState extends State<ReservationPage> {
               smallText: widget.reservation.time,
             ),
             const Gap(20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            Column(
               children: [
-                const Text(
-                  'Ocijeni tretman',
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
                 Row(
-                  children: List.generate(
-                    5,
-                    (index) => IconButton(
-                      onPressed: widget.reservation.status != false
-                          ? () {
-                              setState(() {
-                                selectedRating = index + 1;
-                              });
-                              _showStarRatingDialog(selectedRating);
-                            }
-                          : null,
-                      icon: Icon(
-                        Icons.star,
-                        color: index < selectedRating
-                            ? Colors.amber
-                            : widget.reservation.status != false
-                                ? Colors.grey
-                                : Colors.grey.shade300,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    const Text(
+                      'Ocijeni tretman',
+                      style:
+                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    Row(
+                      children: List.generate(
+                        5,
+                        (index) => IconButton(
+                          onPressed: widget.reservation.status != false
+                              ? () {
+                                  setState(() {
+                                    selectedRating = index + 1;
+                                  });
+                                  _showStarRatingDialog(selectedRating);
+                                }
+                              : null,
+                          icon: Icon(
+                            Icons.star,
+                            color: index < selectedRating
+                                ? Colors.amber
+                                : widget.reservation.status != false
+                                    ? Colors.grey
+                                    : Colors.grey.shade300,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+                  ],
                 ),
+                if (errorText != null)
+                  Text(
+                    errorText!,
+                    style: TextStyle(color: Colors.red),
+                  ),
               ],
             ),
             const SizedBox(height: 20),

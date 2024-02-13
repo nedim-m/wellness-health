@@ -66,6 +66,7 @@ namespace wellness.Service.Services
 
 
             CreateMap<RatingPostRequest, Database.Rating>();
+            CreateMap<RatingUpdateRequest, Database.Rating>();
             CreateMap<Database.Rating, Rating>();
 
             CreateMap<MembershipPostRequest, Database.Membership>();

@@ -6,11 +6,11 @@ part 'rating.g.dart';
 class Rating {
   final int id;
   final int starRating;
-  final int treatmentId;
-  final int userId;
+  final int reservationId;
 
-  Rating(this.id, this.starRating, this.treatmentId, this.userId);
   factory Rating.fromJson(Map<String, dynamic> json) => _$RatingFromJson(json);
+
+  Rating(this.id, this.starRating, this.reservationId);
 
   Map<String, dynamic> toJson() => _$RatingToJson(this);
 }

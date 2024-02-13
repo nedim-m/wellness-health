@@ -8,7 +8,7 @@ using wellness.Model.Rating;
 
 namespace wellness.Service.IServices
 {
-    public interface IRatingService:ICrudService<Rating,BaseSearchObject,RatingPostRequest,RatingPostRequest>
+    public interface IRatingService:ICrudService<Rating, RatingSearchObj, RatingPostRequest, RatingUpdateRequest>
     {
 
     }

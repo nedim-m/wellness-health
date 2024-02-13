@@ -7,17 +7,9 @@ using System.Threading.Tasks;
 
 namespace wellness.Model.Rating
 {
-    public class Rating
+    public class RatingUpdateRequest
     {
-        public int Id { get; set; }
-
-
+        [Range(1, 5)]
         public int StarRating { get; set; }
- 
-        public int ReservationId { get; set; }
-
-
     }
-
 }
-

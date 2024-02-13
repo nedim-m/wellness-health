@@ -1,4 +1,8 @@
+using MailKit;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Pkix;
+using wellness.Payments.IService;
+using wellness.RabbitMQ;
 using wellness.Service.Database;
 using wellness.Service.IServices;
 using wellness.Service.Services;
@@ -9,7 +13,9 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddScoped<IStripePaymentService, StripePaymentService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 builder.Services.AddScoped<IMembershipService, MembershipService>();
+builder.Services.AddScoped<IPayPalService, PayPalService>();
 builder.Services.AddAutoMapper(typeof(AuthService));
+builder.Services.AddScoped<wellness.RabbitMQ.MailService>();
 
 
 

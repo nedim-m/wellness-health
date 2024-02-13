@@ -22,6 +22,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\wellness.Model\wellness.Model.csproj" />
+    <ProjectReference Include="..\wellness.RabbitMQ\wellness.RabbitMQ.csproj" />
   </ItemGroup>
 
 </Project>

@@ -1,12 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:mobile/screens/cc_page.dart';
+import 'package:mobile/providers/paypal_provider.dart';
+
+import 'package:mobile/screens/paypal_page.dart';
 import 'package:mobile/screens/stripe_page.dart';
 
 import 'package:mobile/utils/current_date.dart';
 
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/double_text.dart';
+import 'package:provider/provider.dart';
 
 class PaymentPageView extends StatefulWidget {
   const PaymentPageView(
@@ -63,12 +66,10 @@ class _PaymentPageViewState extends State<PaymentPageView> {
                 bigText: "Cijena: ",
                 smallText: "${widget.price} BAM",
               ),
+              const Gap(30),
+              _buildPaymentOption('PayPal', 'assets/images/paypallogo.png'),
               const Gap(10),
-              _buildPaymentOption('Credit Card', 'assets/images/cclogo.jpg'),
-              const Gap(10),
-              _buildPaymentOption('PayPal'),
-              const Gap(10),
-              _buildPaymentOption('Stripe'),
+              _buildPaymentOption('Stripe', 'assets/images/cclogo.jpg'),
               const Gap(50),
               SizedBox(
                 width: double.infinity,
@@ -114,27 +115,36 @@ class _PaymentPageViewState extends State<PaymentPageView> {
     );
   }
 
-  void _handlePaymentOptionSelection() {
+  Future<void> _handlePaymentOptionSelection() async {
     print('Selected Payment Option: $selectedPaymentOption');
+    final paypalProvider = Provider.of<PayPalProvider>(context, listen: false);
 
     switch (selectedPaymentOption) {
-      case 'Credit Card':
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const CCPageView(),
-          ),
-        );
-        break;
       case 'PayPal':
-        Navigator.push(
-          context,
-          MaterialPageRoute(
-            builder: (context) => const CCPageView(),
-          ),
-        );
+        try {
+          double doublePrice = double.parse(widget.price);
+          String priceToEur = (doublePrice / 1.95).toStringAsFixed(2);
+
+          final orderResult =
+              await paypalProvider.createOrder(priceToEur, "EUR");
+          print("Order created successfully: $orderResult");
+          // ignore: use_build_context_synchronously
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => PayPalCheckout(
+                  paypalUrl: orderResult["approvalUrl"],
+                  orderId: orderResult["orderId"],
+                  membershipTypeId: widget.memberShipTypeId,
+                  price: priceToEur),
+            ),
+          );
+        } catch (error) {
+          print("Failed to create order: $error");
+        }
         break;
       case 'Stripe':
+        // ignore: use_build_context_synchronously
         Navigator.push(
           context,
           MaterialPageRoute(

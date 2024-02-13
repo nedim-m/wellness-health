@@ -17,7 +17,10 @@ class ReservationProvider extends BaseProvider<Reservation> {
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token!);
 
-    var jsonRequest = jsonEncode(<String, dynamic>{"status": status});
+    var jsonRequest = jsonEncode(<String, dynamic>{
+      "status": status,
+      "sentFromMobile": false,
+    });
 
     var response = await http.put(uri, headers: headers, body: jsonRequest);
 

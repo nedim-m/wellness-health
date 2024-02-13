@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/providers/user_provider.dart';
+import 'package:mobile/screens/forgot_password_page.dart';
 
 import 'package:mobile/screens/home_page.dart';
 import 'package:mobile/screens/register_page.dart';
@@ -130,7 +131,13 @@ class _LoginPageViewState extends State<LoginPageView> {
                 ),
                 const SizedBox(height: 16.0),
                 TextButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => const ForgotPageView()),
+                    );
+                  },
                   child: const Text(
                     'Forgot Password?',
                     style: TextStyle(

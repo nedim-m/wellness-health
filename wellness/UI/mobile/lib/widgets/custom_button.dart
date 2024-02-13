@@ -1,9 +1,18 @@
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({super.key, required this.text, required this.navigateTo});
+  const CustomButton({
+    Key? key,
+    required this.text,
+    required this.navigateTo,
+    this.notificationCount = 0,
+    this.onPressedCustom,
+  }) : super(key: key);
+
   final String text;
   final Widget navigateTo;
+  final int notificationCount;
+  final VoidCallback? onPressedCustom;
 
   @override
   Widget build(BuildContext context) {
@@ -17,8 +26,38 @@ class CustomButton extends StatelessWidget {
             context,
             MaterialPageRoute(builder: (context) => navigateTo),
           );
+
+          if (onPressedCustom != null) {
+            onPressedCustom!();
+          }
         },
-        child: Text(text),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(text),
+            if (notificationCount > 0) ...[
+              const SizedBox(width: 8.0),
+              _buildNotificationIndicator(),
+            ],
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNotificationIndicator() {
+    return Container(
+      padding: const EdgeInsets.all(8.0),
+      decoration: const BoxDecoration(
+        shape: BoxShape.circle,
+        color: Colors.red,
+      ),
+      child: Text(
+        '$notificationCount',
+        style: const TextStyle(
+          color: Colors.white,
+          fontWeight: FontWeight.bold,
+        ),
       ),
     );
   }

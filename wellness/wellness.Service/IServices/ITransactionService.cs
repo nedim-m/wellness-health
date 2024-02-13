@@ -9,7 +9,7 @@ namespace wellness.Service.IServices
 {
     public interface ITransactionService
     {
-        /*Task SaveTransactionAsync(Transaction transaction);*/
+      
         Task SaveTransactionAsync(object transaction);
     }
 }

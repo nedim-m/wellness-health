@@ -5,6 +5,6 @@ namespace wellness.Payments.IService
     public interface IPayPalService
     {
         Task<PayPalOrderResponse> CreateOrderAsync(decimal amount, string currency);
-        Task<bool> CapturePaymentAsync(string orderId);
+        Task<bool> CapturePaymentAsync(PayPalCaptureModel request);
     }
 }

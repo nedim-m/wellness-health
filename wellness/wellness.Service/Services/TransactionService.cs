@@ -17,19 +17,7 @@ namespace wellness.Service.Services
             _mapper = mapper;
         }
 
-        /*public async Task SaveTransactionAsync(Model.Transaction.Transaction transaction)
-        {
-            if (transaction == null)
-            {
-                throw new ArgumentNullException(nameof(transaction), "Transaction cannot be null");
-            }
-
-            var obj = _mapper.Map<Database.Transaction>(transaction);
-
-            _context.Transactions.Add(obj);
-
-            await _context.SaveChangesAsync();
-        }*/
+   
 
         public async Task SaveTransactionAsync(object transaction)
         {
@@ -38,28 +26,43 @@ namespace wellness.Service.Services
                 throw new ArgumentNullException(nameof(transaction), "Transaction cannot be null");
             }
 
-            // Assuming transaction has Amount and Currency properties
-            var amount = GetPropertyValue<int>(transaction, "Amount");
+           
+            var amountObject = GetPropertyValue<object>(transaction, "Amount");
             var currency = GetPropertyValue<string>(transaction, "Currency");
             var paymentMethod = GetPropertyValue<string>(transaction, "PaymentMethod");
             var timeStamp = GetPropertyValue<DateTime>(transaction, "Timestamp");
             var membershipTypeId = GetPropertyValue<int>(transaction, "MemberShipTypeId");
 
-            var transactiontoInsert = new Model.Transaction.Transaction
+           
+            decimal amount;
+            if (amountObject is int intAmount)
             {
-                Amount = amount/100,
+                amount = intAmount / 100m;
+            }
+            else if (amountObject is decimal decimalAmount)
+            {
+                amount = decimalAmount;
+            }
+            else
+            {
+                throw new ArgumentException("Invalid type for Amount property", nameof(transaction));
+            }
+
+            var transactionToInsert = new Model.Transaction.Transaction
+            {
+                Amount = amount,
                 Currency = currency,
                 PaymentMethod = paymentMethod,
-                Timestamp=timeStamp,
-                MemberShipTypeId= membershipTypeId,
+                Timestamp = timeStamp,
+                MemberShipTypeId = membershipTypeId,
             };
 
-            if (transactiontoInsert == null)
+            if (transactionToInsert == null)
             {
                 throw new ArgumentException("Invalid transaction object", nameof(transaction));
             }
 
-            var obj = _mapper.Map<Database.Transaction>(transactiontoInsert);
+            var obj = _mapper.Map<Database.Transaction>(transactionToInsert);
 
             _context.Transactions.Add(obj);
 
@@ -74,7 +77,7 @@ namespace wellness.Service.Services
                 return (T)propertyInfo.GetValue(obj);
             }
 
-            // Handle property not found or invalid type
+           
             throw new ArgumentException($"Property '{propertyName}' not found or invalid type on object", nameof(propertyName));
         }
 

@@ -133,9 +133,10 @@ class _PaymentPageViewState extends State<PaymentPageView> {
             context,
             MaterialPageRoute(
               builder: (context) => PayPalCheckout(
-                paypalUrl: orderResult["approvalUrl"],
-                orderId: orderResult["orderId"],
-              ),
+                  paypalUrl: orderResult["approvalUrl"],
+                  orderId: orderResult["orderId"],
+                  membershipTypeId: widget.memberShipTypeId,
+                  price: priceToEur),
             ),
           );
         } catch (error) {

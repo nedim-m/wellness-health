@@ -3,10 +3,13 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:http/io_client.dart';
+import 'package:mobile/utils/user_store.dart';
 
 class PayPalProvider extends ChangeNotifier {
   HttpClient client = HttpClient();
   IOClient? http;
+  late int userId;
+
   Future<Map<String, dynamic>> createOrder(
       String amount, String currency) async {
     client.badCertificateCallback = (cert, host, port) => true;
@@ -29,8 +32,9 @@ class PayPalProvider extends ChangeNotifier {
   }
 
   Future<Map<String, dynamic>> capturePayment(
-    String orderId,
-  ) async {
+      String orderId, int membershipTypeId, String amount) async {
+    userId = int.parse(UserManager.getUserId()!);
+
     client.badCertificateCallback = (cert, host, port) => true;
     http = IOClient(client);
 
@@ -41,6 +45,9 @@ class PayPalProvider extends ChangeNotifier {
       headers: {"Content-Type": "application/json"},
       body: jsonEncode({
         "orderId": orderId,
+        "userId": userId,
+        'memberShipTypeId': membershipTypeId,
+        'amount': amount,
       }),
     );
     print("Response iz capture paymenta $response");

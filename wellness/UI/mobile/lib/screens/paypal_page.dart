@@ -6,11 +6,15 @@ import 'package:webview_flutter/webview_flutter.dart';
 class PayPalCheckout extends StatefulWidget {
   final String paypalUrl;
   final String orderId;
+  final int membershipTypeId;
+  final String price;
 
   const PayPalCheckout({
     Key? key,
     required this.paypalUrl,
     required this.orderId,
+    required this.membershipTypeId,
+    required this.price,
   }) : super(key: key);
 
   @override
@@ -31,7 +35,8 @@ class _PayPalCheckoutState extends State<PayPalCheckout> {
           if (request.url.contains('success')) {
             final paypalProvider =
                 Provider.of<PayPalProvider>(context, listen: false);
-            paypalProvider.capturePayment(widget.orderId);
+            paypalProvider.capturePayment(
+                widget.orderId, widget.membershipTypeId, widget.price);
 
             Navigator.of(context).pop();
           }

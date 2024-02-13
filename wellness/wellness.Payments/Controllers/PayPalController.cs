@@ -40,11 +40,11 @@ namespace wellness.Payments.Controllers
 
 
         [HttpPost("capture-payment")]
-        public async Task<IActionResult> CapturePayment([FromBody] string orderId)
+        public async Task<IActionResult> CapturePayment([FromBody] PayPalCaptureModel request)
         {
             try
             {
-                bool success = await _payPalService.CapturePaymentAsync(orderId);
+                bool success = await _payPalService.CapturePaymentAsync(request);
 
                 if (success)
                 {

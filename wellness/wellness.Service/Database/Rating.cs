@@ -11,9 +11,7 @@ public partial class Rating
 
     public int TreatmentId { get; set; }
 
-    public int UserId { get; set; }
+    public int ReservationId { get; set; }
 
-    public virtual Treatment Treatment { get; set; } = null!;
-
-    public virtual User User { get; set; } = null!;
+    public virtual Reservation Reservation { get; set; } = null!;
 }

@@ -51,16 +51,7 @@ public partial class DbWellnessContext : DbContext
             entity.HasOne(d => d.User).WithMany(p => p.Memberships).HasForeignKey(d => d.UserId);
         });
 
-        modelBuilder.Entity<Rating>(entity =>
-        {
-            entity.HasIndex(e => e.TreatmentId, "IX_Ratings_TreatmentId");
-
-            entity.HasIndex(e => e.UserId, "IX_Ratings_UserId");
-
-            entity.HasOne(d => d.Treatment).WithMany(p => p.Ratings).HasForeignKey(d => d.TreatmentId);
-
-            entity.HasOne(d => d.User).WithMany(p => p.Ratings).HasForeignKey(d => d.UserId);
-        });
+        
 
         modelBuilder.Entity<Record>(entity =>
         {

@@ -36,8 +36,6 @@ public partial class User
 
     public virtual ICollection<Membership> Memberships { get; } = new List<Membership>();
 
-    public virtual ICollection<Rating> Ratings { get; } = new List<Rating>();
-
     public virtual ICollection<Record> Records { get; } = new List<Record>();
 
     public virtual ICollection<Reservation> Reservations { get; } = new List<Reservation>();

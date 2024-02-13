@@ -36,10 +36,9 @@ namespace wellness.Service.Services
             var obj = await _context.Treatments.FindAsync(id);
 
             if (obj != null) {
-                var hasRelatedRatings = await _context.Ratings
-                    .AnyAsync(r => r.TreatmentId == id);
+               
                 var hasRelatedReservations = await _context.Reservations.AnyAsync(r => r.TreatmentId==id);
-                if (!hasRelatedRatings && !hasRelatedReservations) 
+                if (!hasRelatedReservations) 
                 {
                     _context.Treatments.Remove(obj);
                     await _context.SaveChangesAsync();

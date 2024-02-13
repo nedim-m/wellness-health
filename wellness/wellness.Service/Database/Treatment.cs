@@ -22,7 +22,7 @@ public partial class Treatment
 
     public virtual Category Category { get; set; } = null!;
 
-    public virtual ICollection<Rating> Ratings { get; } = new List<Rating>();
+
 
     public virtual ICollection<Reservation> Reservations { get; } = new List<Reservation>();
 

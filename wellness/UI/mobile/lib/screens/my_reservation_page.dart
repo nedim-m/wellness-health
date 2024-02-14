@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/models/reservation.dart';
+import 'package:mobile/models/treatment.dart';
+
 import 'package:mobile/providers/reservation_provider.dart';
+import 'package:mobile/providers/treatment_provider.dart';
 import 'package:mobile/utils/user_store.dart';
 import 'package:mobile/widgets/reservation_page.dart';
 import 'package:mobile/widgets/app_bar.dart';
@@ -14,7 +17,9 @@ class MyReservationPageView extends StatefulWidget {
 
 class _MyReservationPageViewState extends State<MyReservationPageView> {
   List<Reservation> reservations = [];
+  List<Treatment> treatments = [];
   final ReservationProvider _reservationProvider = ReservationProvider();
+  final TreatmentProvider _treatmentProvider = TreatmentProvider();
   int? _userId;
 
   @override
@@ -23,13 +28,14 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
     _userId = int.parse(UserManager.getUserId()!);
     fetchData();
   }
-  
 
   Future<void> fetchData() async {
     List<Reservation> fetchedReservations =
         await _reservationProvider.get(filter: {
       'userId': _userId,
     });
+
+    treatments = await _treatmentProvider.recommendation();
 
     setState(() {
       reservations = fetchedReservations;
@@ -82,6 +88,7 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
                 MaterialPageRoute(
                   builder: (context) => ReservationPage(
                     reservation: reservations[index],
+                    treatmentList: treatments,
                   ),
                 ),
               );

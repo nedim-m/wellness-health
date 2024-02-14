@@ -42,6 +42,12 @@ namespace wellness.Service.Services
             CreateMap<Database.Treatment, Treatment>().ForMember(dest => dest.Category, opt => opt.MapFrom(src => src.Category.Name))
                                                       .ForMember(dest => dest.TreatmentType, opt => opt.MapFrom(src => src.TreatmentType.Name));
 
+            CreateMap<Treatment, RecommendationTreatment>();
+                                                     
+
+
+
+
             CreateMap<MembershipTypePostRequest, Database.MembershipType>();
             CreateMap<Database.MembershipType, MembershipType>();
 

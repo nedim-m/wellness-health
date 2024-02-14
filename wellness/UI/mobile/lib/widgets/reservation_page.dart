@@ -2,17 +2,21 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:mobile/models/rating.dart';
 import 'package:mobile/models/reservation.dart';
+import 'package:mobile/models/treatment.dart';
 import 'package:mobile/providers/rating_provider.dart';
 import 'package:mobile/providers/reservation_provider.dart';
 import 'package:mobile/screens/my_reservation_page.dart';
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/double_text.dart';
+import 'package:mobile/widgets/treatment_container.dart';
 
 class ReservationPage extends StatefulWidget {
-  const ReservationPage({Key? key, required this.reservation})
+  const ReservationPage(
+      {Key? key, required this.reservation, required this.treatmentList})
       : super(key: key);
 
   final Reservation reservation;
+  final List<Treatment> treatmentList;
 
   @override
   State<ReservationPage> createState() => _ReservationPageState();
@@ -92,9 +96,7 @@ class _ReservationPageState extends State<ReservationPage> {
             TextButton(
               onPressed: () async {
                 await _cancelReservation();
-                // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
-                // ignore: use_build_context_synchronously
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -127,7 +129,6 @@ class _ReservationPageState extends State<ReservationPage> {
             TextButton(
               onPressed: () async {
                 await _postRating(numberOfSelectedStars);
-                // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
               },
               child: const Text("Potvrdi"),
@@ -149,95 +150,108 @@ class _ReservationPageState extends State<ReservationPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: const AppBarWidget(),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            DoubleTextWidget(
-              bigText: "Tretman: ",
-              smallText: widget.reservation.treatment,
-            ),
-            const Gap(15),
-            DoubleTextWidget(
-              bigText: "Datum: ",
-              smallText: widget.reservation.date,
-            ),
-            const Gap(15),
-            DoubleTextWidget(
-              bigText: "Vrijeme: ",
-              smallText: widget.reservation.time,
-            ),
-            const Gap(20),
-            Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      'Ocijeni tretman',
-                      style:
-                          TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                    ),
-                    Row(
-                      children: List.generate(
-                        5,
-                        (index) => IconButton(
-                          onPressed: widget.reservation.status != false
-                              ? () {
-                                  setState(() {
-                                    selectedRating = index + 1;
-                                  });
-                                  _showStarRatingDialog(selectedRating);
-                                }
-                              : null,
-                          icon: Icon(
-                            Icons.star,
-                            color: index < selectedRating
-                                ? Colors.amber
-                                : widget.reservation.status != false
-                                    ? Colors.grey
-                                    : Colors.grey.shade300,
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              DoubleTextWidget(
+                bigText: "Tretman: ",
+                smallText: widget.reservation.treatment,
+              ),
+              const Gap(15),
+              DoubleTextWidget(
+                bigText: "Datum: ",
+                smallText: widget.reservation.date,
+              ),
+              const Gap(15),
+              DoubleTextWidget(
+                bigText: "Vrijeme: ",
+                smallText: widget.reservation.time,
+              ),
+              const Gap(20),
+              Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      const Text(
+                        'Ocijeni tretman',
+                        style: TextStyle(
+                            fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      Row(
+                        children: List.generate(
+                          5,
+                          (index) => IconButton(
+                            onPressed: widget.reservation.status != false
+                                ? () {
+                                    setState(() {
+                                      selectedRating = index + 1;
+                                    });
+                                    _showStarRatingDialog(selectedRating);
+                                  }
+                                : null,
+                            icon: Icon(
+                              Icons.star,
+                              color: index < selectedRating
+                                  ? Colors.amber
+                                  : widget.reservation.status != false
+                                      ? Colors.grey
+                                      : Colors.grey.shade300,
+                            ),
                           ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                if (errorText != null)
-                  Text(
-                    errorText!,
-                    style: TextStyle(color: Colors.red),
+                    ],
                   ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                onPressed: widget.reservation.status != false
-                    ? () {
-                        _showConfirmationDialog();
-                      }
-                    : null,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: widget.reservation.status == false
-                      ? Colors.grey.shade700
-                      : Colors.red,
-                ),
-                child: Text(
-                  widget.reservation.status != false
-                      ? "Odjavi rezervaciju"
-                      : "Žao nam je, Vaša rezervacija je odbijena/odjavljena",
-                  style: TextStyle(
-                    color: widget.reservation.status == false
-                        ? Colors.black
-                        : Colors.white,
+                  if (errorText != null)
+                    Text(
+                      errorText!,
+                      style: TextStyle(color: Colors.red),
+                    ),
+                ],
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  onPressed: widget.reservation.status != false
+                      ? () {
+                          _showConfirmationDialog();
+                        }
+                      : null,
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: widget.reservation.status == false
+                        ? Colors.grey.shade700
+                        : Colors.red,
+                  ),
+                  child: Text(
+                    widget.reservation.status != false
+                        ? "Odjavi rezervaciju"
+                        : "Žao nam je, Vaša rezervacija je odbijena/odjavljena",
+                    style: TextStyle(
+                      color: widget.reservation.status == false
+                          ? Colors.black
+                          : Colors.white,
+                    ),
                   ),
                 ),
               ),
-            ),
-          ],
+              const Gap(20),
+              SingleChildScrollView(
+                padding: const EdgeInsets.only(left: 20),
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: widget.treatmentList
+                      .map((singleTreatment) => TreatmentRecomendationView(
+                          treatment: singleTreatment))
+                      .toList(),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

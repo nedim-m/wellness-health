@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using wellness.Service.Database;
 
@@ -11,9 +12,11 @@ using wellness.Service.Database;
 namespace wellness.Service.Migrations
 {
     [DbContext(typeof(DbWellnessContext))]
-    partial class DbWellnessContextModelSnapshot : ModelSnapshot
+    [Migration("20240215161332_Added new class Report")]
+    partial class AddednewclassReport
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -166,8 +169,8 @@ namespace wellness.Service.Migrations
                     b.Property<DateTime>("DateTo")
                         .HasColumnType("datetime2");
 
-                    b.Property<decimal>("EarnedMoney")
-                        .HasColumnType("decimal(18,2)");
+                    b.Property<float>("EarnedMoney")
+                        .HasColumnType("real");
 
                     b.Property<int>("MemberShipTypeId")
                         .HasColumnType("int");
@@ -473,8 +476,8 @@ namespace wellness.Service.Migrations
                             RefreshToken = "",
                             RoleId = 1,
                             Status = true,
-                            TokenCreated = new DateTime(2024, 2, 15, 17, 1, 54, 206, DateTimeKind.Utc).AddTicks(1243),
-                            TokenExpires = new DateTime(2024, 2, 15, 18, 1, 54, 206, DateTimeKind.Utc).AddTicks(1246),
+                            TokenCreated = new DateTime(2024, 2, 15, 16, 13, 31, 963, DateTimeKind.Utc).AddTicks(5519),
+                            TokenExpires = new DateTime(2024, 2, 15, 17, 13, 31, 963, DateTimeKind.Utc).AddTicks(5522),
                             UserName = "admin"
                         },
                         new
@@ -489,8 +492,8 @@ namespace wellness.Service.Migrations
                             RefreshToken = "",
                             RoleId = 2,
                             Status = true,
-                            TokenCreated = new DateTime(2024, 2, 15, 17, 1, 54, 206, DateTimeKind.Utc).AddTicks(1486),
-                            TokenExpires = new DateTime(2024, 2, 15, 18, 1, 54, 206, DateTimeKind.Utc).AddTicks(1486),
+                            TokenCreated = new DateTime(2024, 2, 15, 16, 13, 31, 963, DateTimeKind.Utc).AddTicks(5809),
+                            TokenExpires = new DateTime(2024, 2, 15, 17, 13, 31, 963, DateTimeKind.Utc).AddTicks(5810),
                             UserName = "worker"
                         },
                         new
@@ -505,8 +508,8 @@ namespace wellness.Service.Migrations
                             RefreshToken = "",
                             RoleId = 3,
                             Status = true,
-                            TokenCreated = new DateTime(2024, 2, 15, 17, 1, 54, 206, DateTimeKind.Utc).AddTicks(1791),
-                            TokenExpires = new DateTime(2024, 2, 15, 18, 1, 54, 206, DateTimeKind.Utc).AddTicks(1792),
+                            TokenCreated = new DateTime(2024, 2, 15, 16, 13, 31, 963, DateTimeKind.Utc).AddTicks(6071),
+                            TokenExpires = new DateTime(2024, 2, 15, 17, 13, 31, 963, DateTimeKind.Utc).AddTicks(6072),
                             UserName = "worker"
                         });
                 });

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/providers/user_provider.dart';
 import 'package:mobile/screens/login_page.dart';
 import 'package:mobile/screens/my_reservation_page.dart';
 import 'package:mobile/screens/membership_page.dart';
@@ -18,6 +19,8 @@ class HomepageView extends StatefulWidget {
 
 class _HomepageViewState extends State<HomepageView> {
   int _numberOfNotifications = 0;
+  bool status = false;
+  final UserProvider _userProvider = UserProvider();
 
   late HubConnection _signalR;
 
@@ -25,6 +28,7 @@ class _HomepageViewState extends State<HomepageView> {
   void initState() {
     super.initState();
     _initPlatformState();
+    getAccess();
   }
 
   Future<void> _initPlatformState() async {
@@ -68,6 +72,13 @@ class _HomepageViewState extends State<HomepageView> {
     });
   }
 
+  Future<void> getAccess() async {
+    var user = await _userProvider.getById();
+    setState(() {
+      status = user.status!;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -85,9 +96,11 @@ class _HomepageViewState extends State<HomepageView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const CustomButton(
+                  CustomButton(
                     text: 'Pregled Tretmana',
-                    navigateTo: TreatmentOverview(),
+                    navigateTo: status
+                        ? const TreatmentOverview()
+                        : const MemberShipPageView(),
                   ),
                   CustomButton(
                     text: 'Moje rezervacije',

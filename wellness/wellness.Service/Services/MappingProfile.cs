@@ -10,6 +10,7 @@ using wellness.Model.Membership;
 using wellness.Model.MembershipType;
 using wellness.Model.Rating;
 using wellness.Model.Record;
+using wellness.Model.Report;
 using wellness.Model.Reservation;
 using wellness.Model.Role;
 using wellness.Model.RoleUpsertRequest;
@@ -43,7 +44,7 @@ namespace wellness.Service.Services
                                                       .ForMember(dest => dest.TreatmentType, opt => opt.MapFrom(src => src.TreatmentType.Name));
 
             CreateMap<Treatment, RecommendationTreatment>();
-                                                     
+
 
 
 
@@ -68,7 +69,7 @@ namespace wellness.Service.Services
                                                           .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.User.FirstName))
                                                           .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.User.LastName))
                                                           .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.User.Phone));
-                                                          
+
 
 
             CreateMap<RatingPostRequest, Database.Rating>();
@@ -84,7 +85,10 @@ namespace wellness.Service.Services
             CreateMap<Transaction, Database.Transaction>();
             CreateMap<Database.Transaction, Transaction>();
 
-
+            CreateMap<ReportPostRequest, Database.Report>();
+            CreateMap<Database.Report, Report>().ForMember(dest => dest.MemberShipTypeName, opt => opt.MapFrom(src => src.MemberShipType.Name));
+                                                     
         }
     }
 }
+

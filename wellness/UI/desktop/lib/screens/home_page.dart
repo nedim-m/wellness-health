@@ -7,6 +7,7 @@ import 'package:desktop/screens/user_page.dart';
 import 'package:desktop/screens/worker_page.dart';
 import 'package:desktop/utils/role_store.dart';
 import 'package:desktop/utils/token_store.dart';
+import 'package:desktop/widgets/report_create.dart';
 import 'package:fluent_ui/fluent_ui.dart';
 import 'package:signalr_netcore/signalr_client.dart';
 
@@ -123,7 +124,7 @@ class _HomepageViewState extends State<HomepageView> {
             PaneItem(
               icon: const Icon(FluentIcons.mail),
               title: const Text('Kreiraj'),
-              body: const Text("Kreiraj izvjestaj"),
+              body: CreateReportWidget(),
             ),
             PaneItem(
               icon: const Icon(FluentIcons.calendar),

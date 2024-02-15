@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
 import 'package:mobile/models/category.dart';
 import 'package:mobile/models/treatment.dart';
 import 'package:mobile/models/treatment_type.dart';
@@ -20,7 +21,7 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
   final CategoryProvider _categoryProvider = CategoryProvider();
   final TreatmentTypeProvider _treatmentTypeProvider = TreatmentTypeProvider();
 
-  List<Treatment> filterData = [];
+  List<Treatment> filteredData = [];
   List<Treatment> myData = [];
   List<Category> categories = [];
   List<TreatmentType> treatmentTypes = [];
@@ -39,13 +40,28 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
     treatmentTypes = await _treatmentTypeProvider.get();
 
     setState(() {
-      filterData = myData;
+      filteredData = myData;
     });
   }
 
-  @override
-  void dispose() {
-    super.dispose();
+  void applyFilter() {
+    List<Treatment> filteredList = myData;
+
+    if (selectedTreatment != null) {
+      filteredList = filteredList
+          .where((treatment) => treatment.treatmentType == selectedTreatment)
+          .toList();
+    }
+
+    if (selectedCategory != null) {
+      filteredList = filteredList
+          .where((treatment) => treatment.category == selectedCategory)
+          .toList();
+    }
+
+    setState(() {
+      filteredData = filteredList;
+    });
   }
 
   @override
@@ -58,6 +74,17 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const SizedBox(height: 20),
+            const Center(
+              child: Text(
+                'Pregled tretmana',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+            const Gap(30),
             Container(
               width: MediaQuery.of(context).size.width * 0.9,
               padding: const EdgeInsets.all(10),
@@ -66,22 +93,24 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   _buildDropdown(
-                    label: "Enter treatment type",
+                    label: "Izaberite tip tretmana",
                     value: selectedTreatment,
                     onChanged: (value) {
                       setState(() {
                         selectedTreatment = value;
+                        applyFilter();
                       });
                     },
                     items: treatmentTypes.map((type) => type.name).toList(),
                   ),
                   const SizedBox(height: 20),
                   _buildDropdown(
-                    label: "Enter category",
+                    label: "Izaberite kategoriju",
                     value: selectedCategory,
                     onChanged: (value) {
                       setState(() {
                         selectedCategory = value;
+                        applyFilter();
                       });
                     },
                     items: categories.map((category) => category.name).toList(),
@@ -96,7 +125,7 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
                 columns: const [
                   DataColumn(
                     label: Text(
-                      "Treatment Type",
+                      "Tretmani",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16,
@@ -105,7 +134,7 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
                     ),
                   ),
                 ],
-                rows: myData
+                rows: filteredData
                     .map(
                       (data) => DataRow(
                         cells: [
@@ -115,9 +144,10 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
                               Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => TreatmentDetails(
-                                          data: data,
-                                        )),
+                                  builder: (context) => TreatmentDetails(
+                                    data: data,
+                                  ),
+                                ),
                               );
                             },
                           ),
@@ -167,7 +197,7 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
               ),
               isExpanded: true,
               hint: const Center(
-                child: Text("Select", textAlign: TextAlign.center),
+                child: Text("Izaberite", textAlign: TextAlign.center),
               ),
               items: items
                   .map<DropdownMenuItem<String>>(

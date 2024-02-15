@@ -6,6 +6,7 @@ import 'package:mobile/models/treatment.dart';
 import 'package:mobile/providers/rating_provider.dart';
 import 'package:mobile/providers/reservation_provider.dart';
 import 'package:mobile/screens/my_reservation_page.dart';
+import 'package:mobile/screens/treatment_details.dart';
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/double_text.dart';
 import 'package:mobile/widgets/treatment_container.dart';
@@ -156,6 +157,18 @@ class _ReservationPageState extends State<ReservationPage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 20),
+              const Center(
+                child: Text(
+                  'Pregled rezervacije',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+              const Gap(30),
               DoubleTextWidget(
                 bigText: "Tretman: ",
                 smallText: widget.reservation.treatment,
@@ -245,8 +258,21 @@ class _ReservationPageState extends State<ReservationPage> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: widget.treatmentList
-                      .map((singleTreatment) => TreatmentRecomendationView(
-                          treatment: singleTreatment))
+                      .map((singleTreatment) => GestureDetector(
+                            onTap: () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) => TreatmentDetails(
+                                    data: singleTreatment,
+                                  ),
+                                ),
+                              );
+                            },
+                            child: TreatmentRecomendationView(
+                              treatment: singleTreatment,
+                            ),
+                          ))
                       .toList(),
                 ),
               ),

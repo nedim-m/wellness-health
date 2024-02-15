@@ -56,7 +56,7 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
     if (reservations.isEmpty) {
       return const Center(
         child: Text(
-          'Sorry, there are no records.',
+          'Trenutno nema rezervacija',
           style: TextStyle(fontSize: 18, color: Colors.grey),
         ),
       );

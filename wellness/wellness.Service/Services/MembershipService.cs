@@ -52,9 +52,14 @@ namespace wellness.Service.Services
             foreach (var membership in memberships)
             {
               
-                    if (DateTime.Parse(membership.ExpirationDate) <currentDate)
+                if (DateTime.Parse(membership.ExpirationDate) <currentDate)
                         membership.Status = false;
-              
+                var userToUpdate = _context.Users.FindAsync(membership.UserId);
+                if (userToUpdate.Result!=null)
+                {
+                    userToUpdate.Result.Status=false;
+                }
+
             }
 
              _context.SaveChangesAsync();
@@ -87,6 +92,7 @@ namespace wellness.Service.Services
                 var dateToSet = DateTime.Parse(membershipToUpdate.ExpirationDate).AddDays(membershipType!.Duration);
                 membershipToUpdate.ExpirationDate = dateToSet.ToString("dd.MM.yyyy");
                 membershipToUpdate.Status=true;
+
             }
             
 
@@ -96,6 +102,11 @@ namespace wellness.Service.Services
 
             _mapper.Map(update, membershipToUpdate);
 
+            var userToUpdate = _context.Users.FindAsync(membershipToUpdate.UserId);
+            if (userToUpdate.Result!=null)
+            {
+                userToUpdate.Result.Status=true;
+            }
 
 
 
@@ -107,6 +118,7 @@ namespace wellness.Service.Services
         public override async Task<Model.Membership.Membership> Insert(MembershipPostRequest insert)
         {
             var membershipType = await _context.MembershipTypes.FindAsync(insert.MemberShipTypeId);
+
             DateTime currentDate = DateTime.Now;
             var dateToSet = currentDate.AddDays(membershipType!.Duration);
 
@@ -122,6 +134,13 @@ namespace wellness.Service.Services
             };
 
              _context.Memberships.Add(membershipToInsert);
+            var userToUpdate=_context.Users.FindAsync(insert.UserId);
+            if (userToUpdate.Result!=null)
+            {
+                userToUpdate.Result.Status=true;
+            }
+
+
 
             await _context.SaveChangesAsync();
 

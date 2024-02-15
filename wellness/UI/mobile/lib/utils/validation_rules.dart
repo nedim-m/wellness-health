@@ -4,17 +4,17 @@ class ValidationRules {
       return errorMessage;
     }
     if (textInput.contains(RegExp(r'[0-9]'))) {
-      return 'Input cannot contain numbers.';
+      return 'Unos ne može sadržavati brojeve.';
     }
     return null;
   }
 
   String? validateEmail(String? email) {
     if (email == null || email.isEmpty) {
-      return 'Please enter your email.';
+      return 'Molim Vas unesite email.';
     }
     if (!isValidEmail(email)) {
-      return 'Invalid email address.';
+      return 'Nevažeća email adresa.';
     }
     return null;
   }
@@ -29,44 +29,44 @@ class ValidationRules {
 
   String? validatePhone(String? phone) {
     if (phone == null || phone.isEmpty) {
-      return 'Please enter your phone number.';
+      return 'Molim Vas unesite broj telefona.';
     }
     if (!RegExp(r'^06\d{7,8}$').hasMatch(phone)) {
-      return 'Please enter 9 or 10 digits starting with 06.';
+      return 'Unesite 9 ili 10 cifara počevši od 06.';
     }
     return null;
   }
 
   String? validatePassword(String? password) {
     if (password == null || password.isEmpty) {
-      return 'Please enter a password.';
+      return 'Unesite lozinku.';
     }
     if (password.length < 8) {
-      return 'Password must be at least 8 characters long.';
+      return 'Lozinka mora imati najmanje 8 znakova.';
     }
     if (!RegExp(r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+])')
         .hasMatch(password)) {
-      return 'Password must contain at least one capital letter, one number, and one special character.';
+      return 'Lozinka mora sadržavati najmanje jedno veliko slovo, jedan broj i jedan poseban znak.';
     }
     return null;
   }
 
   String? validateDropdown(dynamic value) {
     if (value == null) {
-      return 'Please select a from dropdown.';
+      return 'Molimo odaberite iz padajućeg menija.';
     }
     return null;
   }
 
   String? validatePrice(String? price) {
     if (price == null || price.isEmpty) {
-      return 'Please enter a price.';
+      return 'Molimo unesite cijenu.';
     }
 
     final RegExp priceRegex = RegExp(r'^\d+(\.\d{1,2})?$');
 
     if (!priceRegex.hasMatch(price)) {
-      return 'Invalid price format. Please enter a valid price (e.g., 10.99).';
+      return 'Nevažeći format cijene. Unesite ispravnu cijenu (npr. 10,99).';
     }
 
     return null;
@@ -80,7 +80,7 @@ class ValidationRules {
     final RegExp numericRegex = RegExp(r'^[0-9]+$');
 
     if (!numericRegex.hasMatch(userInput)) {
-      return 'Input must contain only numbers.';
+      return 'Unos mora sadržavati samo brojeve.';
     }
 
     return null;

@@ -59,7 +59,7 @@ class _ChoseMembershipPageViewState extends State<ChoseMembershipPageView> {
         const SizedBox(height: 20),
         const Center(
           child: Text(
-            'Članarina',
+            'Izaberite članarinu',
             style: TextStyle(
               fontSize: 24,
               fontWeight: FontWeight.bold,
@@ -76,19 +76,40 @@ class _ChoseMembershipPageViewState extends State<ChoseMembershipPageView> {
           ),
         ),
         const SizedBox(height: 8),
-        DropdownButton<MembershipType>(
-          value: selectedMembershipType,
-          onChanged: (MembershipType? newValue) {
-            setState(() {
-              selectedMembershipType = newValue;
-            });
-          },
-          items: membershipTypes.map((MembershipType type) {
-            return DropdownMenuItem<MembershipType>(
-              value: type,
-              child: Text(type.name),
-            );
-          }).toList(),
+        Center(
+          child: SizedBox(
+            width: double.infinity,
+            child: DropdownButton<MembershipType>(
+              value: selectedMembershipType,
+              onChanged: (MembershipType? newValue) {
+                setState(() {
+                  selectedMembershipType = newValue;
+                });
+              },
+              itemHeight: 50.0,
+              underline: Container(
+                width: double.infinity,
+                height: 1,
+                color: Colors.grey,
+              ),
+              isExpanded: true,
+              items: membershipTypes.map((MembershipType type) {
+                return DropdownMenuItem<MembershipType>(
+                  value: type,
+                  child: Center(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
+                      child: Text(
+                        type.name,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
         ),
         const Gap(15),
         DoubleTextWidget(

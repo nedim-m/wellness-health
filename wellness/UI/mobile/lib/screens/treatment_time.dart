@@ -28,6 +28,18 @@ class _TreatmenTimeState extends State<TreatmenTime> {
           padding: const EdgeInsets.all(20.0),
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            const SizedBox(height: 20),
+            const Center(
+              child: Text(
+                'Pregled slobodnih termina',
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+            const Gap(30),
             DoubleTextWidget(
               bigText: "Vrsta usluge: ",
               smallText: widget.data.treatmentType,

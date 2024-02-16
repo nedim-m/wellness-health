@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:desktop/models/membership_type.dart';
 import 'package:desktop/models/report.dart';
 import 'package:desktop/models/search_result.dart';
@@ -5,6 +7,9 @@ import 'package:desktop/providers/membership_type.provider.dart';
 import 'package:desktop/providers/report_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:open_file/open_file.dart' as open_file;
+
+import 'package:pdf/widgets.dart' as pw;
 
 class ReportShowWidget extends StatefulWidget {
   const ReportShowWidget({Key? key});
@@ -46,6 +51,91 @@ class _ReportShowWidgetState extends State<ReportShowWidget> {
               element.memberShipTypeId == selectedMembershipType?.id)
           .toList();
     });
+  }
+
+  Future<void> generatePDF(Report report) async {
+    final pdf = pw.Document();
+
+    pdf.addPage(
+      pw.Page(
+        build: (pw.Context context) => pw.Column(
+          crossAxisAlignment: pw.CrossAxisAlignment.start,
+          children: [
+            pw.Header(
+              level: 0,
+              child: pw.Text('Izvjestaj o clanarini',
+                  style: pw.TextStyle(
+                      fontSize: 24, fontWeight: pw.FontWeight.bold)),
+            ),
+            pw.SizedBox(height: 10),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Text('Tip clanarine:',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.Text('${report.memberShipTypeName}',
+                    style: const pw.TextStyle(fontSize: 16)),
+              ],
+            ),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Text('Datum od:',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.Text('${DateFormat('dd.MM.yyyy').format(report.dateFrom)}',
+                    style: const pw.TextStyle(fontSize: 16)),
+              ],
+            ),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Text('Datum do:',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.Text('${DateFormat('dd.MM.yyyy').format(report.dateTo)}',
+                    style: const pw.TextStyle(fontSize: 16)),
+              ],
+            ),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Text('Broj korisnika:',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.Text('${report.totalUsers}',
+                    style: const pw.TextStyle(fontSize: 16)),
+              ],
+            ),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
+                pw.Text('Ukupna zarada:',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.Text('${report.earnedMoney} BAM',
+                    style: const pw.TextStyle(fontSize: 16)),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+
+    final directory = Directory(
+        'C:/Users/Nedim/Documents/GitHub/wellness-health/wellness/UI/desktop/assets/pdf');
+
+    final path = '${directory.path}/report.pdf';
+
+    if (!directory.existsSync()) {
+      directory.createSync(recursive: true);
+    }
+
+    final file = File(path);
+    final pdfBytes = await pdf.save();
+    await file.writeAsBytes(pdfBytes);
+
+    try {
+      open_file.OpenFile.open(path);
+    } catch (error) {
+      print('Pogreška pri otvaranju PDF-a: $error');
+    }
   }
 
   @override
@@ -151,12 +241,22 @@ class _ReportShowWidgetState extends State<ReportShowWidget> {
                       ),
                     ),
                   ),
+                  DataColumn(
+                    label: Text(
+                      "Akcija",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
                 ],
                 source: RowSource(
                   count: myData.result.length,
                   myData: myData.result,
                   context: context,
                   refreshCallback: fetchData,
+                  generatePDF: generatePDF,
                 ),
                 rowsPerPage: 5,
               ),
@@ -173,17 +273,20 @@ class RowSource extends DataTableSource {
   final int count;
   final BuildContext context;
   final Function() refreshCallback;
+  final Function(Report) generatePDF;
   RowSource({
     required this.myData,
     required this.count,
     required this.context,
     required this.refreshCallback,
+    required this.generatePDF,
   });
 
   @override
   DataRow? getRow(int index) {
     if (index < rowCount) {
-      return recentFileDataRow(context, myData![index], refreshCallback);
+      return recentFileDataRow(
+          context, myData![index], refreshCallback, generatePDF);
     } else {
       return null;
     }
@@ -199,39 +302,24 @@ class RowSource extends DataTableSource {
   int get selectedRowCount => 0;
 }
 
-DataRow recentFileDataRow(
-    BuildContext context, data, Function() refreshCallback) {
+DataRow recentFileDataRow(BuildContext context, Report data,
+    Function() refreshCallback, Function(Report) generatePDF) {
   final dateFormat = DateFormat('dd.MM.yyyy');
   return DataRow(
     cells: [
-      DataCell(Text(data.memberShipTypeName)),
+      DataCell(Text(data.memberShipTypeName!)),
       DataCell(Text(dateFormat.format(data.dateFrom))),
       DataCell(Text(dateFormat.format(data.dateTo))),
       DataCell(Text(data.totalUsers.toString())),
       DataCell(Text("${data.earnedMoney.toString()} BAM")),
-      /*DataCell(
-        Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                onPressed: () async {
-                  /*await showDialog(
-                    context: context,
-                    builder: (context) {
-                      return MembershipTypeEditPopUpWidget(
-                        edit: true,
-                        data: data,
-                        refreshCallback: refreshCallback,
-                      );
-                    },
-                  );*/
-                },
-                child: const Text("Edit"),
-              ),
-            ),
-          ],
+      DataCell(
+        ElevatedButton(
+          onPressed: () {
+            generatePDF(data);
+          },
+          child: const Text('Generiši PDF'),
         ),
-      ),*/
+      ),
     ],
   );
 }

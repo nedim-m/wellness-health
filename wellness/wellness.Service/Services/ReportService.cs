@@ -32,27 +32,22 @@ namespace wellness.Service.Services
         {
             var fromDate = DateTime.Parse(insert.DateFrom).Date;
             var toDate = DateTime.Parse(insert.DateTo).Date;
-            
-
-
-           
 
             var transactions = _context.Transactions
-                .Where(t => t.Timestamp.Date >=  fromDate && t.Timestamp.Date <= toDate && t.MemberShipTypeId == insert.MemberShipTypeId)
+                .Where(t => t.Timestamp.Date >= fromDate && t.Timestamp.Date <= toDate && t.MemberShipTypeId == insert.MemberShipTypeId)
                 .ToList();
-
-           
-
-
 
             var totalAmount = transactions.Sum(t => t.Currency == "EUR" ? t.Amount * 1.95m : t.Amount);
 
-            
+            var uniqueUserIds = transactions.Select(t => t.UserId).Distinct();
+            var totalUser = uniqueUserIds.Count();
 
             entity.EarnedMoney = totalAmount;
+            entity.TotalUsers = totalUser; 
 
             return base.BeforeInsert(entity, insert);
         }
+
 
 
 

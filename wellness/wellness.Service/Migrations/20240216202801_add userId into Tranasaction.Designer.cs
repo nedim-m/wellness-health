@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using wellness.Service.Database;
 
@@ -11,9 +12,11 @@ using wellness.Service.Database;
 namespace wellness.Service.Migrations
 {
     [DbContext(typeof(DbWellnessContext))]
-    partial class DbWellnessContextModelSnapshot : ModelSnapshot
+    [Migration("20240216202801_add userId into Tranasaction")]
+    partial class adduserIdintoTranasaction
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -170,9 +173,6 @@ namespace wellness.Service.Migrations
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("MemberShipTypeId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TotalUsers")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -481,8 +481,8 @@ namespace wellness.Service.Migrations
                             RefreshToken = "",
                             RoleId = 1,
                             Status = true,
-                            TokenCreated = new DateTime(2024, 2, 16, 20, 59, 48, 721, DateTimeKind.Utc).AddTicks(4505),
-                            TokenExpires = new DateTime(2024, 2, 16, 21, 59, 48, 721, DateTimeKind.Utc).AddTicks(4508),
+                            TokenCreated = new DateTime(2024, 2, 16, 20, 28, 1, 161, DateTimeKind.Utc).AddTicks(3687),
+                            TokenExpires = new DateTime(2024, 2, 16, 21, 28, 1, 161, DateTimeKind.Utc).AddTicks(3690),
                             UserName = "admin"
                         },
                         new
@@ -497,8 +497,8 @@ namespace wellness.Service.Migrations
                             RefreshToken = "",
                             RoleId = 2,
                             Status = true,
-                            TokenCreated = new DateTime(2024, 2, 16, 20, 59, 48, 721, DateTimeKind.Utc).AddTicks(4632),
-                            TokenExpires = new DateTime(2024, 2, 16, 21, 59, 48, 721, DateTimeKind.Utc).AddTicks(4632),
+                            TokenCreated = new DateTime(2024, 2, 16, 20, 28, 1, 161, DateTimeKind.Utc).AddTicks(3870),
+                            TokenExpires = new DateTime(2024, 2, 16, 21, 28, 1, 161, DateTimeKind.Utc).AddTicks(3871),
                             UserName = "worker"
                         },
                         new
@@ -513,8 +513,8 @@ namespace wellness.Service.Migrations
                             RefreshToken = "",
                             RoleId = 3,
                             Status = true,
-                            TokenCreated = new DateTime(2024, 2, 16, 20, 59, 48, 721, DateTimeKind.Utc).AddTicks(4794),
-                            TokenExpires = new DateTime(2024, 2, 16, 21, 59, 48, 721, DateTimeKind.Utc).AddTicks(4795),
+                            TokenCreated = new DateTime(2024, 2, 16, 20, 28, 1, 161, DateTimeKind.Utc).AddTicks(4095),
+                            TokenExpires = new DateTime(2024, 2, 16, 21, 28, 1, 161, DateTimeKind.Utc).AddTicks(4095),
                             UserName = "worker"
                         });
                 });

@@ -32,8 +32,9 @@ namespace wellness.Service.Services
             var paymentMethod = GetPropertyValue<string>(transaction, "PaymentMethod");
             var timeStamp = GetPropertyValue<DateTime>(transaction, "Timestamp");
             var membershipTypeId = GetPropertyValue<int>(transaction, "MemberShipTypeId");
+            var userId = GetPropertyValue<int>(transaction, "UserId");
 
-           
+
             decimal amount;
             if (amountObject is int intAmount)
             {
@@ -55,6 +56,7 @@ namespace wellness.Service.Services
                 PaymentMethod = paymentMethod,
                 Timestamp = timeStamp,
                 MemberShipTypeId = membershipTypeId,
+                UserId= userId
             };
 
             if (transactionToInsert == null)

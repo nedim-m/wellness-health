@@ -87,7 +87,8 @@ namespace wellness.Service.Services
 
             CreateMap<ReportPostRequest, Database.Report>();
             CreateMap<Database.Report, Report>().ForMember(dest => dest.MemberShipTypeName, opt => opt.MapFrom(src => src.MemberShipType.Name));
-                                                     
+            
+
         }
     }
 }

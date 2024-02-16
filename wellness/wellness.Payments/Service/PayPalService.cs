@@ -173,6 +173,7 @@ public class PayPalService : IPayPalService
             Currency = "EUR",
             Timestamp = DateTime.Now,
             MemberShipTypeId = membershipTypeId,
+            UserId=userId,
         };
 
         try

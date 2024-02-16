@@ -15,5 +15,6 @@ namespace wellness.Model.Transaction
         public DateTime Timestamp { get; set; }
 
         public int MemberShipTypeId { get; set; }
+        public int UserId { get; set; }
     }
 }

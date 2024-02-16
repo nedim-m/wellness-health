@@ -37,11 +37,39 @@ class _CreateReportWidgetState extends State<CreateReportWidget> {
     setState(() {});
   }
 
+  void _showAlertDialog(bool success) {
+    String title = success ? "Uspješno" : "Greška";
+    String message = success
+        ? "Izvještaj je uspješno kreiran. Pogledajte u sekciji Izvještaj/prikaži."
+        : "Došlo je do greške prilikom kreiranja izvještaja.";
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(title),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: Text('U redu'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _saveChanges() async {
     try {
       await _reportProvider.add(
           selectedDateDo, selectedDateOd, selectedTipClanarine!);
-    } catch (e) {}
+      _showAlertDialog(true);
+    } catch (e) {
+      _showAlertDialog(false);
+    }
   }
 
   @override

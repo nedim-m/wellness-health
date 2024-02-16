@@ -18,5 +18,9 @@ namespace wellness.Service.Database
 
         public virtual MembershipType MemberShipType { get; set; } = null!;
 
+        public int UserId { get; set; }
+
+        public virtual User User { get; set; } = null!;
+
     }
 }

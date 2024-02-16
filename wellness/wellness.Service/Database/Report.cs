@@ -13,7 +13,7 @@ namespace wellness.Service.Database
         public DateTime DateFrom { get; set; }
 
         public decimal EarnedMoney { get; set; }
-
+        public int TotalUsers { get; set; }
         public int MemberShipTypeId { get; set; }
 
         public virtual MembershipType MemberShipType { get; set; } = null!;

@@ -25,6 +25,7 @@ class ReportProvider extends BaseProvider<Report> {
       "dateFrom": dateFromString,
       "membershipTypeId": membershipTypeId
     });
+
     var response = await http.post(uri, headers: headers, body: jsonRequest);
 
     if (isValidResponse(response)) {

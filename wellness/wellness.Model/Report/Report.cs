@@ -14,6 +14,8 @@ namespace wellness.Model.Report
 
         public float EarnedMoney { get; set; }
 
+        public int TotalUsers { get; set; }
         public string MemberShipTypeName { get; set; } = null!;
+        public int MemberShipTypeId { get; set; }
     }
 }

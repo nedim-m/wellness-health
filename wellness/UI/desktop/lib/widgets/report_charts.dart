@@ -22,7 +22,6 @@ class _ReportChartsState extends State<ReportCharts> {
     reportReservations = {'active': 0, 'inactive': 0, 'notAnswered': 0};
     reportMemberships = {'active': 0, 'inactive': 0};
     fetchData().then((_) {
-      // Obavezno pozovite setState() nakon što se podaci preuzmu kako biste ponovo izgradili interfejs
       setState(() {});
     });
   }

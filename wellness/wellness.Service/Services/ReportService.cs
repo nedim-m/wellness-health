@@ -48,15 +48,71 @@ namespace wellness.Service.Services
             return base.BeforeInsert(entity, insert);
         }
 
+        public async Task<ReportChart> GetNumOfActiveMemeberships()
+        {
+            var countTrue = await _context.Memberships
+               .Where(x =>  x.Status == true)
+               .CountAsync();
 
+            var countFalse = await _context.Memberships
+               .Where(x => x.Status == false)
+               .CountAsync();
 
+            var result = new ReportChart
+            {
+                Active = countTrue,
+                Inactive = countFalse
+            };
 
+            return result;
+        }
 
+        public async Task<ReportChart> GetNumOfActiveUseres()
+        {
+            var roleId = 3;
 
+            var countTrue = await _context.Users
+                .Where(x => x.RoleId == roleId && x.Status == true)
+                .CountAsync();
 
+            var countFalse = await _context.Users
+                .Where(x => x.RoleId == roleId && x.Status == false)
+                .CountAsync();
 
+            var result = new ReportChart
+            {
+                Active = countTrue,
+                Inactive = countFalse
+            };
 
+            return result;
+        }
 
+        public async Task<ReportChart> GetNumOfReservations()
+        {
 
+            var countTrue = await _context.Reservations
+              .Where(x => x.Status == true)
+              .CountAsync();
+
+            var countFalse = await _context.Reservations
+               .Where(x => x.Status == false)
+               .CountAsync();
+
+            var countNull= await _context.Reservations
+               .Where(x => x.Status == null)
+               .CountAsync();
+
+            var result = new ReportChart
+            {
+                Active = countTrue,
+                Inactive = countFalse,
+                NotAnswered=countNull
+            };
+
+            return result;
+
+            
+        }
     }
 }

@@ -10,5 +10,8 @@ namespace wellness.Service.IServices
 {
     public interface IReportService:ICrudService<Report,BaseSearchObject,ReportPostRequest,ReportPostRequest>
     {
+        Task<ReportChart> GetNumOfActiveUseres();
+        Task<ReportChart> GetNumOfActiveMemeberships();
+        Task<ReportChart> GetNumOfReservations();
     }
 }

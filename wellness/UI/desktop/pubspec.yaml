@@ -44,6 +44,7 @@ dependencies:
   signalr_netcore: ^0.1.7+2-nullsafety.3
   pdf: ^3.10.7
   open_file: ^3.3.2
+  fl_chart: ^0.63.0
   
   
  

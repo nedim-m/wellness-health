@@ -7,6 +7,7 @@ import 'package:desktop/screens/user_page.dart';
 import 'package:desktop/screens/worker_page.dart';
 import 'package:desktop/utils/role_store.dart';
 import 'package:desktop/utils/token_store.dart';
+import 'package:desktop/widgets/report_charts.dart';
 import 'package:desktop/widgets/report_create.dart';
 import 'package:desktop/widgets/report_show.dart';
 import 'package:fluent_ui/fluent_ui.dart';
@@ -120,17 +121,17 @@ class _HomepageViewState extends State<HomepageView> {
         PaneItemExpander(
           title: const Text('Izvjestaj'),
           icon: const Icon(FluentIcons.report_document),
-          body: const Text("This is text"),
+          body: const ReportCharts(),
           items: [
             PaneItem(
               icon: const Icon(FluentIcons.mail),
               title: const Text('Kreiraj'),
-              body: CreateReportWidget(),
+              body: const CreateReportWidget(),
             ),
             PaneItem(
               icon: const Icon(FluentIcons.calendar),
               title: const Text('Prikaži'),
-              body: ReportShowWidget(),
+              body: const ReportShowWidget(),
             ),
           ],
         ),

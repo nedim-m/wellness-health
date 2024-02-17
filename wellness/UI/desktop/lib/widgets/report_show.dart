@@ -82,7 +82,7 @@ class _ReportShowWidgetState extends State<ReportShowWidget> {
               children: [
                 pw.Text('Datum od:',
                     style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.Text('${DateFormat('dd.MM.yyyy').format(report.dateFrom)}',
+                pw.Text(DateFormat('dd.MM.yyyy').format(report.dateFrom),
                     style: const pw.TextStyle(fontSize: 16)),
               ],
             ),
@@ -91,7 +91,7 @@ class _ReportShowWidgetState extends State<ReportShowWidget> {
               children: [
                 pw.Text('Datum do:',
                     style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
-                pw.Text('${DateFormat('dd.MM.yyyy').format(report.dateTo)}',
+                pw.Text(DateFormat('dd.MM.yyyy').format(report.dateTo),
                     style: const pw.TextStyle(fontSize: 16)),
               ],
             ),

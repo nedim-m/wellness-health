@@ -57,6 +57,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
       phone = TextEditingController(text: widget.data!.phone);
       _base64Image = widget.data!.picture;
       selectedStatus = widget.data!.status;
+      
     }
     fetchData();
 

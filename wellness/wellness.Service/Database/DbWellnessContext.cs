@@ -37,6 +37,7 @@ public partial class DbWellnessContext : DbContext
     public virtual DbSet<Transaction>Transactions  { get; set; }
 
     public virtual DbSet<Report>Reports { get; set; }
+    public virtual DbSet<Shift> Shifts { get; set; }
 
 
 

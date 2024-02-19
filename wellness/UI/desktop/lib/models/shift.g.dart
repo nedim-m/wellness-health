@@ -1,19 +1,19 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'role.dart';
+part of 'shift.dart';
 
 // **************************************************************************
 // JsonSerializableGenerator
 // **************************************************************************
 
-Role _$RoleFromJson(Map<String, dynamic> json) => Role(
+Shift _$ShiftFromJson(Map<String, dynamic> json) => Shift(
       json['id'] as int,
       json['name'] as String,
-      json['description'] as String,
+      json['workingHours'] as String,
     );
 
-Map<String, dynamic> _$RoleToJson(Role instance) => <String, dynamic>{
+Map<String, dynamic> _$ShiftToJson(Shift instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
-      'description': instance.description,
+      'workingHours': instance.workingHours,
     };

@@ -124,6 +124,7 @@ namespace wellness.Service.Services
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
             user.RoleId = 3;
+            user.ShiftId=1;
 
        
             _context.Users.Add(user);

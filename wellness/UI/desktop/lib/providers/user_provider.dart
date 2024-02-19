@@ -84,7 +84,8 @@ class UserProvider extends BaseProvider<User> {
       String password,
       int roleId,
       String picture,
-      bool status) async {
+      bool status,
+      int shiftId) async {
     var url = "$baseUrl$endpoint";
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token!);
@@ -99,7 +100,8 @@ class UserProvider extends BaseProvider<User> {
       "picture": picture,
       "roleId": roleId,
       "phone": phone,
-      "status": status
+      "status": status,
+      "shiftId": shiftId
     });
 
     var response = await http.post(uri, headers: headers, body: jsonRequest);
@@ -122,7 +124,8 @@ class UserProvider extends BaseProvider<User> {
       String password,
       int roleId,
       String picture,
-      bool status) async {
+      bool status,
+      int shiftId) async {
     var url = "$baseUrl$endpoint/$id";
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token!);
@@ -137,7 +140,8 @@ class UserProvider extends BaseProvider<User> {
       "picture": picture,
       "roleId": roleId,
       "phone": phone,
-      "status": status
+      "status": status,
+      "shiftId": shiftId
     });
 
     var response = await http.put(uri, headers: headers, body: jsonRequest);

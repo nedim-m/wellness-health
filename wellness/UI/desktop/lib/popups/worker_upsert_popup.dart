@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:desktop/models/shift.dart';
+import 'package:desktop/providers/shift_provider.dart';
 import 'package:desktop/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,6 +32,7 @@ class WorkerEditPopUpWidget extends StatefulWidget {
 
 class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
   final RoleProvider roleProvider = RoleProvider();
+  final ShiftProvider shiftProvider = ShiftProvider();
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
   TextEditingController email = TextEditingController();
@@ -38,8 +41,12 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
   SearchResult<Role> myData = SearchResult<Role>();
+  SearchResult<Shift> myDataShift = SearchResult<Shift>();
   Role? selectedRole;
   List<Role> allRoles = [];
+
+  Shift? selectedShift;
+  List<Shift> allShifts = [];
   File? selectedPhoto;
   final _formKey = GlobalKey<FormState>();
   final _validation = ValidationRules();
@@ -57,7 +64,6 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
       phone = TextEditingController(text: widget.data!.phone);
       _base64Image = widget.data!.picture;
       selectedStatus = widget.data!.status;
-      
     }
     fetchData();
 
@@ -66,8 +72,10 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
 
   Future<void> fetchData() async {
     myData = await roleProvider.get();
+    myDataShift = await shiftProvider.get();
     setState(() {
       allRoles = myData.result;
+      allShifts = myDataShift.result;
     });
   }
 
@@ -132,18 +140,21 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
           selectedRole!.id,
           _base64Image ?? widget.data!.picture,
           selectedStatus!,
+          selectedShift!.id,
         );
       } else {
         await provider.addWorker(
-            firstName.text,
-            lastName.text,
-            email.text,
-            userName.text,
-            phone.text,
-            password.text,
-            selectedRole!.id,
-            _base64Image ?? "N/A",
-            selectedStatus!);
+          firstName.text,
+          lastName.text,
+          email.text,
+          userName.text,
+          phone.text,
+          password.text,
+          selectedRole!.id,
+          _base64Image ?? "N/A",
+          selectedStatus!,
+          selectedShift!.id,
+        );
       }
 
       widget.refreshCallback();
@@ -265,7 +276,23 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
                     child: Text(role.name),
                   );
                 }).toList(),
-                hint: const Text("Izaberite ulogu"),
+                hint: const Text("Izaberite poziciju"),
+                validator: _validation.validateDropdown,
+              ),
+              DropdownButtonFormField<Shift>(
+                value: selectedShift,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedShift = newValue!;
+                  });
+                },
+                items: allShifts.map<DropdownMenuItem<Shift>>((Shift shift) {
+                  return DropdownMenuItem<Shift>(
+                    value: shift,
+                    child: Text(shift.name),
+                  );
+                }).toList(),
+                hint: const Text("Izaberite smjenu"),
                 validator: _validation.validateDropdown,
               ),
               DropdownButtonFormField<bool>(

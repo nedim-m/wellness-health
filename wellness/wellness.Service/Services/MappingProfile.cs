@@ -13,7 +13,8 @@ using wellness.Model.Record;
 using wellness.Model.Report;
 using wellness.Model.Reservation;
 using wellness.Model.Role;
-using wellness.Model.RoleUpsertRequest;
+
+using wellness.Model.Shift;
 using wellness.Model.Transaction;
 using wellness.Model.Treatment;
 using wellness.Model.TreatmentType;
@@ -32,7 +33,7 @@ namespace wellness.Service.Services
             CreateMap<UserPostRequest, Database.User>();
 
             CreateMap<Database.User, User>().ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.Name))
-                                            .ForMember(dest => dest.ShiftTime, opt => opt.MapFrom(src => src.Role.ShiftTime));
+                                            .ForMember(dest => dest.ShiftTime, opt => opt.MapFrom(src => src.Shift.WorkingHours));
             CreateMap<CategoryPostRequest, Database.Category>();
             CreateMap<Database.Category, Category>();
 
@@ -58,8 +59,9 @@ namespace wellness.Service.Services
                                                 .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.User.Phone))
                                                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
 
-            CreateMap<RoleUpsertRequest, Database.Role>();
+           
             CreateMap<Database.Role, Role>();
+            CreateMap<Database.Shift, Shift>();
 
 
             CreateMap<ReservationPostRequest, Database.Reservation>();

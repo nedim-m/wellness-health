@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace wellness.Service.Migrations
 {
     /// <inheritdoc />
-    public partial class testDbContextseed : Migration
+    public partial class TestnewDatabase : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -20,8 +20,7 @@ namespace wellness.Service.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -36,7 +35,8 @@ namespace wellness.Service.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<float>(type: "real", nullable: false)
+                    Price = table.Column<float>(type: "real", nullable: false),
+                    Duration = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -50,13 +50,25 @@ namespace wellness.Service.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    ShiftTime = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    ModifiedDate = table.Column<DateTime>(type: "datetime2", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Roles", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Shifts",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    WorkingHours = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Shifts", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -66,12 +78,35 @@ namespace wellness.Service.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    Price = table.Column<float>(type: "real", nullable: false)
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TreatmentTypes", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Reports",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DateTo = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DateFrom = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EarnedMoney = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    TotalUsers = table.Column<int>(type: "int", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    MemberShipTypeId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Reports", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Reports_MembershipTypes_MemberShipTypeId",
+                        column: x => x.MemberShipTypeId,
+                        principalTable: "MembershipTypes",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -93,7 +128,8 @@ namespace wellness.Service.Migrations
                     Status = table.Column<bool>(type: "bit", nullable: false),
                     Prisutan = table.Column<bool>(type: "bit", nullable: true),
                     Picture = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
-                    RoleId = table.Column<int>(type: "int", nullable: false)
+                    RoleId = table.Column<int>(type: "int", nullable: false),
+                    ShiftId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -104,6 +140,12 @@ namespace wellness.Service.Migrations
                         principalTable: "Roles",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Users_Shifts_ShiftId",
+                        column: x => x.ShiftId,
+                        principalTable: "Shifts",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -112,6 +154,7 @@ namespace wellness.Service.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     TreatmentTypeId = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
@@ -142,8 +185,8 @@ namespace wellness.Service.Migrations
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    ExpirationDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ExpirationDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartDate = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Status = table.Column<bool>(type: "bit", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     MemberShipTypeId = table.Column<int>(type: "int", nullable: false)
@@ -187,27 +230,29 @@ namespace wellness.Service.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Ratings",
+                name: "Transactions",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Description = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    StarRating = table.Column<int>(type: "int", nullable: false),
-                    TreatmentId = table.Column<int>(type: "int", nullable: false),
+                    PaymentMethod = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Currency = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    MemberShipTypeId = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Ratings", x => x.Id);
+                    table.PrimaryKey("PK_Transactions", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Ratings_Treatments_TreatmentId",
-                        column: x => x.TreatmentId,
-                        principalTable: "Treatments",
+                        name: "FK_Transactions_MembershipTypes_MemberShipTypeId",
+                        column: x => x.MemberShipTypeId,
+                        principalTable: "MembershipTypes",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Ratings_Users_UserId",
+                        name: "FK_Transactions_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id",
@@ -221,9 +266,9 @@ namespace wellness.Service.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<int>(type: "int", nullable: false),
-                    DateOf = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DateTo = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<bool>(type: "bit", nullable: false),
+                    Date = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Time = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Status = table.Column<bool>(type: "bit", nullable: true),
                     TreatmentId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -243,29 +288,55 @@ namespace wellness.Service.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "Ratings",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    StarRating = table.Column<int>(type: "int", nullable: false),
+                    ReservationId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ratings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Ratings_Reservations_ReservationId",
+                        column: x => x.ReservationId,
+                        principalTable: "Reservations",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "Roles",
-                columns: new[] { "Id", "Description", "ModifiedDate", "Name", "ShiftTime" },
+                columns: new[] { "Id", "Description", "Name" },
                 values: new object[,]
                 {
-                    { 1, "Administracija", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Administrator", null },
-                    { 2, "Evidencija prisutnih, rezervacija i tretmana", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Worker-first-shift", "od 08:00 do 16:00" },
-                    { 3, "Korisnik", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Member", null },
-                    { 4, "Evidencija prisutnih, rezervacija i tretmana", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Worker-second-shift", "od 16:00 do 23:00" },
-                    { 5, "Fitnes trener", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Trainer-first-shift", "od 08:00 do 16:00" },
-                    { 6, "Fitnes trener", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Trainer-second-shift", "od 16:00 do 23:00" },
-                    { 7, "Fizijatar", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Physiotherapist-first-shift", "od 08:00 do 16:00" },
-                    { 8, "Fizijatar", new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Physiotherapist-second-shift", "od 16:00 do 23:00" }
+                    { 1, "Administracija", "Administrator" },
+                    { 2, "Evidencija prisutnih, rezervacija i tretmana", "Employee" },
+                    { 3, "Korisnik", "Member" }
+                });
+
+            migrationBuilder.InsertData(
+                table: "Shifts",
+                columns: new[] { "Id", "Name", "WorkingHours" },
+                values: new object[,]
+                {
+                    { 1, "Admin/Member", " " },
+                    { 2, "Prva smjena", "08:00 - 14:00" },
+                    { 3, "Druga smjena", "14:00 - 20:00" }
                 });
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Id", "Email", "FirstName", "LastName", "PasswordHash", "PasswordSalt", "Phone", "Picture", "Prisutan", "RefreshToken", "RoleId", "Status", "TokenCreated", "TokenExpires", "UserName" },
+                columns: new[] { "Id", "Email", "FirstName", "LastName", "PasswordHash", "PasswordSalt", "Phone", "Picture", "Prisutan", "RefreshToken", "RoleId", "ShiftId", "Status", "TokenCreated", "TokenExpires", "UserName" },
                 values: new object[,]
                 {
-                    { 1, "admin@admin.com", "Admin", "Admin", new byte[] { 121, 196, 229, 226, 156, 226, 132, 65, 207, 254, 90, 152, 15, 48, 147, 10, 89, 188, 65, 118, 220, 95, 122, 84, 106, 251, 167, 20, 10, 222, 210, 1, 240, 243, 68, 22, 243, 36, 222, 42, 114, 207, 117, 174, 34, 135, 67, 30, 40, 144, 21, 250, 33, 24, 220, 142, 39, 23, 128, 238, 188, 139, 4, 78 }, new byte[] { 75, 42, 158, 170, 242, 143, 49, 217, 11, 31, 60, 110, 3, 162, 244, 15, 64, 94, 80, 27, 194, 224, 95, 84, 48, 137, 97, 152, 191, 77, 4, 64, 228, 187, 93, 203, 209, 195, 10, 79, 104, 102, 93, 239, 221, 198, 205, 163, 233, 41, 66, 94, 12, 94, 221, 83, 37, 109, 174, 4, 57, 130, 84, 173, 232, 26, 71, 252, 179, 190, 224, 34, 89, 148, 191, 140, 142, 144, 249, 67, 210, 95, 74, 103, 212, 227, 49, 150, 210, 201, 150, 249, 28, 214, 117, 144, 115, 247, 175, 249, 6, 143, 5, 220, 125, 177, 84, 227, 243, 230, 189, 223, 14, 6, 213, 241, 83, 211, 21, 122, 147, 225, 62, 239, 53, 224, 105, 160 }, "061111222", null, null, "", 1, true, new DateTime(2023, 10, 31, 7, 55, 42, 537, DateTimeKind.Utc).AddTicks(2589), new DateTime(2023, 10, 31, 8, 55, 42, 537, DateTimeKind.Utc).AddTicks(2593), "admin" },
-                    { 2, "worker@admin.com", "Worker", "Worker", new byte[] { 121, 196, 229, 226, 156, 226, 132, 65, 207, 254, 90, 152, 15, 48, 147, 10, 89, 188, 65, 118, 220, 95, 122, 84, 106, 251, 167, 20, 10, 222, 210, 1, 240, 243, 68, 22, 243, 36, 222, 42, 114, 207, 117, 174, 34, 135, 67, 30, 40, 144, 21, 250, 33, 24, 220, 142, 39, 23, 128, 238, 188, 139, 4, 78 }, new byte[] { 75, 42, 158, 170, 242, 143, 49, 217, 11, 31, 60, 110, 3, 162, 244, 15, 64, 94, 80, 27, 194, 224, 95, 84, 48, 137, 97, 152, 191, 77, 4, 64, 228, 187, 93, 203, 209, 195, 10, 79, 104, 102, 93, 239, 221, 198, 205, 163, 233, 41, 66, 94, 12, 94, 221, 83, 37, 109, 174, 4, 57, 130, 84, 173, 232, 26, 71, 252, 179, 190, 224, 34, 89, 148, 191, 140, 142, 144, 249, 67, 210, 95, 74, 103, 212, 227, 49, 150, 210, 201, 150, 249, 28, 214, 117, 144, 115, 247, 175, 249, 6, 143, 5, 220, 125, 177, 84, 227, 243, 230, 189, 223, 14, 6, 213, 241, 83, 211, 21, 122, 147, 225, 62, 239, 53, 224, 105, 160 }, "061112333", null, null, "", 2, true, new DateTime(2023, 10, 31, 7, 55, 42, 537, DateTimeKind.Utc).AddTicks(2772), new DateTime(2023, 10, 31, 8, 55, 42, 537, DateTimeKind.Utc).AddTicks(2773), "worker" },
-                    { 3, "member@admin.com", "Member", "Member", new byte[] { 121, 196, 229, 226, 156, 226, 132, 65, 207, 254, 90, 152, 15, 48, 147, 10, 89, 188, 65, 118, 220, 95, 122, 84, 106, 251, 167, 20, 10, 222, 210, 1, 240, 243, 68, 22, 243, 36, 222, 42, 114, 207, 117, 174, 34, 135, 67, 30, 40, 144, 21, 250, 33, 24, 220, 142, 39, 23, 128, 238, 188, 139, 4, 78 }, new byte[] { 75, 42, 158, 170, 242, 143, 49, 217, 11, 31, 60, 110, 3, 162, 244, 15, 64, 94, 80, 27, 194, 224, 95, 84, 48, 137, 97, 152, 191, 77, 4, 64, 228, 187, 93, 203, 209, 195, 10, 79, 104, 102, 93, 239, 221, 198, 205, 163, 233, 41, 66, 94, 12, 94, 221, 83, 37, 109, 174, 4, 57, 130, 84, 173, 232, 26, 71, 252, 179, 190, 224, 34, 89, 148, 191, 140, 142, 144, 249, 67, 210, 95, 74, 103, 212, 227, 49, 150, 210, 201, 150, 249, 28, 214, 117, 144, 115, 247, 175, 249, 6, 143, 5, 220, 125, 177, 84, 227, 243, 230, 189, 223, 14, 6, 213, 241, 83, 211, 21, 122, 147, 225, 62, 239, 53, 224, 105, 160 }, "061110121", null, null, "", 3, true, new DateTime(2023, 10, 31, 7, 55, 42, 537, DateTimeKind.Utc).AddTicks(2937), new DateTime(2023, 10, 31, 8, 55, 42, 537, DateTimeKind.Utc).AddTicks(2938), "worker" }
+                    { 1, "admin@admin.com", "Admin", "Admin", new byte[] { 121, 196, 229, 226, 156, 226, 132, 65, 207, 254, 90, 152, 15, 48, 147, 10, 89, 188, 65, 118, 220, 95, 122, 84, 106, 251, 167, 20, 10, 222, 210, 1, 240, 243, 68, 22, 243, 36, 222, 42, 114, 207, 117, 174, 34, 135, 67, 30, 40, 144, 21, 250, 33, 24, 220, 142, 39, 23, 128, 238, 188, 139, 4, 78 }, new byte[] { 75, 42, 158, 170, 242, 143, 49, 217, 11, 31, 60, 110, 3, 162, 244, 15, 64, 94, 80, 27, 194, 224, 95, 84, 48, 137, 97, 152, 191, 77, 4, 64, 228, 187, 93, 203, 209, 195, 10, 79, 104, 102, 93, 239, 221, 198, 205, 163, 233, 41, 66, 94, 12, 94, 221, 83, 37, 109, 174, 4, 57, 130, 84, 173, 232, 26, 71, 252, 179, 190, 224, 34, 89, 148, 191, 140, 142, 144, 249, 67, 210, 95, 74, 103, 212, 227, 49, 150, 210, 201, 150, 249, 28, 214, 117, 144, 115, 247, 175, 249, 6, 143, 5, 220, 125, 177, 84, 227, 243, 230, 189, 223, 14, 6, 213, 241, 83, 211, 21, 122, 147, 225, 62, 239, 53, 224, 105, 160 }, "061111222", null, null, "", 1, 1, true, new DateTime(2024, 2, 19, 20, 29, 41, 854, DateTimeKind.Utc).AddTicks(7296), new DateTime(2024, 2, 19, 21, 29, 41, 854, DateTimeKind.Utc).AddTicks(7298), "admin" },
+                    { 2, "employee@admin.com", "Employee", "Employee", new byte[] { 121, 196, 229, 226, 156, 226, 132, 65, 207, 254, 90, 152, 15, 48, 147, 10, 89, 188, 65, 118, 220, 95, 122, 84, 106, 251, 167, 20, 10, 222, 210, 1, 240, 243, 68, 22, 243, 36, 222, 42, 114, 207, 117, 174, 34, 135, 67, 30, 40, 144, 21, 250, 33, 24, 220, 142, 39, 23, 128, 238, 188, 139, 4, 78 }, new byte[] { 75, 42, 158, 170, 242, 143, 49, 217, 11, 31, 60, 110, 3, 162, 244, 15, 64, 94, 80, 27, 194, 224, 95, 84, 48, 137, 97, 152, 191, 77, 4, 64, 228, 187, 93, 203, 209, 195, 10, 79, 104, 102, 93, 239, 221, 198, 205, 163, 233, 41, 66, 94, 12, 94, 221, 83, 37, 109, 174, 4, 57, 130, 84, 173, 232, 26, 71, 252, 179, 190, 224, 34, 89, 148, 191, 140, 142, 144, 249, 67, 210, 95, 74, 103, 212, 227, 49, 150, 210, 201, 150, 249, 28, 214, 117, 144, 115, 247, 175, 249, 6, 143, 5, 220, 125, 177, 84, 227, 243, 230, 189, 223, 14, 6, 213, 241, 83, 211, 21, 122, 147, 225, 62, 239, 53, 224, 105, 160 }, "061112333", null, null, "", 2, 2, true, new DateTime(2024, 2, 19, 20, 29, 41, 854, DateTimeKind.Utc).AddTicks(7608), new DateTime(2024, 2, 19, 21, 29, 41, 854, DateTimeKind.Utc).AddTicks(7608), "employee" },
+                    { 3, "member@admin.com", "Member", "Member", new byte[] { 121, 196, 229, 226, 156, 226, 132, 65, 207, 254, 90, 152, 15, 48, 147, 10, 89, 188, 65, 118, 220, 95, 122, 84, 106, 251, 167, 20, 10, 222, 210, 1, 240, 243, 68, 22, 243, 36, 222, 42, 114, 207, 117, 174, 34, 135, 67, 30, 40, 144, 21, 250, 33, 24, 220, 142, 39, 23, 128, 238, 188, 139, 4, 78 }, new byte[] { 75, 42, 158, 170, 242, 143, 49, 217, 11, 31, 60, 110, 3, 162, 244, 15, 64, 94, 80, 27, 194, 224, 95, 84, 48, 137, 97, 152, 191, 77, 4, 64, 228, 187, 93, 203, 209, 195, 10, 79, 104, 102, 93, 239, 221, 198, 205, 163, 233, 41, 66, 94, 12, 94, 221, 83, 37, 109, 174, 4, 57, 130, 84, 173, 232, 26, 71, 252, 179, 190, 224, 34, 89, 148, 191, 140, 142, 144, 249, 67, 210, 95, 74, 103, 212, 227, 49, 150, 210, 201, 150, 249, 28, 214, 117, 144, 115, 247, 175, 249, 6, 143, 5, 220, 125, 177, 84, 227, 243, 230, 189, 223, 14, 6, 213, 241, 83, 211, 21, 122, 147, 225, 62, 239, 53, 224, 105, 160 }, "061110121", null, null, "", 3, 1, true, new DateTime(2024, 2, 19, 20, 29, 41, 854, DateTimeKind.Utc).AddTicks(7783), new DateTime(2024, 2, 19, 21, 29, 41, 854, DateTimeKind.Utc).AddTicks(7783), "member" },
+                    { 4, "member@admin.com", "Korisnik", "Korisnik", new byte[] { 121, 196, 229, 226, 156, 226, 132, 65, 207, 254, 90, 152, 15, 48, 147, 10, 89, 188, 65, 118, 220, 95, 122, 84, 106, 251, 167, 20, 10, 222, 210, 1, 240, 243, 68, 22, 243, 36, 222, 42, 114, 207, 117, 174, 34, 135, 67, 30, 40, 144, 21, 250, 33, 24, 220, 142, 39, 23, 128, 238, 188, 139, 4, 78 }, new byte[] { 75, 42, 158, 170, 242, 143, 49, 217, 11, 31, 60, 110, 3, 162, 244, 15, 64, 94, 80, 27, 194, 224, 95, 84, 48, 137, 97, 152, 191, 77, 4, 64, 228, 187, 93, 203, 209, 195, 10, 79, 104, 102, 93, 239, 221, 198, 205, 163, 233, 41, 66, 94, 12, 94, 221, 83, 37, 109, 174, 4, 57, 130, 84, 173, 232, 26, 71, 252, 179, 190, 224, 34, 89, 148, 191, 140, 142, 144, 249, 67, 210, 95, 74, 103, 212, 227, 49, 150, 210, 201, 150, 249, 28, 214, 117, 144, 115, 247, 175, 249, 6, 143, 5, 220, 125, 177, 84, 227, 243, 230, 189, 223, 14, 6, 213, 241, 83, 211, 21, 122, 147, 225, 62, 239, 53, 224, 105, 160 }, "061110123", null, null, "", 3, 1, true, new DateTime(2024, 2, 19, 20, 29, 41, 854, DateTimeKind.Utc).AddTicks(8083), new DateTime(2024, 2, 19, 21, 29, 41, 854, DateTimeKind.Utc).AddTicks(8083), "korisnik" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -279,19 +350,19 @@ namespace wellness.Service.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Ratings_TreatmentId",
+                name: "IX_Ratings_ReservationId",
                 table: "Ratings",
-                column: "TreatmentId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Ratings_UserId",
-                table: "Ratings",
-                column: "UserId");
+                column: "ReservationId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Records_UserId",
                 table: "Records",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Reports_MemberShipTypeId",
+                table: "Reports",
+                column: "MemberShipTypeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_TreatmentId",
@@ -301,6 +372,16 @@ namespace wellness.Service.Migrations
             migrationBuilder.CreateIndex(
                 name: "IX_Reservations_UserId",
                 table: "Reservations",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_MemberShipTypeId",
+                table: "Transactions",
+                column: "MemberShipTypeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transactions_UserId",
+                table: "Transactions",
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
@@ -317,6 +398,11 @@ namespace wellness.Service.Migrations
                 name: "IX_Users_RoleId",
                 table: "Users",
                 column: "RoleId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Users_ShiftId",
+                table: "Users",
+                column: "ShiftId");
         }
 
         /// <inheritdoc />
@@ -330,6 +416,12 @@ namespace wellness.Service.Migrations
 
             migrationBuilder.DropTable(
                 name: "Records");
+
+            migrationBuilder.DropTable(
+                name: "Reports");
+
+            migrationBuilder.DropTable(
+                name: "Transactions");
 
             migrationBuilder.DropTable(
                 name: "Reservations");
@@ -351,6 +443,9 @@ namespace wellness.Service.Migrations
 
             migrationBuilder.DropTable(
                 name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "Shifts");
         }
     }
 }

@@ -69,6 +69,7 @@ builder.Services.AddTransient<IRecommendationService, RecommendationService>();
 builder.Services.AddTransient<IReportService, ReportService>();
 builder.Services.AddTransient<RabbitMQService>();
 builder.Services.AddTransient<MailService>();
+builder.Services.AddTransient<IShiftService, ShiftService>();
 
 
 

@@ -6,13 +6,13 @@ using System.Text;
 using System.Threading.Tasks;
 using wellness.Model;
 using wellness.Model.Role;
-using wellness.Model.RoleUpsertRequest;
+
 using wellness.Service.IServices;
-using wellness.Service.Migrations;
+
 
 namespace wellness.Service.Services
 {
-    public class RoleService : CrudService<Role, Database.Role, BaseSearchObject, RoleUpsertRequest, RoleUpsertRequest>, IRoleService
+    public class RoleService : Service<Role,Database.Role,BaseSearchObject>,IRoleService
     {
         public RoleService(IMapper mapper, Database.DbWellnessContext context) : base(mapper, context)
         {

@@ -208,6 +208,14 @@ class RowSource extends DataTableSource {
   int get selectedRowCount => 0;
 }
 
+Widget _buildStatusIcon(bool status) {
+  if (status) {
+    return const Icon(Icons.check, color: Colors.green);
+  } else {
+    return const Icon(Icons.close, color: Colors.red);
+  }
+}
+
 DataRow recentFileDataRow(
     BuildContext context, var data, Function() refreshCallback) {
   return DataRow(
@@ -215,11 +223,7 @@ DataRow recentFileDataRow(
       DataCell(Text(data.firstName)),
       DataCell(Text(data.lastName)),
       DataCell(Text(data.shiftTime)),
-      DataCell(
-        Text(
-          data.status ? "DA" : "NE",
-        ),
-      ),
+      DataCell(_buildStatusIcon(data.status)),
       DataCell(
         Row(
           children: [
@@ -237,7 +241,7 @@ DataRow recentFileDataRow(
                     },
                   );
                 },
-                child: const Text("Edit"),
+                child: const Text("Ažuriraj"),
               ),
             ),
           ],

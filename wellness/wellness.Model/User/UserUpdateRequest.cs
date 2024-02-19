@@ -19,7 +19,8 @@ namespace wellness.Models.User
         public string UserName { get; set; } = null!;
      
         public string Password { get; set; } = null!;
-   
+        public bool Status { get; set; }
+
         public string ConfrimPassword { get; set; } = null!;
         public string? Phone { get; set; }
     }

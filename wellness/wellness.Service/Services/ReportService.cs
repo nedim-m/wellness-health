@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -28,7 +29,7 @@ namespace wellness.Service.Services
         }
 
 
-        public override Task BeforeInsert(Database.Report entity, ReportPostRequest insert)
+        public override  Task BeforeInsert(Database.Report entity, ReportPostRequest insert)
         {
             var fromDate = DateTime.Parse(insert.DateFrom).Date;
             var toDate = DateTime.Parse(insert.DateTo).Date;
@@ -43,7 +44,8 @@ namespace wellness.Service.Services
             var totalUser = uniqueUserIds.Count();
 
             entity.EarnedMoney = totalAmount;
-            entity.TotalUsers = totalUser; 
+            entity.TotalUsers = totalUser;
+            entity.Timestamp=DateTime.Now;
 
             return base.BeforeInsert(entity, insert);
         }

@@ -54,7 +54,7 @@ class _CreateReportWidgetState extends State<CreateReportWidget> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('U redu'),
+              child: const Text('U redu'),
             ),
           ],
         );

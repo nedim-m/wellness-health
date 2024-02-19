@@ -13,6 +13,7 @@ namespace wellness.Model.Report
         public DateTime DateFrom { get; set; }
 
         public float EarnedMoney { get; set; }
+        public DateTime Timestamp { get; set; }
 
         public int TotalUsers { get; set; }
         public string MemberShipTypeName { get; set; } = null!;

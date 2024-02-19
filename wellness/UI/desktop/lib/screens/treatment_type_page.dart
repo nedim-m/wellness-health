@@ -125,7 +125,6 @@ class _TreatmentTypePageViewState extends State<TreatmentTypePageView> {
                       ),
                     ),
                   ),
-                 
                   DataColumn(
                     label: Text(
                       "Akcija",
@@ -207,7 +206,19 @@ DataRow recentFileDataRow(BuildContext context, var data,
   return DataRow(
     cells: [
       DataCell(Text(data.name)),
-      DataCell(Text(data.description)),
+      DataCell(
+        SizedBox(
+          width: 150,
+          child: Tooltip(
+            message: data.description,
+            child: Text(
+              data.description,
+              overflow: TextOverflow.ellipsis,
+              maxLines: 1,
+            ),
+          ),
+        ),
+      ),
       DataCell(
         Row(
           children: [
@@ -225,7 +236,7 @@ DataRow recentFileDataRow(BuildContext context, var data,
                     },
                   );
                 },
-                child: const Text("Edit"),
+                child: const Text("Ažuriraj"),
               ),
             ),
             const SizedBox(width: 8),
@@ -240,13 +251,14 @@ DataRow recentFileDataRow(BuildContext context, var data,
                       builder: (context) {
                         return AlertDialog(
                           title: const Text(
-                            'Deletion Error',
+                            'Greška prilikom brisanja',
                             style: TextStyle(color: Colors.red),
                           ),
-                          content: const Text('You cannot delete this item.'),
+                          content: const Text(
+                              'Ne možete obrisati ovu vrstu usluge!'),
                           actions: <Widget>[
                             TextButton(
-                              child: const Text('OK'),
+                              child: const Text('Uredu'),
                               onPressed: () {
                                 Navigator.of(context).pop();
                               },
@@ -257,7 +269,7 @@ DataRow recentFileDataRow(BuildContext context, var data,
                     );
                   }
                 },
-                child: const Text("Delete"),
+                child: const Text("Obriši"),
               ),
             ),
           ],

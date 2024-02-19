@@ -71,6 +71,16 @@ class _ReportShowWidgetState extends State<ReportShowWidget> {
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
+                pw.Text('Datum kreiranja:',
+                    style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
+                pw.Text(
+                    DateFormat('dd.MM.yyyy - HH:mm').format(report.timestamp),
+                    style: const pw.TextStyle(fontSize: 16)),
+              ],
+            ),
+            pw.Row(
+              mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
+              children: [
                 pw.Text('Tip clanarine:',
                     style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                 pw.Text('${report.memberShipTypeName}',
@@ -207,6 +217,15 @@ class _ReportShowWidgetState extends State<ReportShowWidget> {
                   ),
                   DataColumn(
                     label: Text(
+                      "Datum kreiranja izvještaja",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
                       "Datum od",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
@@ -305,9 +324,12 @@ class RowSource extends DataTableSource {
 DataRow recentFileDataRow(BuildContext context, Report data,
     Function() refreshCallback, Function(Report) generatePDF) {
   final dateFormat = DateFormat('dd.MM.yyyy');
+  final dateFormatwithTime = DateFormat("dd.MM.yyyy - HH:mm");
+
   return DataRow(
     cells: [
       DataCell(Text(data.memberShipTypeName!)),
+      DataCell(Text(dateFormatwithTime.format(data.timestamp))),
       DataCell(Text(dateFormat.format(data.dateFrom))),
       DataCell(Text(dateFormat.format(data.dateTo))),
       DataCell(Text(data.totalUsers.toString())),

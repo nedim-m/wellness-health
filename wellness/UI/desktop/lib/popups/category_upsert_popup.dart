@@ -24,7 +24,7 @@ class CategoryEditPopUpWidget extends StatefulWidget {
 class _CategoryEditPopUpWidgetState extends State<CategoryEditPopUpWidget> {
   TextEditingController name = TextEditingController();
   TextEditingController description = TextEditingController();
-  bool selectedStatus = false;
+
   final _formKey = GlobalKey<FormState>();
   final _validation = ValidationRules();
 
@@ -33,7 +33,6 @@ class _CategoryEditPopUpWidgetState extends State<CategoryEditPopUpWidget> {
     if (widget.edit == true && widget.data != null) {
       name = TextEditingController(text: widget.data!.name);
       description = TextEditingController(text: widget.data!.description);
-      selectedStatus = widget.data!.status;
     }
     super.initState();
   }
@@ -56,12 +55,11 @@ class _CategoryEditPopUpWidgetState extends State<CategoryEditPopUpWidget> {
             widget.data!.id,
             name.text,
             description.text,
-            selectedStatus,
           ),
         );
       } else {
         await provider.insert(
-          Category(0, name.text, description.text, selectedStatus),
+          Category(0, name.text, description.text),
         );
       }
       widget.refreshCallback();
@@ -73,7 +71,9 @@ class _CategoryEditPopUpWidgetState extends State<CategoryEditPopUpWidget> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: widget.edit ? const Text("Edit Item") : const Text("Add Item"),
+      title: widget.edit
+          ? const Text("Ažuriraj kategoriju")
+          : const Text("Dodaj kategoriju"),
       content: Form(
         key: _formKey,
         child: Column(
@@ -82,33 +82,15 @@ class _CategoryEditPopUpWidgetState extends State<CategoryEditPopUpWidget> {
             TextFormField(
               controller: name,
               decoration: const InputDecoration(labelText: "Naziv"),
-              validator: (value) =>
-                  _validation.validateTextInput(value, 'Please enter Name.'),
+              validator: (value) => _validation.validateTextInput(
+                  value, 'Molim Vas unesite naziv.'),
             ),
             TextFormField(
+              maxLines: 5,
               controller: description,
               decoration: const InputDecoration(labelText: "Opis"),
               validator: (value) => _validation.validateTextInput(
-                  value, 'Please enter Description.'),
-            ),
-            DropdownButtonFormField<bool>(
-              value: selectedStatus,
-              onChanged: (newValue) {
-                setState(() {
-                  selectedStatus = newValue!;
-                });
-              },
-              items: const [
-                DropdownMenuItem<bool>(
-                  value: true,
-                  child: Text('Aktivan'),
-                ),
-                DropdownMenuItem<bool>(
-                  value: false,
-                  child: Text('Neaktivan'),
-                ),
-              ],
-              decoration: const InputDecoration(labelText: 'Status'),
+                  value, 'Molim Vas unesite opis.'),
             ),
           ],
         ),
@@ -116,13 +98,13 @@ class _CategoryEditPopUpWidgetState extends State<CategoryEditPopUpWidget> {
       actions: [
         TextButton(
           onPressed: _saveChanges,
-          child: const Text("Save"),
+          child: const Text("Spremi"),
         ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text("Cancel"),
+          child: const Text("Otkaži"),
         ),
       ],
     );

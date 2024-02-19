@@ -122,6 +122,15 @@ class _ReservationPageViewState extends State<ReservationPageView> {
                 columns: const [
                   DataColumn(
                     label: Text(
+                      "Tretman",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
                       "Ime",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
@@ -248,6 +257,7 @@ DataRow recentFileDataRow(
     Function() refreshCallback) {
   return DataRow(
     cells: [
+      DataCell(Text(data.treatment)),
       DataCell(Text(data.firstName)),
       DataCell(Text(data.lastName)),
       DataCell(Text(data.phone)),

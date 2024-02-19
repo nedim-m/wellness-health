@@ -11,11 +11,12 @@ class Report {
   final String? memberShipTypeName;
   final int memberShipTypeId;
   final int? totalUsers;
+  final DateTime timestamp;
 
   factory Report.fromJson(Map<String, dynamic> json) => _$ReportFromJson(json);
 
   Report(this.id, this.dateTo, this.dateFrom, this.earnedMoney,
-      this.memberShipTypeName, this.memberShipTypeId, this.totalUsers);
+      this.memberShipTypeName, this.memberShipTypeId, this.totalUsers, this.timestamp);
 
   Map<String, dynamic> toJson() => _$ReportToJson(this);
 }

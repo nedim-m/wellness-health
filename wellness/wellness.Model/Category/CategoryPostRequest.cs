@@ -12,6 +12,6 @@ namespace wellness.Model.Category
 
         public string Description { get; set; } = null!;
 
-        public bool Status { get; set; }
+     
     }
 }

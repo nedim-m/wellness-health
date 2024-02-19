@@ -62,10 +62,15 @@ class TreatmentDetailWidget extends StatelessWidget {
             ),
           ),
           if (data.picture != null)
-            Image(
-              image: decodedImage,
+            Container(
               height: 200,
               width: 200,
+              decoration: BoxDecoration(
+                image: DecorationImage(
+                  image: decodedImage,
+                  fit: BoxFit.cover,
+                ),
+              ),
             ),
         ],
       ),
@@ -74,7 +79,7 @@ class TreatmentDetailWidget extends StatelessWidget {
           onPressed: () {
             Navigator.pop(context);
           },
-          child: const Text("Close"),
+          child: const Text("Zatvori"),
         ),
       ],
     );

@@ -75,7 +75,9 @@ class _TreatmentEditPopUpWidgetState extends State<TreatmentEditPopUpWidget> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: widget.edit ? const Text("Edit Item") : const Text("Add Item"),
+      title: widget.edit
+          ? const Text("Ažuriraj vrstu usluge")
+          : const Text("Dodaj vrstu usluge"),
       content: Form(
         key: _formKey,
         child: Column(
@@ -84,14 +86,15 @@ class _TreatmentEditPopUpWidgetState extends State<TreatmentEditPopUpWidget> {
             TextFormField(
               controller: name,
               decoration: const InputDecoration(labelText: "Naziv"),
-              validator: (value) =>
-                  _validation.validateTextInput(value, 'Please enter Name.'),
+              validator: (value) => _validation.validateTextInput(
+                  value, 'Molim Vas unesite naziv.'),
             ),
             TextFormField(
+              maxLines: 5,
               controller: description,
               decoration: const InputDecoration(labelText: "Opis"),
               validator: (value) => _validation.validateTextInput(
-                  value, 'Please enter Description.'),
+                  value, 'Molim Vas unesite opis.'),
             ),
           ],
         ),
@@ -99,13 +102,13 @@ class _TreatmentEditPopUpWidgetState extends State<TreatmentEditPopUpWidget> {
       actions: [
         TextButton(
           onPressed: _saveChanges,
-          child: const Text("Save"),
+          child: const Text("Spremi"),
         ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text("Cancel"),
+          child: const Text("Otkaži"),
         ),
       ],
     );

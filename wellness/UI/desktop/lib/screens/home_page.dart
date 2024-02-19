@@ -184,7 +184,7 @@ class _HomepageViewState extends State<HomepageView> {
           PaneItem(
             icon: const Icon(FluentIcons.leave_user),
             title: const Text('Odjava'),
-            body: const Text("Home6"),
+            body: const Text("Odjava"),
             onTap: () {
               removeCredentials();
               Navigator.pop(context);

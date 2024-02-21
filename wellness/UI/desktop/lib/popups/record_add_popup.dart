@@ -77,13 +77,13 @@ class _RecordAddPopupWidgetState extends State<RecordAddPopupWidget> {
       actions: [
         TextButton(
           onPressed: _saveChanges,
-          child: const Text("Save"),
+          child: const Text("Spremi"),
         ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text("Cancel"),
+          child: const Text("Otkaži"),
         ),
       ],
     );

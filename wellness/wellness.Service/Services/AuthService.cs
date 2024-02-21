@@ -46,6 +46,15 @@ namespace wellness.Service.Services
             {
                 return new AuthResponse { Message = "Wrong Password." };
             }
+
+            if(user.RoleId!=3 && user.Status==false)
+            {
+                return new AuthResponse { Message = "Your account has been disabled",
+                    Success = false,
+                };
+            }
+
+
             string token = CreateToken(user);
             var refreshToken = CreateRefreshToken();
             await SetRefreshToken(refreshToken, user);
@@ -115,6 +124,7 @@ namespace wellness.Service.Services
             user.PasswordHash = passwordHash;
             user.PasswordSalt = passwordSalt;
             user.RoleId = 3;
+            user.ShiftId=1;
 
        
             _context.Users.Add(user);

@@ -110,6 +110,12 @@ namespace wellness.Service.Services
         {
             var context = _context.Set<Database.Reservation>().AsQueryable();
 
+            
+            if (DateTime.Parse(insert.Date) == DateTime.Now.Date)
+            {
+                throw new InvalidOperationException("Cannot reserve for today.");
+            }
+
             var existingReservationSameDateTime = await context.FirstOrDefaultAsync(r => r.UserId == entity.UserId && r.Date == insert.Date && r.TreatmentId == insert.TreatmentId && r.Time == insert.Time && (r.Status == true || r.Status == null));
             if (existingReservationSameDateTime != null)
             {
@@ -127,9 +133,8 @@ namespace wellness.Service.Services
             {
                 throw new InvalidOperationException("User has already reserved this treatment at the specified date with a different time.");
             }
-
-           
         }
+
 
         public override async Task<Model.Reservation.Reservation> Insert(ReservationPostRequest insert)
         {
@@ -154,7 +159,7 @@ namespace wellness.Service.Services
             }
             catch (Exception ex)
             {
-               
+                throw new InvalidOperationException(ex.Message);
             }
 
             return _mapper.Map<Model.Reservation.Reservation>(entity);

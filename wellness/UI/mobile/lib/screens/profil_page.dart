@@ -97,9 +97,9 @@ class _ProfilPageViewState extends State<ProfilPageView> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Success"),
-          content:
-              const Text("Profile update successful! Please log in again."),
+          title: const Text("Uspješno"),
+          content: const Text(
+              "Profil uspješno ažuriran! Molimo Vas ulogujte se ponovo."),
           actions: [
             TextButton(
               onPressed: () {
@@ -123,8 +123,8 @@ class _ProfilPageViewState extends State<ProfilPageView> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: const Text("Error"),
-          content: const Text("An error occurred. Please try again."),
+          title: const Text("Greška"),
+          content: const Text("Desila se greška. Molimo Vas pokušajte ponovo."),
           actions: [
             TextButton(
               onPressed: () {
@@ -151,7 +151,7 @@ class _ProfilPageViewState extends State<ProfilPageView> {
               const SizedBox(height: 20),
               const Center(
                 child: Text(
-                  'Profile Update',
+                  'Ažuriranje profila',
                   style: TextStyle(
                     fontSize: 24,
                     fontWeight: FontWeight.bold,
@@ -162,12 +162,12 @@ class _ProfilPageViewState extends State<ProfilPageView> {
               const SizedBox(height: 16),
               _buildTextField(
                 _firstNameController,
-                'First Name',
+                'Ime',
                 errorText: _errorMessages['firstName'],
               ),
               _buildTextField(
                 _lastNameController,
-                'Last Name',
+                'Prezime',
                 errorText: _errorMessages['lastName'],
               ),
               _buildTextField(
@@ -177,30 +177,30 @@ class _ProfilPageViewState extends State<ProfilPageView> {
               ),
               _buildTextField(
                 _userNameController,
-                'Username',
+                'Korisničko ime',
                 errorText: _errorMessages['userName'],
               ),
               _buildTextField(
                 _passwordController,
-                'Password',
+                'Lozinka',
                 isObscure: true,
                 errorText: _errorMessages['password'],
               ),
               _buildTextField(
                 _confirmPasswordController,
-                'Confirm Password',
+                'Potvrdite lozinku',
                 isObscure: true,
                 errorText: _errorMessages['confirmPassword'],
               ),
               _buildTextField(
                 _phoneController,
-                'Phone',
+                'Telefon',
                 errorText: _errorMessages['phone'],
               ),
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: _saveChanges,
-                child: const Text('Update Profile'),
+                child: const Text('Ažuriraj profil'),
               ),
             ],
           ),

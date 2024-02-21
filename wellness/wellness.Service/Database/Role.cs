@@ -10,9 +10,7 @@ public partial class Role
     public string Name { get; set; } = null!;
 
     public string Description { get; set; } = null!;
-    public string? ShiftTime { get; set; } = null!;
 
-    public DateTime ModifiedDate { get; set; }
 
     public virtual ICollection<User> Users { get; } = new List<User>();
 }

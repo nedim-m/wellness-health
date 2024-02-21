@@ -27,6 +27,8 @@ class _TreatmentDetailsState extends State<TreatmentDetails> {
 
   @override
   Widget build(BuildContext context) {
+    bool isTodayOrBefore = selectedDate.isBefore(DateTime.now());
+
     return Scaffold(
       appBar: const AppBarWidget(),
       body: SingleChildScrollView(
@@ -35,6 +37,18 @@ class _TreatmentDetailsState extends State<TreatmentDetails> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              const SizedBox(height: 20),
+              const Center(
+                child: Text(
+                  'Detalji tretmana',
+                  style: TextStyle(
+                    fontSize: 24,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
+              const Gap(30),
               DoubleTextWidget(
                 bigText: "Vrsta usluge: ",
                 smallText: widget.data.treatmentType,
@@ -71,20 +85,32 @@ class _TreatmentDetailsState extends State<TreatmentDetails> {
                 },
               ),
               const Gap(30),
+              if (isTodayOrBefore)
+                const Center(
+                  child: Text(
+                    "Ne možete rezervirati za današnji dan ili u prošlosti. Molim Vas izaberite neki datum u budućnosti.",
+                    style: TextStyle(
+                      color: Colors.red,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => TreatmenTime(
-                          data: widget.data,
-                          selectedDate: selectedDate,
-                        ),
-                      ),
-                    );
-                  },
+                  onPressed: isTodayOrBefore
+                      ? null
+                      : () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => TreatmenTime(
+                                data: widget.data,
+                                selectedDate: selectedDate,
+                              ),
+                            ),
+                          );
+                        },
                   child: const Text("Nastavi"),
                 ),
               ),

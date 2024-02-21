@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:desktop/models/shift.dart';
+import 'package:desktop/providers/shift_provider.dart';
 import 'package:desktop/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -30,19 +32,27 @@ class WorkerEditPopUpWidget extends StatefulWidget {
 
 class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
   final RoleProvider roleProvider = RoleProvider();
+  final ShiftProvider shiftProvider = ShiftProvider();
   TextEditingController firstName = TextEditingController();
   TextEditingController lastName = TextEditingController();
   TextEditingController email = TextEditingController();
   TextEditingController userName = TextEditingController();
   TextEditingController phone = TextEditingController();
   TextEditingController password = TextEditingController();
+  TextEditingController confirmPassword = TextEditingController();
   SearchResult<Role> myData = SearchResult<Role>();
+  SearchResult<Shift> myDataShift = SearchResult<Shift>();
   Role? selectedRole;
   List<Role> allRoles = [];
+
+  Shift? selectedShift;
+  List<Shift> allShifts = [];
   File? selectedPhoto;
   final _formKey = GlobalKey<FormState>();
   final _validation = ValidationRules();
   String? _base64Image;
+  String? _imageValidationError;
+  bool? selectedStatus;
 
   @override
   void initState() {
@@ -53,6 +63,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
       userName = TextEditingController(text: widget.data!.userName);
       phone = TextEditingController(text: widget.data!.phone);
       _base64Image = widget.data!.picture;
+      selectedStatus = widget.data!.status;
     }
     fetchData();
 
@@ -61,8 +72,10 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
 
   Future<void> fetchData() async {
     myData = await roleProvider.get();
+    myDataShift = await shiftProvider.get();
     setState(() {
       allRoles = myData.result;
+      allShifts = myDataShift.result;
     });
   }
 
@@ -82,17 +95,39 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
       type: FileType.image,
     );
 
+    setState(() {
+      _imageValidationError = null;
+    });
+
     if (result != null) {
       setState(() {
         selectedPhoto = File(result.files.single.path!);
         _base64Image = base64Encode(selectedPhoto!.readAsBytesSync());
       });
+    } else {
+      setState(() {
+        _imageValidationError = 'Molimo odaberite fotografiju.';
+      });
     }
+  }
+
+  bool validateForm() {
+    bool isValid = _formKey.currentState!.validate();
+
+    if (selectedPhoto == null &&
+        (_base64Image == null || _base64Image!.isEmpty)) {
+      setState(() {
+        _imageValidationError = 'Molimo odaberite fotografiju.';
+        isValid = false;
+      });
+    }
+
+    return isValid;
   }
 
   void _saveChanges() async {
     final provider = Provider.of<UserProvider>(context, listen: false);
-    if (_formKey.currentState!.validate()) {
+    if (validateForm()) {
       if (widget.edit == true && widget.data != null) {
         await provider.updateWorker(
           widget.data!.id,
@@ -104,6 +139,8 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
           password.text,
           selectedRole!.id,
           _base64Image ?? widget.data!.picture,
+          selectedStatus!,
+          selectedShift!.id,
         );
       } else {
         await provider.addWorker(
@@ -115,6 +152,8 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
           password.text,
           selectedRole!.id,
           _base64Image ?? "N/A",
+          selectedStatus!,
+          selectedShift!.id,
         );
       }
 
@@ -127,7 +166,9 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: widget.edit ? const Text("Edit Worker") : const Text("Add Worker"),
+      title: widget.edit
+          ? const Text("Ažuriraj zaposlenika")
+          : const Text("Dodaj zaposlenika"),
       content: SingleChildScrollView(
         child: Form(
           key: _formKey,
@@ -136,42 +177,60 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
             children: [
               GestureDetector(
                 onTap: _selectPhoto,
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  child: selectedPhoto != null
-                      ? Image.file(selectedPhoto!, fit: BoxFit.cover)
-                      : _base64Image != null && _base64Image!.isNotEmpty
-                          ? Image.memory(
+                child: Column(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          if (selectedPhoto != null)
+                            Image.file(selectedPhoto!, fit: BoxFit.cover),
+                          if (_base64Image != null && _base64Image!.isNotEmpty)
+                            Image.memory(
                               base64.decode(_base64Image!),
                               fit: BoxFit.cover,
-                            )
-                          : const Center(
+                            ),
+                          if (selectedPhoto == null &&
+                              (_base64Image == null || _base64Image!.isEmpty))
+                            const Center(
                               child: Text(
-                                "Tap to Add Photo",
+                                "Dodajte fotografiju",
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: Colors.grey,
                                 ),
                               ),
                             ),
+                        ],
+                      ),
+                    ),
+                    if (_imageValidationError != null)
+                      Text(
+                        _imageValidationError!,
+                        style: const TextStyle(
+                          color: Colors.red,
+                        ),
+                      ),
+                  ],
                 ),
               ),
               TextFormField(
                 controller: firstName,
-                decoration: const InputDecoration(labelText: "First Name"),
+                decoration: const InputDecoration(labelText: "Ime"),
                 validator: (value) => _validation.validateTextInput(
-                    value, 'Please enter your First Name.'),
+                    value, 'Molim Vas unesite Vaše ime.'),
               ),
               TextFormField(
                 controller: lastName,
-                decoration: const InputDecoration(labelText: "Last Name"),
+                decoration: const InputDecoration(labelText: "Prezime"),
                 validator: (value) => _validation.validateTextInput(
-                    value, 'Please enter your Last Name.'),
+                    value, 'Molim Vas unesite Vaše prezime.'),
               ),
               TextFormField(
                 controller: email,
@@ -181,21 +240,28 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
               ),
               TextFormField(
                 controller: userName,
-                decoration: const InputDecoration(labelText: "Username"),
+                decoration: const InputDecoration(labelText: "Korisničko ime"),
                 validator: (value) => _validation.validateTextInput(
-                    value, 'Please enter your Username'),
+                    value, 'Molim Vas unesite Vaše korisničko ime'),
               ),
               TextFormField(
                 controller: phone,
-                decoration: const InputDecoration(labelText: "Phone"),
+                decoration: const InputDecoration(labelText: "Telefon"),
                 keyboardType: TextInputType.phone,
                 validator: _validation.validatePhone,
               ),
               TextFormField(
                 controller: password,
-                decoration: const InputDecoration(labelText: "Password"),
-                keyboardType: TextInputType.visiblePassword,
+                decoration: const InputDecoration(labelText: "Lozinka"),
+                obscureText: true,
                 validator: _validation.validatePassword,
+              ),
+              TextFormField(
+                controller: confirmPassword,
+                decoration: const InputDecoration(labelText: "Potvrda lozinke"),
+                obscureText: true,
+                validator: (value) =>
+                    _validation.validateConfirmPassword(password.text, value),
               ),
               DropdownButtonFormField<Role>(
                 value: selectedRole,
@@ -210,8 +276,43 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
                     child: Text(role.name),
                   );
                 }).toList(),
-                hint: const Text("Choose a Role"),
+                hint: const Text("Izaberite poziciju"),
                 validator: _validation.validateDropdown,
+              ),
+              DropdownButtonFormField<Shift>(
+                value: selectedShift,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedShift = newValue!;
+                  });
+                },
+                items: allShifts.map<DropdownMenuItem<Shift>>((Shift shift) {
+                  return DropdownMenuItem<Shift>(
+                    value: shift,
+                    child: Text(shift.name),
+                  );
+                }).toList(),
+                hint: const Text("Izaberite smjenu"),
+                validator: _validation.validateDropdown,
+              ),
+              DropdownButtonFormField<bool>(
+                value: selectedStatus,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedStatus = newValue!;
+                  });
+                },
+                items: const [
+                  DropdownMenuItem<bool>(
+                    value: true,
+                    child: Text('Aktivan'),
+                  ),
+                  DropdownMenuItem<bool>(
+                    value: false,
+                    child: Text('Neaktivan'),
+                  ),
+                ],
+                decoration: const InputDecoration(labelText: 'Status'),
               ),
             ],
           ),
@@ -220,13 +321,13 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
       actions: [
         TextButton(
           onPressed: _saveChanges,
-          child: const Text("Save"),
+          child: const Text("Spremi"),
         ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text("Cancel"),
+          child: const Text("Otkaži"),
         ),
       ],
     );

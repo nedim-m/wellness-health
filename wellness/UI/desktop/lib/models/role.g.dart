@@ -10,12 +10,10 @@ Role _$RoleFromJson(Map<String, dynamic> json) => Role(
       json['id'] as int,
       json['name'] as String,
       json['description'] as String,
-      json['shiftTime'] as String?,
     );
 
 Map<String, dynamic> _$RoleToJson(Role instance) => <String, dynamic>{
       'id': instance.id,
       'name': instance.name,
       'description': instance.description,
-      'shiftTime': instance.shiftTime,
     };

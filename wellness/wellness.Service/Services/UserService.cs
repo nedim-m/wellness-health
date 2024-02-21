@@ -40,7 +40,7 @@ namespace wellness.Service.Services
 
         public override async Task<PagedResult<Models.User.User>> Get(UserSearchObj? search = null)
         {
-            var filteredEntity = _context.Set<Database.User>().AsQueryable().Include("Role");
+            var filteredEntity = _context.Set<Database.User>().AsQueryable().Include("Role").Include("Shift");
 
             if (!string.IsNullOrWhiteSpace(search?.SearchName))
             {
@@ -133,6 +133,7 @@ namespace wellness.Service.Services
             user.PasswordHash= passwordHash;
             user.PasswordSalt=passwordSalt;
             user.RoleId=insert.RoleId;
+            user.ShiftId=insert.ShiftId;
             _context.Users.Add(user);
 
 

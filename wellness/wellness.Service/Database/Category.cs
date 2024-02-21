@@ -11,7 +11,7 @@ public partial class Category
 
     public string Description { get; set; } = null!;
 
-    public bool Status { get; set; }
+
 
     public virtual ICollection<Treatment> Treatments { get; } = new List<Treatment>();
 }

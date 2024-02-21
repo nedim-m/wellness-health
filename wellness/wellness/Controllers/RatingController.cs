@@ -4,9 +4,9 @@ using wellness.Service.IServices;
 
 namespace wellness.Controllers
 {
-    public class RatingController : CrudController<Rating, BaseSearchObject, RatingPostRequest, RatingPostRequest>
+    public class RatingController : CrudController<Rating, RatingSearchObj, RatingPostRequest, RatingUpdateRequest>
     {
-        public RatingController(ILogger<BaseController<Rating, BaseSearchObject>> logger, IRatingService service) : base(logger, service)
+        public RatingController(ILogger<BaseController<Rating, RatingSearchObj>> logger, IRatingService service) : base(logger, service)
         {
         }
     }

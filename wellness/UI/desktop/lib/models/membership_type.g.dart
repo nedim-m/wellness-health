@@ -12,6 +12,7 @@ MembershipType _$MembershipTypeFromJson(Map<String, dynamic> json) =>
       json['name'] as String,
       json['description'] as String,
       (json['price'] as num).toDouble(),
+      json['duration'] as int,
     );
 
 Map<String, dynamic> _$MembershipTypeToJson(MembershipType instance) =>
@@ -20,4 +21,5 @@ Map<String, dynamic> _$MembershipTypeToJson(MembershipType instance) =>
       'name': instance.name,
       'description': instance.description,
       'price': instance.price,
+      'duration': instance.duration,
     };

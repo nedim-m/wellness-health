@@ -69,7 +69,8 @@ class _ColorCodedCalendarState extends State<ColorCodedCalendar> {
           context: context,
           builder: (context) => AlertDialog(
             title: const Text('Neuspješno'),
-            content: const Text('Neuspjela rezervacija. Već ste rezervisali!'),
+            content: const Text(
+                'Neuspjela rezervacija. Već ste rezervisali! Pokušajte neki drugi termin.'),
             actions: [
               TextButton(
                 onPressed: () => Navigator.pop(context),

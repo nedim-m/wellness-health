@@ -12,12 +12,13 @@ class Treatment {
   final double price;
   final int duration;
   final String? picture;
+  final double? averageRating;
 
   factory Treatment.fromJson(Map<String, dynamic> json) =>
       _$TreatmentFromJson(json);
 
   Treatment(this.id, this.treatmentType, this.category, this.description,
-      this.price, this.picture, this.duration, this.name);
+      this.price, this.picture, this.duration, this.name, this.averageRating);
 
   Map<String, dynamic> toJson() => _$TreatmentToJson(this);
 }

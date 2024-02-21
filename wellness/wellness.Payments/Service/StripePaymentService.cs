@@ -329,6 +329,8 @@ public class StripePaymentService : IStripePaymentService
             Currency = "BAM",
             Timestamp = DateTime.Now,
             MemberShipTypeId = membershipTypeId,
+            UserId=userId
+            
         };
 
         try

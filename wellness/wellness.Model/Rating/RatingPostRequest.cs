@@ -13,9 +13,8 @@ namespace wellness.Model.Rating
         [Required]
         [Range(1, 5)]
         public int StarRating { get; set; }
+       
         [Required]
-        public int TreatmentId { get; set; }
-        [Required]
-        public int UserId { get; set; }
+        public int ReservationId { get; set; }
     }
 }

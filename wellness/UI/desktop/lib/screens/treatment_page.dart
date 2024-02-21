@@ -65,7 +65,7 @@ class _TreatmentPageViewState extends State<TreatmentPageView> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const Text(
-                        "Unesite vrstu uslugu ",
+                        "Unesite vrstu uslugu: ",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
@@ -112,7 +112,7 @@ class _TreatmentPageViewState extends State<TreatmentPageView> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       const Text(
-                        "Unesite kategoriju ",
+                        "Unesite kategoriju:     ",
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 15,
@@ -319,7 +319,7 @@ DataRow recentFileDataRow(BuildContext context, var data,
                     },
                   );
                 },
-                child: const Text("Details"),
+                child: const Text("Detalji"),
               ),
             ),
             const SizedBox(width: 8),
@@ -337,7 +337,7 @@ DataRow recentFileDataRow(BuildContext context, var data,
                     },
                   );
                 },
-                child: const Text("Edit"),
+                child: const Text("Ažuriraj"),
               ),
             ),
             const SizedBox(width: 8),
@@ -355,7 +355,8 @@ DataRow recentFileDataRow(BuildContext context, var data,
                             'Deletion Error',
                             style: TextStyle(color: Colors.red),
                           ),
-                          content: const Text('You cannot delete this item.'),
+                          content:
+                              const Text('Ne mozežete obrisati ovaj tretman!'),
                           actions: <Widget>[
                             TextButton(
                               child: const Text('OK'),
@@ -369,7 +370,7 @@ DataRow recentFileDataRow(BuildContext context, var data,
                     );
                   }
                 },
-                child: const Text("Delete"),
+                child: const Text("Obriši"),
               ),
             ),
           ],

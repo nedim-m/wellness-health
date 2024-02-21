@@ -17,14 +17,16 @@ import '../utils/validation_rules.dart';
 
 class TreatmenUpsertPopUpWidget extends StatefulWidget {
   const TreatmenUpsertPopUpWidget({
-    super.key,
+    Key? key,
     this.data,
     required this.edit,
     required this.refreshCallback,
-  });
+  }) : super(key: key);
+
   final Treatment? data;
   final bool edit;
   final Function() refreshCallback;
+
   @override
   State<TreatmenUpsertPopUpWidget> createState() =>
       _TreatmenUpsertPopUpWidgetState();
@@ -49,6 +51,7 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
 
   File? selectedPhoto;
   String? _base64Image;
+  String? _imageValidationError;
 
   @override
   void initState() {
@@ -89,12 +92,25 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
       });
 
       _base64Image = base64Encode(selectedPhoto!.readAsBytesSync());
+      _validateImage();
     }
   }
 
+  void _validateImage() {
+    setState(() {
+      if (selectedPhoto == null) {
+        _imageValidationError = 'Molimo odaberite fotografiju.';
+      } else {
+        _imageValidationError = null;
+      }
+    });
+  }
+
   void _saveChanges() async {
+    _validateImage();
+
     final provider = Provider.of<TreatmentProvider>(context, listen: false);
-    if (_formKey.currentState!.validate()) {
+    if (_formKey.currentState!.validate() && _imageValidationError == null) {
       if (widget.edit == true && widget.data != null) {
         await provider.updateTreatment(
           widget.data!.id,
@@ -127,7 +143,9 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: AlertDialog(
-        title: widget.edit ? const Text("Edit Item") : const Text("Add Item"),
+        title: widget.edit
+            ? const Text("Ažuriraj tretman")
+            : const Text("Dodaj tretman"),
         content: Form(
           key: _formKey,
           child: Column(
@@ -146,7 +164,7 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
                       ? Image.file(selectedPhoto!, fit: BoxFit.cover)
                       : const Center(
                           child: Text(
-                            "Tap to Add Photo",
+                            "Dodajte fotografiju",
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               color: Colors.grey,
@@ -155,11 +173,19 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
                         ),
                 ),
               ),
+              Text(
+                _imageValidationError ?? '',
+                style: const TextStyle(
+                  color: Colors.red,
+                ),
+              ),
               TextFormField(
                 controller: name,
                 decoration: const InputDecoration(labelText: "Naziv"),
-                validator: (value) =>
-                    _validation.validateTextInput(value, 'Please enter name.'),
+                validator: (value) => _validation.validateTextInput(
+                  value,
+                  'Molim Vas unesti naziv.',
+                ),
               ),
               DropdownButtonFormField<int>(
                 value: selectedTreatmentTypeId,
@@ -198,14 +224,18 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
                 maxLines: 5,
                 decoration: const InputDecoration(labelText: "Opis"),
                 validator: (value) => _validation.validateTextInput(
-                    value, 'Please enter description.'),
+                  value,
+                  'Molim Vas unesti opis.',
+                ),
               ),
               TextFormField(
                 controller: duration,
                 decoration: const InputDecoration(labelText: "Trajanje"),
                 keyboardType: TextInputType.number,
                 validator: (value) => _validation.validateNumberInput(
-                    value, 'Please enter duration.'),
+                  value,
+                  'Molim vas unesite trajanje.',
+                ),
               ),
               TextFormField(
                 controller: price,
@@ -219,13 +249,13 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
         actions: [
           TextButton(
             onPressed: _saveChanges,
-            child: const Text("Save"),
+            child: const Text("Spremi"),
           ),
           TextButton(
             onPressed: () {
               Navigator.of(context).pop();
             },
-            child: const Text("Cancel"),
+            child: const Text("Otkaži"),
           ),
         ],
       ),

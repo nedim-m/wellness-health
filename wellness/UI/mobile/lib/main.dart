@@ -8,6 +8,7 @@ import 'package:mobile/providers/membership_provider.dart';
 import 'package:mobile/providers/membership_type_provider.dart';
 import 'package:mobile/providers/paypal_provider.dart';
 import 'package:mobile/providers/rating_provider.dart';
+
 import 'package:mobile/providers/reservation_provider.dart';
 import 'package:mobile/providers/treatment_provider.dart';
 import 'package:mobile/providers/treatment_type_provider.dart';
@@ -33,6 +34,7 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) => MembershipProvider()),
       ChangeNotifierProvider(create: (_) => MembershipTypeProvider()),
       ChangeNotifierProvider(create: (_) => PayPalProvider()),
+   
     ],
     child: MultiBlocProvider(
       providers: [

@@ -15,7 +15,7 @@ class _LoginPageViewState extends State<LoginPageView> {
   final TextEditingController _passwordController = TextEditingController();
   final UserProvider _userProvider = UserProvider();
   bool _loginFailed = false;
-  final String _errorMessage = "Invalid username or password!";
+  final String _errorMessage = "Neispravano korisničko ime ili lozinka!";
 
   Future<void> _login() async {
     final String username = _usernameController.text;
@@ -77,7 +77,7 @@ class _LoginPageViewState extends State<LoginPageView> {
                 child: TextField(
                   controller: _usernameController,
                   decoration: const InputDecoration(
-                    labelText: 'Username',
+                    labelText: 'Korisničko ime',
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -94,7 +94,7 @@ class _LoginPageViewState extends State<LoginPageView> {
                   controller: _passwordController,
                   obscureText: true,
                   decoration: const InputDecoration(
-                    labelText: 'Password',
+                    labelText: 'Lozinka',
                     border: OutlineInputBorder(),
                   ),
                 ),
@@ -122,15 +122,6 @@ class _LoginPageViewState extends State<LoginPageView> {
                 ),
               ),
               const SizedBox(height: 16.0),
-              TextButton(
-                onPressed: () {},
-                child: const Text(
-                  'Forgot Password?',
-                  style: TextStyle(
-                    color: Colors.black87,
-                  ),
-                ),
-              ),
             ],
           ),
         ),

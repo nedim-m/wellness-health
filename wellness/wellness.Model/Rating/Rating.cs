@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,12 +13,10 @@ namespace wellness.Model.Rating
 
 
         public int StarRating { get; set; }
+ 
+        public int ReservationId { get; set; }
 
-        public int TreatmentId { get; set; }
 
-        public int UserId { get; set; }
-
-       
     }
 
 }

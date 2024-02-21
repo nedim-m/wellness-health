@@ -33,14 +33,14 @@ public partial class User
     public byte[]? Picture { get; set; }
 
     public int RoleId { get; set; }
+    public int ShiftId { get; set; }
 
     public virtual ICollection<Membership> Memberships { get; } = new List<Membership>();
-
-    public virtual ICollection<Rating> Ratings { get; } = new List<Rating>();
 
     public virtual ICollection<Record> Records { get; } = new List<Record>();
 
     public virtual ICollection<Reservation> Reservations { get; } = new List<Reservation>();
 
     public virtual Role Role { get; set; } = null!;
+    public virtual Shift Shift { get; set; } = null!;
 }

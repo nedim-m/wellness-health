@@ -28,6 +28,7 @@ class _MembershipTypeEditPopUpWidgetState
   TextEditingController name = TextEditingController();
   TextEditingController description = TextEditingController();
   TextEditingController price = TextEditingController();
+  TextEditingController duration = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
   final _validation = ValidationRules();
@@ -58,12 +59,12 @@ class _MembershipTypeEditPopUpWidgetState
         await provider.update(
           widget.data!.id,
           MembershipType(widget.data!.id, name.text, description.text,
-              double.parse(price.text)),
+              double.parse(price.text), int.parse(duration.text)),
         );
       } else {
         await provider.insert(
-          MembershipType(
-              0, name.text, description.text, double.parse(price.text)),
+          MembershipType(0, name.text, description.text,
+              double.parse(price.text), int.parse(duration.text)),
         );
       }
       widget.refreshCallback();
@@ -75,7 +76,9 @@ class _MembershipTypeEditPopUpWidgetState
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: widget.edit ? const Text("Edit Item") : const Text("Add Item"),
+      title: widget.edit
+          ? const Text("Ažuriraj članarinu")
+          : const Text("Dodaj članarinu"),
       content: Form(
         key: _formKey,
         child: Column(
@@ -84,14 +87,20 @@ class _MembershipTypeEditPopUpWidgetState
             TextFormField(
               controller: name,
               decoration: const InputDecoration(labelText: "Naziv"),
-              validator: (value) =>
-                  _validation.validateTextInput(value, 'Please enter Name.'),
+              validator: (value) => _validation.validateTextInput(
+                  value, 'Molim Vas unesite naziv.'),
             ),
             TextFormField(
               controller: description,
               decoration: const InputDecoration(labelText: "Opis"),
               validator: (value) => _validation.validateTextInput(
-                  value, 'Please enter Description.'),
+                  value, 'Molim Vas unesite opis.'),
+            ),
+            TextFormField(
+              controller: duration,
+              decoration: const InputDecoration(labelText: "Trajanje"),
+              keyboardType: TextInputType.number,
+              validator: _validation.validateNumInput,
             ),
             TextFormField(
               controller: price,
@@ -105,13 +114,13 @@ class _MembershipTypeEditPopUpWidgetState
       actions: [
         TextButton(
           onPressed: _saveChanges,
-          child: const Text("Save"),
+          child: const Text("Spremi"),
         ),
         TextButton(
           onPressed: () {
             Navigator.of(context).pop();
           },
-          child: const Text("Cancel"),
+          child: const Text("Otkaži"),
         ),
       ],
     );

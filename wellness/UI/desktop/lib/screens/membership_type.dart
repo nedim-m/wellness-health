@@ -120,6 +120,15 @@ class _MembershipTypePageViewState extends State<MembershipTypePageView> {
                   ),
                   DataColumn(
                     label: Text(
+                      "Trajanje",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
                       "Cijena",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
@@ -204,6 +213,7 @@ DataRow recentFileDataRow(
     cells: [
       DataCell(Text(data.name)),
       DataCell(Text(data.description)),
+      DataCell(Text("${data.duration.toString()} dan/a")),
       DataCell(Text(data.price.toString())),
       DataCell(
         Row(
@@ -222,7 +232,7 @@ DataRow recentFileDataRow(
                     },
                   );
                 },
-                child: const Text("Edit"),
+                child: const Text("Ažuriraj"),
               ),
             ),
           ],

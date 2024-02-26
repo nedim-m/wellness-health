@@ -41,6 +41,26 @@ namespace wellness.Service.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Description of Category 1",
+                            Name = "Category 1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Description of Category 2",
+                            Name = "Category 2"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Description of Category 3",
+                            Name = "Category 3"
+                        });
                 });
 
             modelBuilder.Entity("wellness.Service.Database.Membership", b =>
@@ -102,6 +122,24 @@ namespace wellness.Service.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("MembershipTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Opis membership 1",
+                            Duration = 30,
+                            Name = "Membership 1",
+                            Price = 60f
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Opis membership 2",
+                            Duration = 60,
+                            Name = "Membership 2",
+                            Price = 120f
+                        });
                 });
 
             modelBuilder.Entity("wellness.Service.Database.Rating", b =>
@@ -395,6 +433,26 @@ namespace wellness.Service.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("TreatmentTypes");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Description = "Description of TreatmentType 1",
+                            Name = "TreatmentType 1"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Description = "Description of TreatmentType 2",
+                            Name = "TreatmentType 2"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Description = "Description of TreatmentType 3",
+                            Name = "TreatmentType 3"
+                        });
                 });
 
             modelBuilder.Entity("wellness.Service.Database.User", b =>
@@ -478,8 +536,8 @@ namespace wellness.Service.Migrations
                             RoleId = 1,
                             ShiftId = 1,
                             Status = true,
-                            TokenCreated = new DateTime(2024, 2, 19, 20, 29, 41, 854, DateTimeKind.Utc).AddTicks(7296),
-                            TokenExpires = new DateTime(2024, 2, 19, 21, 29, 41, 854, DateTimeKind.Utc).AddTicks(7298),
+                            TokenCreated = new DateTime(2024, 2, 26, 21, 45, 59, 449, DateTimeKind.Utc).AddTicks(6726),
+                            TokenExpires = new DateTime(2024, 2, 26, 22, 45, 59, 449, DateTimeKind.Utc).AddTicks(6729),
                             UserName = "admin"
                         },
                         new
@@ -495,14 +553,14 @@ namespace wellness.Service.Migrations
                             RoleId = 2,
                             ShiftId = 2,
                             Status = true,
-                            TokenCreated = new DateTime(2024, 2, 19, 20, 29, 41, 854, DateTimeKind.Utc).AddTicks(7608),
-                            TokenExpires = new DateTime(2024, 2, 19, 21, 29, 41, 854, DateTimeKind.Utc).AddTicks(7608),
+                            TokenCreated = new DateTime(2024, 2, 26, 21, 45, 59, 449, DateTimeKind.Utc).AddTicks(7031),
+                            TokenExpires = new DateTime(2024, 2, 26, 22, 45, 59, 449, DateTimeKind.Utc).AddTicks(7032),
                             UserName = "employee"
                         },
                         new
                         {
                             Id = 3,
-                            Email = "member@admin.com",
+                            Email = "member@member.com",
                             FirstName = "Member",
                             LastName = "Member",
                             PasswordHash = new byte[] { 121, 196, 229, 226, 156, 226, 132, 65, 207, 254, 90, 152, 15, 48, 147, 10, 89, 188, 65, 118, 220, 95, 122, 84, 106, 251, 167, 20, 10, 222, 210, 1, 240, 243, 68, 22, 243, 36, 222, 42, 114, 207, 117, 174, 34, 135, 67, 30, 40, 144, 21, 250, 33, 24, 220, 142, 39, 23, 128, 238, 188, 139, 4, 78 },
@@ -512,14 +570,14 @@ namespace wellness.Service.Migrations
                             RoleId = 3,
                             ShiftId = 1,
                             Status = true,
-                            TokenCreated = new DateTime(2024, 2, 19, 20, 29, 41, 854, DateTimeKind.Utc).AddTicks(7783),
-                            TokenExpires = new DateTime(2024, 2, 19, 21, 29, 41, 854, DateTimeKind.Utc).AddTicks(7783),
+                            TokenCreated = new DateTime(2024, 2, 26, 21, 45, 59, 449, DateTimeKind.Utc).AddTicks(7383),
+                            TokenExpires = new DateTime(2024, 2, 26, 22, 45, 59, 449, DateTimeKind.Utc).AddTicks(7384),
                             UserName = "member"
                         },
                         new
                         {
                             Id = 4,
-                            Email = "member@admin.com",
+                            Email = "korisnik@korisnik.com",
                             FirstName = "Korisnik",
                             LastName = "Korisnik",
                             PasswordHash = new byte[] { 121, 196, 229, 226, 156, 226, 132, 65, 207, 254, 90, 152, 15, 48, 147, 10, 89, 188, 65, 118, 220, 95, 122, 84, 106, 251, 167, 20, 10, 222, 210, 1, 240, 243, 68, 22, 243, 36, 222, 42, 114, 207, 117, 174, 34, 135, 67, 30, 40, 144, 21, 250, 33, 24, 220, 142, 39, 23, 128, 238, 188, 139, 4, 78 },
@@ -529,9 +587,26 @@ namespace wellness.Service.Migrations
                             RoleId = 3,
                             ShiftId = 1,
                             Status = true,
-                            TokenCreated = new DateTime(2024, 2, 19, 20, 29, 41, 854, DateTimeKind.Utc).AddTicks(8083),
-                            TokenExpires = new DateTime(2024, 2, 19, 21, 29, 41, 854, DateTimeKind.Utc).AddTicks(8083),
+                            TokenCreated = new DateTime(2024, 2, 26, 21, 45, 59, 449, DateTimeKind.Utc).AddTicks(7742),
+                            TokenExpires = new DateTime(2024, 2, 26, 22, 45, 59, 449, DateTimeKind.Utc).AddTicks(7742),
                             UserName = "korisnik"
+                        },
+                        new
+                        {
+                            Id = 5,
+                            Email = "nedim_misic@hotmail.com",
+                            FirstName = "Nedim",
+                            LastName = "Misic",
+                            PasswordHash = new byte[] { 121, 196, 229, 226, 156, 226, 132, 65, 207, 254, 90, 152, 15, 48, 147, 10, 89, 188, 65, 118, 220, 95, 122, 84, 106, 251, 167, 20, 10, 222, 210, 1, 240, 243, 68, 22, 243, 36, 222, 42, 114, 207, 117, 174, 34, 135, 67, 30, 40, 144, 21, 250, 33, 24, 220, 142, 39, 23, 128, 238, 188, 139, 4, 78 },
+                            PasswordSalt = new byte[] { 75, 42, 158, 170, 242, 143, 49, 217, 11, 31, 60, 110, 3, 162, 244, 15, 64, 94, 80, 27, 194, 224, 95, 84, 48, 137, 97, 152, 191, 77, 4, 64, 228, 187, 93, 203, 209, 195, 10, 79, 104, 102, 93, 239, 221, 198, 205, 163, 233, 41, 66, 94, 12, 94, 221, 83, 37, 109, 174, 4, 57, 130, 84, 173, 232, 26, 71, 252, 179, 190, 224, 34, 89, 148, 191, 140, 142, 144, 249, 67, 210, 95, 74, 103, 212, 227, 49, 150, 210, 201, 150, 249, 28, 214, 117, 144, 115, 247, 175, 249, 6, 143, 5, 220, 125, 177, 84, 227, 243, 230, 189, 223, 14, 6, 213, 241, 83, 211, 21, 122, 147, 225, 62, 239, 53, 224, 105, 160 },
+                            Phone = "061110123",
+                            RefreshToken = "",
+                            RoleId = 3,
+                            ShiftId = 1,
+                            Status = true,
+                            TokenCreated = new DateTime(2024, 2, 26, 21, 45, 59, 449, DateTimeKind.Utc).AddTicks(7962),
+                            TokenExpires = new DateTime(2024, 2, 26, 22, 45, 59, 449, DateTimeKind.Utc).AddTicks(7963),
+                            UserName = "nedim"
                         });
                 });
 

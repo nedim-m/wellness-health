@@ -97,5 +97,10 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+using (var scope = app.Services.CreateScope())
+{
+    var dataContext = scope.ServiceProvider.GetRequiredService<DbWellnessContext>();
+    dataContext.Database.Migrate();
+}
 
 app.Run();

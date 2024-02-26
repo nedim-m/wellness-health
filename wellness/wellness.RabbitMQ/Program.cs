@@ -19,10 +19,12 @@ partial class Program
         Console.WriteLine("Konzolna aplikacija za RabbitMQ je pokrenuta. Pritisnite ENTER za izlaz.");
         Console.ReadLine();
 
+        Task.Delay(Timeout.Infinite).Wait();
+
         host.StopAsync().Wait();
     }
 
     private static IWebHostBuilder CreateWebHostBuilder() =>
         WebHost.CreateDefaultBuilder()
-            .UseStartup<Startup>();
+            .UseStartup<Startup>().UseUrls("http://localhost:5000"); 
 }

@@ -1,0 +1,83 @@
+version: '3'
+
+services:
+  wellness-sql:
+    container_name: sql
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    restart: unless-stopped
+    environment:
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=Test123@
+      - MSSQL_PID=Developer
+    ports:
+      - 1401:1433
+    expose:
+      - 1433
+    networks:
+      - wellness_network
+
+  wellness-rabbitmq:
+    container_name: rabbitmq
+    image: rabbitmq:3-management
+    restart: unless-stopped
+    ports: 
+      - 8080:15672
+      - 5672:5672
+    expose:
+      - 5672
+    networks:
+      - wellness_network
+  wellness-rabbitmq-service:
+    container_name: rabbitmq-service
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile_rabbitmq
+    ports:
+      - 5000:5000 
+    networks:
+      - wellness_network
+    depends_on:
+      - wellness-rabbitmq
+
+  wellness-payment-service:
+    container_name: payment-service
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile_payments
+    environment:
+      - ConnectionStrings__DefaultConnection=Server=wellness-sql,1433;Database=wellness_db;User=sa;Password=Test123@;Trust Server Certificate=true;ConnectRetryCount=0
+      - ASPNETCORE_ENVIRONMENT=Development
+      - Stripe__PubKey=${STRIPE__PUBKEY}
+      - Stripe__SecretKey=${STRIPE__SECRETKEY}
+      - Paypal__ClientId=${PAYPAL__CLIENTID}
+      - Paypal__Secret=${PAYPAL__SECRET}
+    ports:
+      - "7012:80" 
+    expose:
+      - 7012
+    networks:
+      - wellness_network
+
+  wellness-api:
+    container_name: api
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+    - ConnectionStrings__DefaultConnection=Server=wellness-sql,1433;Database=wellness_db;User=sa;Password=Test123@;Trust Server Certificate=true;ConnectRetryCount=0
+    - ASPNETCORE_ENVIRONMENT=Development
+    - AppSettings__Token=${APPSETTINGS__TOKEN}
+    ports:
+    - 7081:7081
+    networks:
+      - wellness_network
+    depends_on:
+      - wellness-sql
+      - wellness-rabbitmq-service
+
+networks:
+  wellness_network:
+    driver: bridge

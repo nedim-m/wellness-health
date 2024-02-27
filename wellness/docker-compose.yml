@@ -34,7 +34,7 @@ services:
       context: .
       dockerfile: Dockerfile_rabbitmq
     ports:
-      - 5000:5000 
+      - 5000:5630
     networks:
       - wellness_network
     depends_on:

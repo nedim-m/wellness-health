@@ -30,7 +30,7 @@ public class RabbitMQService
          
 
             _hubConnection = new HubConnectionBuilder()
-    .WithUrl("http://localhost:5000/notificationHub")
+    .WithUrl("http://localhost:5630/notificationHub")
     .Build();
 
 

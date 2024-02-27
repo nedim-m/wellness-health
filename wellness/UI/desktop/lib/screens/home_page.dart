@@ -44,9 +44,17 @@ class _HomepageViewState extends State<HomepageView> {
         .withUrl("http://localhost:5000/notificationHub")
         .build();
 
+    
     _signalR.on("ReceiveNotification", _onNewMessage);
 
-    await _signalR.start();
+    try {
+     
+      await _signalR.start();
+      print('Connected to SignalR hub.');
+    } catch (e) {
+      print('Error connecting to SignalR hub: $e');
+      
+    }
   }
 
   void _onNewMessage(List<dynamic>? parameters) {

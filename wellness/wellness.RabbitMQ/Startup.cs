@@ -20,9 +20,10 @@ public class Startup
                 builder => builder
                     .AllowAnyMethod()
                     .AllowAnyHeader()
-                    .WithOrigins("http://10.0.2.2:5000")  
+                    .WithOrigins("http://10.0.2.2:5630")
                     .AllowCredentials());
         });
+
 
         services.AddSignalR(hubOptions =>
         {

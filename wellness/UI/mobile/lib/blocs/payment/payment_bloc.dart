@@ -19,7 +19,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
   }
 
   late int userId;
-  
+
   HttpClient client = HttpClient();
   IOClient? http;
 
@@ -106,7 +106,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     client.badCertificateCallback = (cert, host, port) => true;
     http = IOClient(client);
     final url = Uri.parse(
-      'https://10.0.2.2:7012/StripePayment/process-payment/',
+      'http://10.0.2.2:7012/StripePayment/process-payment/',
     );
     final response = await http!.post(
       url,
@@ -129,7 +129,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     http = IOClient(client);
 
     final url = Uri.parse(
-      'https://10.0.2.2:7012/StripePayment/confirm-payment/',
+      'http://10.0.2.2:7012/StripePayment/confirm-payment/',
     );
     final response = await http!.post(
       url,

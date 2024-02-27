@@ -12,10 +12,6 @@ partial class Program
         var rabbitMQService = new RabbitMQService();
         rabbitMQService.ConsumeNotifications();
 
-        
-        
-
-
         Console.WriteLine("Konzolna aplikacija za RabbitMQ je pokrenuta. Pritisnite ENTER za izlaz.");
         Console.ReadLine();
 
@@ -26,5 +22,10 @@ partial class Program
 
     private static IWebHostBuilder CreateWebHostBuilder() =>
         WebHost.CreateDefaultBuilder()
-            .UseStartup<Startup>().UseUrls("http://localhost:5000"); 
+            .UseStartup<Startup>()
+            .UseKestrel(options =>
+            {
+                // Omogući podršku za IPv6
+                options.Listen(System.Net.IPAddress.IPv6Any, 5630);
+            });
 }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using wellness.Model;
@@ -48,59 +49,77 @@ namespace wellness.Service.Services
                 query = query.Where(x => x.Date.StartsWith(search.Date) || x.Date.Contains(search.Date));
             }
 
-           
+
 
             return base.AddFilter(query, search);
         }
-
         public override async Task<PagedResult<Model.Reservation.Reservation>> Get(ReservationSearchObj? search = null)
         {
+
             var query = _context.Set<Database.Reservation>().AsQueryable();
 
-            PagedResult<Model.Reservation.Reservation> result = new();
+
+            PagedResult<Model.Reservation.Reservation> result = new PagedResult<Model.Reservation.Reservation>();
+
 
             query = AddFilter(query, search);
+
+
             query = AddInclude(query, search);
 
+            
             result.Count = await query.CountAsync();
+
 
             if (search?.Page.HasValue == true && search?.PageSize.HasValue == true)
             {
-                query = query.Take(search.PageSize.Value).Skip(search.Page.Value * search.PageSize.Value);
+                query = query.Skip(search.Page.Value * search.PageSize.Value).Take(search.PageSize.Value);
             }
 
+          
             var list = await query.ToListAsync();
 
+           
             UpdateStatusForPastReservations(list);
 
+            
             list = list
                 .OrderByDescending(r => r.Status == true)
                 .ThenByDescending(r => r.Status == null)
-                .ThenBy(r => DateTime.Parse(r.Date + " " + r.Time))
+                .ThenBy(r => TryParseDateTime(r.Date + " " + r.Time, out DateTime parsedDateTime) ? parsedDateTime : DateTime.MinValue)
                 .ToList();
 
+           
             var tmp = _mapper.Map<List<Model.Reservation.Reservation>>(list);
             result.Result = tmp;
 
+            
             return result;
+        }
+
+        
+        private bool TryParseDateTime(string dateString, out DateTime parsedDateTime)
+        {
+            return DateTime.TryParseExact(dateString, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDateTime);
         }
 
 
         private void UpdateStatusForPastReservations(List<Database.Reservation> reservations)
         {
-            
             DateTime currentDate = DateTime.Now;
 
             foreach (var reservation in reservations)
             {
-             
-                DateTime parsedDateTime = DateTime.Parse(reservation.Date + " " + reservation.Time);
-               
-
-                if (parsedDateTime < currentDate && reservation.Status == null)
+                if (TryParseDateTime(reservation.Date + " " + reservation.Time, out DateTime parsedDateTime))
                 {
-                    reservation.Status = false;
-                  
+                    if (parsedDateTime < currentDate && reservation.Status == null)
+                    {
+                        reservation.Status = false;
+                    }
+                }
+                else
+                {
+                   
                 }
             }
             _context.SaveChangesAsync();
@@ -110,10 +129,9 @@ namespace wellness.Service.Services
         {
             var context = _context.Set<Database.Reservation>().AsQueryable();
 
-            
-            if (DateTime.Parse(insert.Date) == DateTime.Now.Date)
+            if (!TryParseDateTime(insert.Date + " " + insert.Time, out DateTime parsedInsertDate) || parsedInsertDate.Date == DateTime.Now.Date)
             {
-                throw new InvalidOperationException("Cannot reserve for today.");
+                throw new InvalidOperationException("Cannot reserve for today or invalid date format.");
             }
 
             var existingReservationSameDateTime = await context.FirstOrDefaultAsync(r => r.UserId == entity.UserId && r.Date == insert.Date && r.TreatmentId == insert.TreatmentId && r.Time == insert.Time && (r.Status == true || r.Status == null));
@@ -177,16 +195,16 @@ namespace wellness.Service.Services
             }
             catch (Exception ex)
             {
-                
+
                 throw new InvalidOperationException("Error");
             }
 
             var user = await _context.Users.FindAsync(entity.UserId);
             var treatment = await _context.Treatments.FindAsync(entity.TreatmentId);
-           
 
 
-           
+
+
 
             var data = new NotificationData
             {

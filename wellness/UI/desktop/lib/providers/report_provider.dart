@@ -42,13 +42,11 @@ class ReportProvider extends BaseProvider<Report> {
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token!);
 
-    print("Print urla: $url");
     var response = await http.get(uri, headers: headers);
 
     if (isValidResponse(response)) {
       var data = jsonDecode(response.body);
 
-      print("Print iz usera data: $data");
       return data;
     } else {
       throw Exception("Unknown error");

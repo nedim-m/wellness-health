@@ -1,14 +1,19 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Net.Mime.MediaTypeNames;
+
 
 namespace wellness.Service.Database
 {
     partial class DbWellnessContext
     {
+
+   
         partial void OnModelCreatingPartial(ModelBuilder modelBuilder)
         {
 
@@ -37,7 +42,33 @@ namespace wellness.Service.Database
             modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id=2, Name="TreatmentType 2", Description="Description of TreatmentType 2" });
             modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id=3, Name="TreatmentType 3", Description="Description of TreatmentType 3" });
 
-            
+            //Treatments
+            /*modelBuilder.Entity<Treatment>().HasData(new Treatment
+            {
+                Id = 1,
+                Name="Tretman lica jedan",
+                TreatmentTypeId = 1,
+                CategoryId = 1,
+                Description = "Description of Treatment 1",
+                Duration = 120,
+                Price = 120,
+                Picture = ConvertImageToByteArray("tretman-lica1.jpg")
+            });
+            modelBuilder.Entity<Treatment>().HasData(new Treatment
+            {
+                Id = 2,
+                Name="Tretman lica dva",
+                TreatmentTypeId = 1,
+                CategoryId = 2,
+                Description = "Description of Treatment 2",
+                Duration = 45,
+                Price = 30,
+                Picture = ConvertImageToByteArray("tretman-lica2.jpg")
+            });
+            */
+
+
+
 
 
 
@@ -143,6 +174,12 @@ namespace wellness.Service.Database
             }
             return bytes;
         }
+       
+
+
+
+
+
 
 
     }

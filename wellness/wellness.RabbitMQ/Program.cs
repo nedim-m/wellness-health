@@ -25,7 +25,7 @@ partial class Program
             .UseStartup<Startup>()
             .UseKestrel(options =>
             {
-                // Omogući podršku za IPv6
+                
                 options.Listen(System.Net.IPAddress.IPv6Any, 5630);
             });
 }

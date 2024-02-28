@@ -65,7 +65,7 @@ services:
     restart: unless-stopped
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: Dockerfile_api
     environment:
     - ConnectionStrings__DefaultConnection=Server=wellness-sql,1433;Database=wellness_db;User=sa;Password=Test123@;Trust Server Certificate=true;ConnectRetryCount=0
     - ASPNETCORE_ENVIRONMENT=Development

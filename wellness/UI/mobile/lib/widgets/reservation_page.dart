@@ -56,7 +56,7 @@ class _ReservationPageState extends State<ReservationPage> {
   void showError() {
     setState(() {
       errorText = rated
-          ? "Već ste ocijenuli tretma!"
+          ? "Već ste ocijenuli tretman!"
           : "Ne možete ocijeniti ako niste bili na tretmanu!";
     });
   }

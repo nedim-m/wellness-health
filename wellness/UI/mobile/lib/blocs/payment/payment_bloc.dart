@@ -16,6 +16,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     on<PaymentStart>(_onPaymentStart);
     on<PaymentCreateIntent>(_onPaymentCreateIntent);
     on<PaymentConfirmIntent>(_onPaymentConfirmIntent);
+    on<PaymentFinish>(_onPaymentFinish);
   }
 
   late int userId;
@@ -25,6 +26,13 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
 
   void _onPaymentStart(
     PaymentStart event,
+    Emitter<PaymentState> emit,
+  ) {
+    emit(state.copyWith(status: PaymentStatus.initial));
+  }
+
+  void _onPaymentFinish(
+    PaymentFinish event,
     Emitter<PaymentState> emit,
   ) {
     emit(state.copyWith(status: PaymentStatus.initial));

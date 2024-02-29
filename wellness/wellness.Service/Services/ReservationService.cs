@@ -117,10 +117,7 @@ namespace wellness.Service.Services
                         reservation.Status = false;
                     }
                 }
-                else
-                {
-                   
-                }
+               
             }
             _context.SaveChangesAsync();
         }

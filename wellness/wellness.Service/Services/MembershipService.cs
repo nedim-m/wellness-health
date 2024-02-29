@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -17,14 +18,12 @@ namespace wellness.Service.Services
     {
         private readonly DbWellnessContext _context;
         private readonly IMapper _mapper;
-      
+
         public MembershipService(IMapper mapper, Database.DbWellnessContext context) : base(mapper, context)
         {
             _context=context;
             _mapper=mapper;
-           
         }
-
 
         public override IQueryable<Database.Membership> AddInclude(IQueryable<Database.Membership> query, MembershipSearchObj? search = null)
         {
@@ -43,26 +42,25 @@ namespace wellness.Service.Services
             return base.AddFilter(query, search);
         }
 
-        private void UpdateStatusForMembership(List<Database.Membership> memberships)
+        private async Task UpdateStatusForMembership(List<Database.Membership> memberships)
         {
-
-           DateTime currentDate = DateTime.Now;
-           
+            DateTime currentDate = DateTime.Now;
 
             foreach (var membership in memberships)
             {
-              
-                if (DateTime.Parse(membership.ExpirationDate) <currentDate)
-                        membership.Status = false;
-                var userToUpdate = _context.Users.FindAsync(membership.UserId);
-                if (userToUpdate.Result!=null)
+                if (DateTime.TryParseExact(membership.ExpirationDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime expirationDate) && expirationDate < currentDate)
                 {
-                    userToUpdate.Result.Status=false;
-                }
+                    membership.Status = false;
 
+                    var userToUpdate = await _context.Users.FindAsync(membership.UserId);
+                    if (userToUpdate != null)
+                    {
+                        userToUpdate.Status = false;
+                    }
+                }
             }
 
-             _context.SaveChangesAsync();
+            await _context.SaveChangesAsync();
         }
 
         public override async Task<Model.Membership.Membership> Update(int id, MembershipUpdateRequest update)
@@ -76,39 +74,31 @@ namespace wellness.Service.Services
                 return null;
             }
 
-            if (DateTime.Parse(membershipToUpdate.ExpirationDate)<currentDate)
+            if (DateTime.TryParseExact(membershipToUpdate.ExpirationDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime expirationDate) && expirationDate < currentDate)
             {
-
                 var dateToSet = currentDate.AddDays(membershipType!.Duration);
                 membershipToUpdate.ExpirationDate = dateToSet.ToString("dd.MM.yyyy");
-                membershipToUpdate.StartDate=currentDate.ToString("dd.MM.yyyy");
-                membershipToUpdate.Status=true;
-
-
+                membershipToUpdate.StartDate = currentDate.ToString("dd.MM.yyyy");
+                membershipToUpdate.Status = true;
             }
             else
             {
-
-                var dateToSet = DateTime.Parse(membershipToUpdate.ExpirationDate).AddDays(membershipType!.Duration);
-                membershipToUpdate.ExpirationDate = dateToSet.ToString("dd.MM.yyyy");
-                membershipToUpdate.Status=true;
-
+                DateTime dateToSet;
+                if (DateTime.TryParseExact(membershipToUpdate.ExpirationDate, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out dateToSet))
+                {
+                    dateToSet = dateToSet.AddDays(membershipType!.Duration);
+                    membershipToUpdate.ExpirationDate = dateToSet.ToString("dd.MM.yyyy");
+                    membershipToUpdate.Status = true;
+                }
             }
-            
-
-
-
-
 
             _mapper.Map(update, membershipToUpdate);
 
-            var userToUpdate = _context.Users.FindAsync(membershipToUpdate.UserId);
-            if (userToUpdate.Result!=null)
+            var userToUpdate = await _context.Users.FindAsync(membershipToUpdate.UserId);
+            if (userToUpdate != null)
             {
-                userToUpdate.Result.Status=true;
+                userToUpdate.Status = true;
             }
-
-
 
             await _context.SaveChangesAsync();
 
@@ -129,25 +119,18 @@ namespace wellness.Service.Services
                 Status=true,
                 MemberShipTypeId=insert.MemberShipTypeId,
                 UserId=insert.UserId
-
-
             };
 
-             _context.Memberships.Add(membershipToInsert);
-            var userToUpdate=_context.Users.FindAsync(insert.UserId);
-            if (userToUpdate.Result!=null)
+            _context.Memberships.Add(membershipToInsert);
+            var userToUpdate = _context.Users.FindAsync(insert.UserId);
+            if (userToUpdate.Result != null)
             {
-                userToUpdate.Result.Status=true;
+                userToUpdate.Result.Status = true;
             }
-
-
 
             await _context.SaveChangesAsync();
 
             return _mapper.Map<Model.Membership.Membership>(membershipToInsert);
         }
-
-
-
     }
 }

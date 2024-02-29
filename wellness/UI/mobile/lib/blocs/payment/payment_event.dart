@@ -22,6 +22,10 @@ class PaymentCreateIntent extends PaymentEvent {
   List<Object?> get props => [billingDetails, items];
 }
 
+class PaymentFinish extends PaymentEvent {}
+
+
+
 class PaymentConfirmIntent extends PaymentEvent {
   final String clientSecret;
 

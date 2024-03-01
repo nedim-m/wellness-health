@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Azure.Core;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
@@ -162,40 +163,61 @@ namespace wellness.Service.Services
 
         public async Task<string> ForgotPassword(UserForgotPassword request)
         {
+          
             var filteredEntity = await _context.Set<Database.User>()
-       .Where(x => x.UserName == request.UserName && x.Email == request.Email)
-       .FirstOrDefaultAsync();
-            if (filteredEntity!=null)
+                .Where(x => x.UserName == request.UserName && x.Email == request.Email)
+                .FirstOrDefaultAsync();
+
+            if (filteredEntity != null && filteredEntity.RoleId == 3 && !request.Mobile)
             {
+                
+                return null;
+            }
+            if(filteredEntity != null && filteredEntity.RoleId != 3 && request.Mobile)
+            {
+                return null;
+            }
+            
+
+          
+            if (filteredEntity != null)
+            {
+        
                 string password = GeneratePassword();
 
-
+               
                 var userToUpdate = await _context.Users.FindAsync(filteredEntity.Id);
                 if (userToUpdate == null)
                 {
+                    
                     return null;
                 }
 
-            
+               
                 CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
-                userToUpdate.PasswordHash= passwordHash;
-                userToUpdate.PasswordSalt=passwordSalt;
+                userToUpdate.PasswordHash = passwordHash;
+                userToUpdate.PasswordSalt = passwordSalt;
 
+            
                 await _context.SaveChangesAsync();
 
+                
                 string subject = "Resetiranje lozinke";
-                string body = $"Poštovanje, Vaša nova lozinka za username: {request.UserName} je uspješno postavljena. Molimo Vas da odmah istu postavite na željenu. Nova lozinka: {password}  .Lijep pozdrav. Wellness centar - Health.";
+                string body = $"Poštovanje, Vaša nova lozinka za korisničko ime: {request.UserName} je uspešno postavljena. Molimo Vas da je odmah promenite. Nova lozinka: {password}. Lijep pozdrav. Wellness centar - Health.";
 
                 _mailService.SendEmail(request.Email, subject, body);
 
-                return "Password reset initiated. Check your email for instructions.";
+         
+                return "Iniciran je reset lozinke. Proverite svoj email za uputstva.";
             }
+
 
             return null;
         }
 
-        
+
+
 
         public static string GeneratePassword(int length = 8)
         {
@@ -203,5 +225,51 @@ namespace wellness.Service.Services
             return new string(Enumerable.Repeat(chars, length)
                 .Select(s => s[Random.Next(s.Length)]).ToArray());
         }
+
+        public async Task<Models.User.User?> RegisterUser(UserDesktopInsert request)
+        {
+
+            string password = GeneratePassword();
+            CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
+
+            var user = _mapper.Map<Database.User>(request);
+            user.PasswordHash= passwordHash;
+            user.PasswordSalt=passwordSalt;
+            _context.Users.Add(user);
+
+
+
+            await _context.SaveChangesAsync();
+
+
+            string subject = "Vaša lozinka";
+            string body = $"Poštovanje, Vaša lozinka za username: {request.UserName} je uspješno postavljena. Molimo Vas da odmah istu postavite na željenu. Nova lozinka: {password}  .Lijep pozdrav. Wellness centar - Health.";
+
+            _mailService.SendEmail(request.Email, subject, body);
+
+
+
+            return _mapper.Map<Models.User.User>(user);
+        }
+
+        public async Task<Models.User.User?> UpdateUser(int id, UserDesktopInsert request)
+        {
+            var userToUpdate = await _context.Users.FindAsync(id);
+
+
+            if (userToUpdate == null)
+            {
+                return null;
+            }
+
+            _mapper.Map(request, userToUpdate);
+
+
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<Models.User.User>(userToUpdate);
+        }
+
+
     }
 }

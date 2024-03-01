@@ -64,7 +64,6 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
       phone = TextEditingController(text: widget.data!.phone);
       _base64Image = widget.data!.picture;
       selectedStatus = widget.data!.status;
-      
     }
     fetchData();
 
@@ -137,11 +136,11 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
           email.text,
           userName.text,
           phone.text,
-          password.text,
           selectedRole!.id,
           _base64Image ?? widget.data!.picture,
           selectedStatus!,
           selectedShift!.id,
+          
         );
       } else {
         await provider.addWorker(
@@ -150,9 +149,8 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
           email.text,
           userName.text,
           phone.text,
-          password.text,
           selectedRole!.id,
-          _base64Image!,
+          _base64Image ?? "N/A",
           selectedStatus!,
           selectedShift!.id,
         );
@@ -250,19 +248,6 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
                 decoration: const InputDecoration(labelText: "Telefon"),
                 keyboardType: TextInputType.phone,
                 validator: _validation.validatePhone,
-              ),
-              TextFormField(
-                controller: password,
-                decoration: const InputDecoration(labelText: "Lozinka"),
-                obscureText: true,
-                validator: _validation.validatePassword,
-              ),
-              TextFormField(
-                controller: confirmPassword,
-                decoration: const InputDecoration(labelText: "Potvrda lozinke"),
-                obscureText: true,
-                validator: (value) =>
-                    _validation.validateConfirmPassword(password.text, value),
               ),
               DropdownButtonFormField<Role>(
                 value: selectedRole,

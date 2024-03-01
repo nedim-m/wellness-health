@@ -6,11 +6,12 @@ using wellness.Model.User;
 using wellness.Models.User;
 using wellness.Models.UserPostRequest;
 using wellness.Service.IServices;
+using wellness.Service.Services;
 
 namespace wellness.Controllers
 {
 
-  
+
     public class UserController : CrudController<Models.User.User, UserSearchObj, UserPostRequest, UserPostRequest>
     {
         private new readonly IUserService _service;
@@ -26,6 +27,27 @@ namespace wellness.Controllers
             if (response!=null)
                 return Ok(response);
             return BadRequest();
+        }
+
+
+        [HttpPost("register")]
+        public async Task<ActionResult<User>> RegisterUser(UserDesktopInsert request)
+        {
+            var response = await _service.RegisterUser(request);
+            if (response!=null)
+                return Ok(response);
+            return BadRequest();
+
+        }
+
+        [HttpPut("{id}/update")]
+        public async Task<ActionResult<User>> UpdateUser(int id, [FromBody] UserDesktopInsert request)
+        {
+            var response = await _service.UpdateUser(id, request);
+            if (response!=null)
+                return Ok(response);
+            return BadRequest();
+
         }
     }
 }

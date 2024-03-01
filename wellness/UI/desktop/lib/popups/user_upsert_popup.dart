@@ -64,15 +64,8 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
     final provider = Provider.of<UserProvider>(context, listen: false);
     if (_formKey.currentState!.validate()) {
       if (widget.edit == true && widget.data != null) {
-        await provider.updateUser(
-          widget.data!.id,
-          firstName.text,
-          lastName.text,
-          email.text,
-          userName.text,
-          phone.text,
-          password.text,
-        );
+        await provider.updateUser(widget.data!.id, firstName.text,
+            lastName.text, email.text, userName.text, phone.text);
       } else {
         await provider.addUser(
           firstName.text,
@@ -80,7 +73,6 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
           email.text,
           userName.text,
           phone.text,
-          password.text,
         );
       }
 
@@ -106,13 +98,13 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
                 controller: firstName,
                 decoration: const InputDecoration(labelText: "Ime"),
                 validator: (value) => _validation.validateTextInput(
-                    value, 'Molim Vas unesti Vaše ime.'),
+                    value, 'Molim Vas unesite Vaše ime.'),
               ),
               TextFormField(
                 controller: lastName,
                 decoration: const InputDecoration(labelText: "Prezime"),
                 validator: (value) => _validation.validateTextInput(
-                    value, 'Molim Vas unesti Vaše prezime.'),
+                    value, 'Molim Vas unesite Vaše prezime.'),
               ),
               TextFormField(
                 controller: email,
@@ -124,26 +116,13 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
                 controller: userName,
                 decoration: const InputDecoration(labelText: "Korisničko ime"),
                 validator: (value) => _validation.validateTextInput(
-                    value, 'Molim Vas unesti Vaše korisničko ime'),
+                    value, 'Molim Vas unesite Vaše korisničko ime'),
               ),
               TextFormField(
                 controller: phone,
                 decoration: const InputDecoration(labelText: "Telefon"),
                 keyboardType: TextInputType.phone,
                 validator: _validation.validatePhone,
-              ),
-              TextFormField(
-                controller: password,
-                decoration: const InputDecoration(labelText: "Lozinka"),
-                obscureText: true,
-                validator: _validation.validatePassword,
-              ),
-              TextFormField(
-                controller: confirmPassword,
-                decoration: const InputDecoration(labelText: "Potvrda lozinke"),
-                obscureText: true,
-                validator: (value) =>
-                    _validation.validateConfirmPassword(password.text, value),
               ),
             ],
           ),

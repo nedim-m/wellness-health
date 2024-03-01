@@ -1,4 +1,5 @@
 import 'package:desktop/screens/category_page.dart';
+import 'package:desktop/screens/employee_profil.dart';
 import 'package:desktop/screens/record_page.dart';
 import 'package:desktop/screens/reservation_page.dart';
 import 'package:desktop/screens/treatment_page.dart';
@@ -44,16 +45,13 @@ class _HomepageViewState extends State<HomepageView> {
         .withUrl("http://localhost:5000/notificationHub")
         .build();
 
-    
     _signalR.on("ReceiveNotification", _onNewMessage);
 
     try {
-     
       await _signalR.start();
       print('Connected to SignalR hub.');
     } catch (e) {
       print('Error connecting to SignalR hub: $e');
-      
     }
   }
 
@@ -124,6 +122,12 @@ class _HomepageViewState extends State<HomepageView> {
             _updateNotifications(true);
           },
           body: const ReservationPageView(),
+        ),
+      if (!isAdmin)
+        PaneItem(
+          icon: const Icon(FluentIcons.profile_search),
+          title: const Text('Profil'),
+          body: const EmployeeUpdateScreen(),
         ),
       if (isAdmin)
         PaneItemExpander(

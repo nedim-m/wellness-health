@@ -12,5 +12,7 @@ namespace wellness.Model.User
         public string UserName { get; set; } = null!;
      
         public string Email { get; set; } = null!;
+
+        public bool Mobile { get; set; } = true;
     }
 }

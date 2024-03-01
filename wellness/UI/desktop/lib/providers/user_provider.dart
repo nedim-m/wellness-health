@@ -22,9 +22,8 @@ class UserProvider extends BaseProvider<User> {
     String email,
     String userName,
     String phone,
-    String password,
   ) async {
-    var url = "$baseUrl$endpoint/$id";
+    var url = "$baseUrl$endpoint/$id/update";
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token!);
 
@@ -33,9 +32,6 @@ class UserProvider extends BaseProvider<User> {
       "lastName": lastName,
       "email": email,
       "userName": userName,
-      "password": password,
-      "confrimPassword": password,
-      "roleId": 3,
       "phone": phone,
     });
 
@@ -50,8 +46,8 @@ class UserProvider extends BaseProvider<User> {
   }
 
   Future<dynamic> addUser(String firstName, String lastName, String email,
-      String userName, String phone, String password) async {
-    var url = "${baseUrl}Auth/register";
+      String userName, String phone) async {
+    var url = "$baseUrl$endpoint/register";
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token!);
 
@@ -60,8 +56,6 @@ class UserProvider extends BaseProvider<User> {
       "lastName": lastName,
       "email": email,
       "userName": userName,
-      "password": password,
-      "confrimPassword": password,
       "phone": phone
     });
 
@@ -81,12 +75,11 @@ class UserProvider extends BaseProvider<User> {
       String email,
       String userName,
       String phone,
-      String password,
       int roleId,
       String picture,
       bool status,
       int shiftId) async {
-    var url = "$baseUrl$endpoint";
+    var url = "$baseUrl$endpoint/register";
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token!);
 
@@ -95,8 +88,6 @@ class UserProvider extends BaseProvider<User> {
       "lastName": lastName,
       "email": email,
       "userName": userName,
-      "password": password,
-      "confrimPassword": password,
       "picture": picture,
       "roleId": roleId,
       "phone": phone,
@@ -121,12 +112,11 @@ class UserProvider extends BaseProvider<User> {
       String email,
       String userName,
       String phone,
-      String password,
       int roleId,
       String picture,
       bool status,
       int shiftId) async {
-    var url = "$baseUrl$endpoint/$id";
+    var url = "$baseUrl$endpoint/$id/update";
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token!);
 
@@ -135,8 +125,6 @@ class UserProvider extends BaseProvider<User> {
       "lastName": lastName,
       "email": email,
       "userName": userName,
-      "password": password,
-      "confrimPassword": password,
       "picture": picture,
       "roleId": roleId,
       "phone": phone,
@@ -180,4 +168,41 @@ class UserProvider extends BaseProvider<User> {
       return false;
     }
   }
+
+  Future<dynamic> forgotPassword(
+    String userName,
+    String email,
+  ) async {
+    var url = "$baseUrl$endpoint/reset";
+    var uri = Uri.parse(url);
+    var headers = createJwtHeaders(token ?? '');
+
+    var jsonRequest =
+        jsonEncode(<String, dynamic>{"userName": userName, "email": email});
+
+    var response = await http.post(uri, headers: headers, body: jsonRequest);
+
+    if (isValidResponse(response)) {
+      var data = response.body;
+      return data;
+    } else {
+      throw Exception("Unknown error");
+    }
+  }
+
+  /*Future<User> getById() async {
+    int id = RoleManager.getUserId();
+    var url = "$baseUrl$endpoint/$id";
+    var uri = Uri.parse(url);
+    var headers = createJwtHeaders(token!);
+
+    var response = await http.get(uri, headers: headers);
+
+    if (isValidResponse(response)) {
+      var data = jsonDecode(response.body);
+      return fromJson(data);
+    } else {
+      throw Exception("Unknown error");
+    }
+  }*/
 }

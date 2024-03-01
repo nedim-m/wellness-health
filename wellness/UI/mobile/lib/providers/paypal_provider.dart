@@ -38,7 +38,7 @@ class PayPalProvider extends ChangeNotifier {
     client.badCertificateCallback = (cert, host, port) => true;
     http = IOClient(client);
 
-    const String apiUrl = 'https://10.0.2.2:7012/PayPal/capture-payment/';
+    const String apiUrl = 'http://10.0.2.2:7012/PayPal/capture-payment/';
 
     final response = await http!.post(
       Uri.parse(apiUrl),

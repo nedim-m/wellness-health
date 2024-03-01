@@ -11,7 +11,7 @@ class Treatment {
   final String description;
   final double price;
   final int duration;
-  final String? picture;
+  final String picture;
 
   factory Treatment.fromJson(Map<String, dynamic> json) =>
       _$TreatmentFromJson(json);

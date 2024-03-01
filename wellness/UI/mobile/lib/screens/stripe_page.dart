@@ -35,15 +35,15 @@ class _StripePaymentPageState extends State<StripePaymentPage> {
       appBar: AppBar(
         title: const Text('Uplata putem kreditne kartice'),
       ),
-      body: SingleChildScrollView(
-        child: BlocBuilder<PaymentBloc, PaymentState>(
-          builder: (context, state) {
-            CardFormEditController controller = CardFormEditController(
-              initialDetails: state.cardFieldInputDetails,
-            );
+      body: BlocBuilder<PaymentBloc, PaymentState>(
+        builder: (context, state) {
+          CardFormEditController controller = CardFormEditController(
+            initialDetails: state.cardFieldInputDetails,
+          );
 
-            if (state.status == PaymentStatus.initial) {
-              return Padding(
+          if (state.status == PaymentStatus.initial) {
+            return SingleChildScrollView(
+              child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
@@ -79,16 +79,18 @@ class _StripePaymentPageState extends State<StripePaymentPage> {
                     ),
                   ],
                 ),
-              );
-            }
-            if (state.status == PaymentStatus.success) {
-              return Column(
+              ),
+            );
+          }
+          if (state.status == PaymentStatus.success) {
+            return Container(
+              alignment: Alignment.center,
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('Uplata uspješna!'),
                   const SizedBox(
                     height: 10,
-                    width: double.infinity,
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -102,17 +104,18 @@ class _StripePaymentPageState extends State<StripePaymentPage> {
                     child: const Text('Nazad na početnu'),
                   ),
                 ],
-              );
-            }
+              ),
+            );
+          }
 
-            if (state.status == PaymentStatus.failure) {
-              return Column(
+          if (state.status == PaymentStatus.failure) {
+            return Center(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   const Text('Uplata neuspješna.'),
                   const SizedBox(
                     height: 10,
-                    width: double.infinity,
                   ),
                   ElevatedButton(
                     onPressed: () {
@@ -121,12 +124,12 @@ class _StripePaymentPageState extends State<StripePaymentPage> {
                     child: const Text('Pokušajte ponovo.'),
                   ),
                 ],
-              );
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
-        ),
+              ),
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
       ),
     );
   }

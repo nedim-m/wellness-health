@@ -12,7 +12,7 @@ Treatment _$TreatmentFromJson(Map<String, dynamic> json) => Treatment(
       json['category'] as String,
       json['description'] as String,
       (json['price'] as num).toDouble(),
-      json['picture'] as String?,
+      json['picture'] as String,
       json['duration'] as int,
       json['name'] as String,
     );

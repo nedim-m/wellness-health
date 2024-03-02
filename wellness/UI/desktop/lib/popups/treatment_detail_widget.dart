@@ -67,7 +67,7 @@ class TreatmentDetailWidget extends StatelessWidget {
             decoration: BoxDecoration(
               image: DecorationImage(
                 image: decodedImage,
-                fit: BoxFit.cover,
+                fit: BoxFit.contain,
               ),
             ),
           ),

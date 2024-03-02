@@ -43,29 +43,33 @@ namespace wellness.Service.Database
             modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id=3, Name="TreatmentType 3", Description="Description of TreatmentType 3" });
 
             //Treatments
-            /*modelBuilder.Entity<Treatment>().HasData(new Treatment
+
+            modelBuilder.Entity<Treatment>().HasData(new Treatment
             {
                 Id = 1,
-                Name="Tretman lica jedan",
+                Name = "Tretman lica jedan",
                 TreatmentTypeId = 1,
                 CategoryId = 1,
                 Description = "Description of Treatment 1",
                 Duration = 120,
                 Price = 120,
-                Picture = ConvertImageToByteArray("tretman-lica1.jpg")
+                Picture = ConvertImageToByteArray("wwwroot", "tretman-lica1.jpg")
             });
+
             modelBuilder.Entity<Treatment>().HasData(new Treatment
             {
                 Id = 2,
-                Name="Tretman lica dva",
+                Name = "Tretman lica dva",
                 TreatmentTypeId = 1,
                 CategoryId = 2,
                 Description = "Description of Treatment 2",
                 Duration = 45,
                 Price = 30,
-                Picture = ConvertImageToByteArray("tretman-lica2.jpg")
+                Picture = ConvertImageToByteArray("wwwroot", "tretman-lica2.jpg")
             });
-            */
+
+
+
 
 
 
@@ -174,8 +178,34 @@ namespace wellness.Service.Database
             }
             return bytes;
         }
-       
 
+
+
+
+        private byte[] ConvertImageToByteArray(string folder, string imageName)
+        {
+            string currentDirectory = Directory.GetCurrentDirectory();
+            string imagePath = Path.Combine(currentDirectory, folder, imageName);
+           
+
+            try
+            {
+                if (File.Exists(imagePath))
+                {
+                    return File.ReadAllBytes(imagePath);
+                }
+                else
+                {
+                    Console.WriteLine("Image file not found.");
+                    return null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error reading image file: {ex.Message}");
+                return null;
+            }
+        }
 
 
 

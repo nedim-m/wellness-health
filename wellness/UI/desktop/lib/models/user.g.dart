@@ -15,7 +15,7 @@ User _$UserFromJson(Map<String, dynamic> json) => User(
       json['phone'] as String,
       json['status'] as bool,
       json['picture'] as String,
-      json['role'] as String,
+      json['role'] as String?,
       json['shiftTime'] as String?,
     );
 

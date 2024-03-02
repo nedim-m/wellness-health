@@ -12,7 +12,7 @@ class User {
   final String phone;
   final bool status;
   final String picture;
-  final String role;
+  final String? role;
   final String? shiftTime;
 
   User(this.id, this.firstName, this.lastName, this.email, this.userName,

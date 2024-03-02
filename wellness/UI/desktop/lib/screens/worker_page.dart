@@ -121,6 +121,15 @@ class _WorkerPageViewState extends State<WorkerPageView> {
                   ),
                   DataColumn(
                     label: Text(
+                      "Korisničko ime",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
                       "Radno vrijeme",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
@@ -222,6 +231,7 @@ DataRow recentFileDataRow(
     cells: [
       DataCell(Text(data.firstName)),
       DataCell(Text(data.lastName)),
+      DataCell(Text(data.userName)),
       DataCell(Text(data.shiftTime)),
       DataCell(_buildStatusIcon(data.status)),
       DataCell(

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Org.BouncyCastle.Asn1.Ocsp;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -26,7 +27,7 @@ namespace wellness.Service.Services
     {
         private readonly IMapper _mapper;
         private readonly DbWellnessContext _context;
-        private static readonly Random Random = new Random();
+        private static readonly Random Random = new();
         private readonly MailService _mailService;
 
         public UserService(IMapper mapper, DbWellnessContext context, MailService mailService) : base(mapper, context)
@@ -87,6 +88,10 @@ namespace wellness.Service.Services
 
         public override async Task<Models.User.User> Update(int id, UserPostRequest update)
         {
+            if (!IsAvailable(id, update.UserName, update.Email))
+                return null;
+
+
             if (update.Password.IsNullOrEmpty() && update.ConfrimPassword.IsNullOrEmpty())
             {
                 update.Password="";
@@ -122,8 +127,13 @@ namespace wellness.Service.Services
         }
 
 
-        public override async Task<Models.User.User> Insert(UserPostRequest insert)
+        /*public override async Task<Models.User.User> Insert(UserPostRequest insert)
         {
+            if (!IsAvailable(null, insert.UserName, insert.Email))
+                return null;
+
+
+
             if (insert.Password!=insert.ConfrimPassword)
             {
                 return null;
@@ -145,10 +155,10 @@ namespace wellness.Service.Services
 
 
             return _mapper.Map<Models.User.User>(user);
-        }
+        }*/
 
 
-
+        
 
 
 
@@ -229,6 +239,9 @@ namespace wellness.Service.Services
         public async Task<Models.User.User?> RegisterUser(UserDesktopInsert request)
         {
 
+            if (!IsAvailable(null, request.UserName, request.Email))
+                return null;
+
             string password = GeneratePassword();
             CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
@@ -256,6 +269,9 @@ namespace wellness.Service.Services
         {
             var userToUpdate = await _context.Users.FindAsync(id);
 
+            if (!IsAvailable(id, request.UserName, request.Email))
+                return null;
+
 
             if (userToUpdate == null)
             {
@@ -271,5 +287,64 @@ namespace wellness.Service.Services
         }
 
 
+
+        private bool IsAvailable(int? id, string username, string email)
+        {
+            if (id!=null)
+            {
+
+                if (_context.Users.Any(u => u.UserName == username && u.Id != id))
+                {
+                    return false;
+                }
+
+
+                if (_context.Users.Any(u => u.Email == email && u.Id != id))
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                if (_context.Users.Any(u => u.UserName == username))
+                {
+                    return false;
+                }
+
+
+                if (_context.Users.Any(u => u.Email == email))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+
+        public async Task<Models.User.User?> UpdateEmployee(int id, UserEmployeeDesktopUpdate request)
+        {
+            if (!IsAvailable(id, request.UserName, request.Email))
+                return null;
+
+            var userToUpdate = await _context.Users.FindAsync(id);
+            if (userToUpdate == null)
+            {
+                return null;
+            }
+
+            _mapper.Map(request, userToUpdate);
+
+            if (!request.Password.IsNullOrEmpty())
+            {
+                CreatePasswordHash(request.Password!, out byte[] passwordHash, out byte[] passwordSalt);
+                userToUpdate.PasswordHash=passwordHash;
+                userToUpdate.PasswordSalt=passwordSalt;
+
+            }
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<Models.User.User>(userToUpdate);
+
+        }
     }
 }

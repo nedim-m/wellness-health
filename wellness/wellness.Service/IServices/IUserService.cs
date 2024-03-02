@@ -16,6 +16,8 @@ namespace wellness.Service.IServices
         Task<User?> RegisterUser(UserDesktopInsert request);
         Task<User?> UpdateUser(int id, UserDesktopInsert request);
 
+        Task<User?> UpdateEmployee(int id, UserEmployeeDesktopUpdate request);
+
 
     }
 }

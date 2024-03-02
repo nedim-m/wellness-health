@@ -45,6 +45,7 @@ dependencies:
   pdf: ^3.10.7
   open_file: ^3.3.2
   fl_chart: ^0.63.0
+  jwt_decoder: ^2.0.1
   
   
   

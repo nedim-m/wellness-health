@@ -49,6 +49,30 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
     super.initState();
   }
 
+  void showAddAlert(bool response) {
+    String message = response
+        ? 'Uspješno izmjenjeno'
+        : 'Neuspješna akcija, korisnik sa ovim korisničkim imenom ili email-om već postoji';
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: response ? const Text('Uspješno') : const Text('Neuspješno'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     firstName.dispose();
@@ -63,22 +87,33 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
   void _saveChanges() async {
     final provider = Provider.of<UserProvider>(context, listen: false);
     if (_formKey.currentState!.validate()) {
-      if (widget.edit == true && widget.data != null) {
-        await provider.updateUser(widget.data!.id, firstName.text,
-            lastName.text, email.text, userName.text, phone.text);
-      } else {
-        await provider.addUser(
-          firstName.text,
-          lastName.text,
-          email.text,
-          userName.text,
-          phone.text,
-        );
-      }
+      try {
+        if (widget.edit == true && widget.data != null) {
+          await provider.updateUser(
+            widget.data!.id,
+            firstName.text,
+            lastName.text,
+            email.text,
+            userName.text,
+            phone.text,
+            widget.data!.status,
+          );
+        } else {
+          await provider.addUser(
+            firstName.text,
+            lastName.text,
+            email.text,
+            userName.text,
+            phone.text,
+          );
+        }
 
-      widget.refreshCallback();
-      // ignore: use_build_context_synchronously
-      Navigator.of(context).pop();
+        showAddAlert(true);
+        widget.refreshCallback();
+        Navigator.of(context).pop();
+      } catch (e) {
+        showAddAlert(false);
+      }
     }
   }
 

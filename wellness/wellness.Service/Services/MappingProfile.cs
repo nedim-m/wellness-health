@@ -32,6 +32,7 @@ namespace wellness.Service.Services
             CreateMap<UserUpdateRequest, Database.User>();
             CreateMap<UserPostRequest, Database.User>();
             CreateMap<UserDesktopInsert, Database.User>();
+            CreateMap<UserEmployeeDesktopUpdate, Database.User>();
 
             CreateMap<Database.User, User>().ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.Name))
                                             .ForMember(dest => dest.ShiftTime, opt => opt.MapFrom(src => src.Shift.WorkingHours));

@@ -49,5 +49,15 @@ namespace wellness.Controllers
             return BadRequest();
 
         }
+
+        [HttpPut("{id}/update-employee")]
+        public async Task<ActionResult<User>> UpdateEmployee(int id, [FromBody] UserEmployeeDesktopUpdate request)
+        {
+            var response = await _service.UpdateEmployee(id, request);
+            if (response!=null)
+                return Ok(response);
+            return BadRequest();
+
+        }
     }
 }

@@ -12,6 +12,7 @@ class StripePaymentPage extends StatefulWidget {
       : super(key: key);
   final int memberShipTypeId;
   @override
+  // ignore: library_private_types_in_public_api
   _StripePaymentPageState createState() => _StripePaymentPageState();
 }
 

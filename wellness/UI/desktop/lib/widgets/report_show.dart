@@ -12,7 +12,9 @@ import 'package:open_file/open_file.dart' as open_file;
 import 'package:pdf/widgets.dart' as pw;
 
 class ReportShowWidget extends StatefulWidget {
-  const ReportShowWidget({Key? key});
+  const ReportShowWidget({
+    super.key,
+  });
 
   @override
   State<ReportShowWidget> createState() => _ReportShowWidgetState();

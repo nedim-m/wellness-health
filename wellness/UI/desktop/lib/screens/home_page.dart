@@ -6,6 +6,7 @@ import 'package:desktop/screens/treatment_page.dart';
 import 'package:desktop/screens/treatment_type_page.dart';
 import 'package:desktop/screens/user_page.dart';
 import 'package:desktop/screens/worker_page.dart';
+import 'package:desktop/utils/app_constants.dart';
 import 'package:desktop/utils/role_store.dart';
 import 'package:desktop/utils/token_store.dart';
 import 'package:desktop/widgets/report_charts.dart';
@@ -42,7 +43,8 @@ class _HomepageViewState extends State<HomepageView> {
 
   Future<void> _initPlatformState() async {
     _signalR = HubConnectionBuilder()
-        .withUrl("http://localhost:5000/notificationHub")
+        .withUrl(
+            "${AppConstants.baseUrl}${AppConstants.signalRPort}/notificationHub")
         .build();
 
     _signalR.on("ReceiveNotification", _onNewMessage);
@@ -64,10 +66,12 @@ class _HomepageViewState extends State<HomepageView> {
   }
 
   void _updateNotifications(bool remove) {
-    setState(() {
-      _numberOfNotifications = remove ? 0 : _numberOfNotifications + 1;
-      initializeItemsBasedOnRole();
-    });
+    if (mounted) {
+      setState(() {
+        _numberOfNotifications = remove ? 0 : _numberOfNotifications + 1;
+        initializeItemsBasedOnRole();
+      });
+    }
   }
 
   void removeCredentials() {

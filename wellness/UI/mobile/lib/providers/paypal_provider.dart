@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import 'package:http/io_client.dart';
+import 'package:mobile/utils/app_constants.dart';
 import 'package:mobile/utils/user_store.dart';
 
 class PayPalProvider extends ChangeNotifier {
@@ -15,7 +16,8 @@ class PayPalProvider extends ChangeNotifier {
     client.badCertificateCallback = (cert, host, port) => true;
     http = IOClient(client);
 
-    const String apiUrl = 'http://10.0.2.2:7012/PayPal/create-order/';
+    const String apiUrl =
+        '${AppConstants.baseUrl}${AppConstants.paymentServicePort}/PayPal/create-order/';
 
     final response = await http!.post(
       Uri.parse(apiUrl),
@@ -38,7 +40,8 @@ class PayPalProvider extends ChangeNotifier {
     client.badCertificateCallback = (cert, host, port) => true;
     http = IOClient(client);
 
-    const String apiUrl = 'http://10.0.2.2:7012/PayPal/capture-payment/';
+    const String apiUrl =
+        '${AppConstants.baseUrl}${AppConstants.paymentServicePort}/PayPal/capture-payment/';
 
     final response = await http!.post(
       Uri.parse(apiUrl),

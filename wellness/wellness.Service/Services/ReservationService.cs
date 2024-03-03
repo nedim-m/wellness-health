@@ -55,49 +55,55 @@ namespace wellness.Service.Services
         }
         public override async Task<PagedResult<Model.Reservation.Reservation>> Get(ReservationSearchObj? search = null)
         {
-
             var query = _context.Set<Database.Reservation>().AsQueryable();
-
-
             PagedResult<Model.Reservation.Reservation> result = new PagedResult<Model.Reservation.Reservation>();
 
 
-            query = AddFilter(query, search);
 
+
+
+            bool isFilterApplied = AddFilter(query, search) != query;
 
             query = AddInclude(query, search);
 
-            
             result.Count = await query.CountAsync();
-
 
             if (search?.Page.HasValue == true && search?.PageSize.HasValue == true)
             {
                 query = query.Skip(search.Page.Value * search.PageSize.Value).Take(search.PageSize.Value);
             }
 
-          
             var list = await query.ToListAsync();
-
-           
             UpdateStatusForPastReservations(list);
 
-            
-            list = list
-                .OrderByDescending(r => r.Status == true)
-                .ThenByDescending(r => r.Status == null)
-                .ThenBy(r => TryParseDateTime(r.Date + " " + r.Time, out DateTime parsedDateTime) ? parsedDateTime : DateTime.MinValue)
-                .ToList();
+            if (!isFilterApplied)
+            {
+               
+                list = list
+                    .OrderByDescending(r => r.Status == null)
+                    .ThenByDescending(r => r.Status == true)
+                    .ThenBy(r => TryParseDateTime(r.Date + " " + r.Time, out DateTime parsedDateTime) ? parsedDateTime : DateTime.MinValue)
+                    .ToList();
+            }
+            else
+            {
+                list = list
+                    .OrderByDescending(r => r.Status == true)
+                    .ThenByDescending(r => r.Status == false)
+                    .ThenBy(r => TryParseDateTime(r.Date + " " + r.Time, out DateTime parsedDateTime) ? parsedDateTime : DateTime.MinValue)
+                    .ToList();
+            }
 
-           
+            
+
             var tmp = _mapper.Map<List<Model.Reservation.Reservation>>(list);
             result.Result = tmp;
 
-            
             return result;
         }
 
-        
+
+
         private bool TryParseDateTime(string dateString, out DateTime parsedDateTime)
         {
             return DateTime.TryParseExact(dateString, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDateTime);

@@ -128,7 +128,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
   void showAddAlert(bool response) {
     String message = response
         ? 'Uspješno izmjenjeno'
-        : 'Neuspješna akcija, zaposlenik sa ovim korisničkim imenom ili email-om već postoji';
+        : 'Neuspješna akcija, korisnik sa ovim korisničkim imenom ili email-om već postoji';
 
     showDialog(
       context: context,
@@ -179,7 +179,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
             selectedShift!.id,
           );
         }
-        showAddAlert(true);
+
         widget.refreshCallback();
         // ignore: use_build_context_synchronously
         Navigator.of(context).pop();

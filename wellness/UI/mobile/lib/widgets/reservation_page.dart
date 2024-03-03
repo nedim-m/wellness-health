@@ -97,7 +97,9 @@ class _ReservationPageState extends State<ReservationPage> {
             TextButton(
               onPressed: () async {
                 await _cancelReservation();
+                // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
+                // ignore: use_build_context_synchronously
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -130,6 +132,7 @@ class _ReservationPageState extends State<ReservationPage> {
             TextButton(
               onPressed: () async {
                 await _postRating(numberOfSelectedStars);
+                // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
               },
               child: const Text("Potvrdi"),
@@ -222,7 +225,7 @@ class _ReservationPageState extends State<ReservationPage> {
                   if (errorText != null)
                     Text(
                       errorText!,
-                      style: TextStyle(color: Colors.red),
+                      style: const TextStyle(color: Colors.red),
                     ),
                 ],
               ),

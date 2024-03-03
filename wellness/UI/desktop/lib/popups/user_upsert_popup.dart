@@ -108,8 +108,8 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
           );
         }
 
-        showAddAlert(true);
         widget.refreshCallback();
+        // ignore: use_build_context_synchronously
         Navigator.of(context).pop();
       } catch (e) {
         showAddAlert(false);

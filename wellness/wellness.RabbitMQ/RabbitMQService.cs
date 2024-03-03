@@ -84,11 +84,15 @@ public class RabbitMQService
 
                 signalRnotification="Desktop";
             }
+            else
+            {
+                MailServiceInstance.SendMailNotification(notificationData!);
+            }
             
 
             await _hubConnection.InvokeAsync("ReceiveNotification", signalRnotification);
 
-            MailServiceInstance.SendMailNotification(notificationData!);
+           
         };
 
         _channel.BasicConsume(queue: "notifications_queue", autoAck: true, consumer: consumer);

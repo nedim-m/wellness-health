@@ -56,45 +56,28 @@ namespace wellness.Service.Services
         public override async Task<PagedResult<Model.Reservation.Reservation>> Get(ReservationSearchObj? search = null)
         {
             var query = _context.Set<Database.Reservation>().AsQueryable();
-            PagedResult<Model.Reservation.Reservation> result = new PagedResult<Model.Reservation.Reservation>();
 
+            PagedResult<Model.Reservation.Reservation> result = new();
 
-
-
-
-            bool isFilterApplied = AddFilter(query, search) != query;
-
+            query = AddFilter(query, search);
             query = AddInclude(query, search);
 
             result.Count = await query.CountAsync();
 
             if (search?.Page.HasValue == true && search?.PageSize.HasValue == true)
             {
-                query = query.Skip(search.Page.Value * search.PageSize.Value).Take(search.PageSize.Value);
+                query = query.Take(search.PageSize.Value).Skip(search.Page.Value * search.PageSize.Value);
             }
 
             var list = await query.ToListAsync();
+
             UpdateStatusForPastReservations(list);
 
-            if (!isFilterApplied)
-            {
-               
-                list = list
+            list = list
                     .OrderByDescending(r => r.Status == null)
                     .ThenByDescending(r => r.Status == true)
                     .ThenBy(r => TryParseDateTime(r.Date + " " + r.Time, out DateTime parsedDateTime) ? parsedDateTime : DateTime.MinValue)
                     .ToList();
-            }
-            else
-            {
-                list = list
-                    .OrderByDescending(r => r.Status == true)
-                    .ThenByDescending(r => r.Status == false)
-                    .ThenBy(r => TryParseDateTime(r.Date + " " + r.Time, out DateTime parsedDateTime) ? parsedDateTime : DateTime.MinValue)
-                    .ToList();
-            }
-
-            
 
             var tmp = _mapper.Map<List<Model.Reservation.Reservation>>(list);
             result.Result = tmp;

@@ -34,7 +34,6 @@ Future<void> main() async {
       ChangeNotifierProvider(create: (_) => MembershipProvider()),
       ChangeNotifierProvider(create: (_) => MembershipTypeProvider()),
       ChangeNotifierProvider(create: (_) => PayPalProvider()),
-   
     ],
     child: MultiBlocProvider(
       providers: [

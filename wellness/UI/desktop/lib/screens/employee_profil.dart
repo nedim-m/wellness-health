@@ -249,15 +249,15 @@ class _EmployeeUpdateScreenState extends State<EmployeeUpdateScreen> {
                     decoration:
                         const InputDecoration(labelText: "Nova lozinka"),
                     obscureText: true,
-                    // validator: _validation.validatePassword,
+                    validator: _validation.validatePassword,
                   ),
                   TextFormField(
                     controller: confirmPassword,
                     decoration: const InputDecoration(
                         labelText: "Potvrda nove lozinke"),
                     obscureText: true,
-                    /*validator: (value) => _validation.validateConfirmPassword(
-                        password.text, value),*/
+                    validator: (value) => _validation.validateConfirmPassword(
+                        password.text, value),
                   ),
                   const SizedBox(height: 16.0),
                   ElevatedButton(

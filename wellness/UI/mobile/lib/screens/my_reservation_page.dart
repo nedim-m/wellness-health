@@ -34,6 +34,7 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
         await _reservationProvider.get(filter: {
       'userId': _userId,
     });
+    print("UserId : $_userId");
 
     treatments = await _treatmentProvider.recommendation();
 

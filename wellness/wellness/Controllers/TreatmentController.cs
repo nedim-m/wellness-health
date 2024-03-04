@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using wellness.Model;
+using wellness.Model.Treatment;
 using wellness.Model.User;
 using wellness.Models.User;
 using wellness.Service.IServices;
@@ -9,7 +10,7 @@ using wellness.Service.IServices;
 namespace wellness.Controllers
 {
 
-  
+    
     public class TreatmentController : CrudController<Model.Treatment.Treatment, BaseSearchObject, Model.Treatment.TreatmentPostRequest, Model.Treatment.TreatmentPostRequest>
     {
 
@@ -19,7 +20,7 @@ namespace wellness.Controllers
             _service=service;
         }
 
-
+        [Authorize(Roles = "Administrator")]
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
@@ -28,6 +29,28 @@ namespace wellness.Controllers
                 return Ok(response);
             return BadRequest();
         }
+
+        [Authorize(Roles = "Administrator,Zaposlenik,Korisnik")]
+        public override Task<PagedResult<Model.Treatment.Treatment>> Get([FromQuery] BaseSearchObject? search = null)
+        {
+            return base.Get(search);
+        }
+        [Authorize(Roles = "Administrator")]
+        public override Task<Model.Treatment.Treatment> Insert([FromBody] Model.Treatment.TreatmentPostRequest insert)
+        {
+            return base.Insert(insert);
+        }
+        [Authorize(Roles = "Administrator,Zaposlenik,Korisnik")]
+        public override Task<Model.Treatment.Treatment> GetById(int id)
+        {
+            return base.GetById(id);
+        }
+        [Authorize(Roles = "Administrator")]
+        public override Task<Treatment> Update(int id, [FromBody] TreatmentPostRequest update)
+        {
+            return base.Update(id, update);
+        }
+
 
     }
 }

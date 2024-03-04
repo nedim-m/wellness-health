@@ -64,13 +64,58 @@ namespace wellness.Service.Database
             {
                 Id = 2,
                 Name = "Tretman lica dva",
-                TreatmentTypeId = 1,
+                TreatmentTypeId = 2,
                 CategoryId = 2,
                 Description = "Opis  tretmana lica dva",
                 Duration = 45,
                 Price = 30,
                 Picture = ConvertImageToByteArray("wwwroot", "tretman-lica2.jpg")
             });
+            modelBuilder.Entity<Treatment>().HasData(new Treatment
+            {
+                Id = 3,
+                Name = "Tretman lica tri",
+                TreatmentTypeId = 2,
+                CategoryId = 2,
+                Description = "Opis  tretmana lica tri",
+                Duration = 45,
+                Price = 30,
+                Picture = ConvertImageToByteArray("wwwroot", "tretman-lica3.jpg")
+            });
+            modelBuilder.Entity<Treatment>().HasData(new Treatment
+            {
+                Id = 4,
+                Name = "Tretman lica cetri",
+                TreatmentTypeId = 1,
+                CategoryId = 1,
+                Description = "Opis  tretmana lica cetri",
+                Duration = 45,
+                Price = 30,
+                Picture = ConvertImageToByteArray("wwwroot", "tretman-lica4.jpg")
+            });
+            modelBuilder.Entity<Treatment>().HasData(new Treatment
+            {
+                Id = 5,
+                Name = "Tretman lica pet",
+                TreatmentTypeId = 3,
+                CategoryId = 1,
+                Description = "Opis  tretmana lica pet",
+                Duration = 45,
+                Price = 30,
+                Picture = ConvertImageToByteArray("wwwroot", "tretman-lica5.jpg")
+            });
+            modelBuilder.Entity<Treatment>().HasData(new Treatment
+            {
+                Id = 6,
+                Name = "Tretman lica sest",
+                TreatmentTypeId = 1,
+                CategoryId =2,
+                Description = "Opis  tretmana lica sest",
+                Duration = 45,
+                Price = 30,
+                Picture = ConvertImageToByteArray("wwwroot", "tretman-lica5.jpg")
+            });
+
 
 
 
@@ -169,10 +214,15 @@ namespace wellness.Service.Database
 
 
 
-
+            //Memberships
             modelBuilder.Entity<Membership>().HasData(new Membership
             {
-                Id=1, ExpirationDate="03.03.2025", StartDate="03.03.2024", Status=true, UserId=5, MemberShipTypeId=4
+                Id=1,
+                ExpirationDate="03.03.2025",
+                StartDate="03.03.2024",
+                Status=true,
+                UserId=5,
+                MemberShipTypeId=4
             });
             modelBuilder.Entity<Membership>().HasData(new Membership
             {
@@ -185,6 +235,8 @@ namespace wellness.Service.Database
             });
 
 
+
+            //Transactions
             modelBuilder.Entity<Transaction>().HasData(new Transaction
             {
                 Id=1,
@@ -206,12 +258,12 @@ namespace wellness.Service.Database
 
             });
 
-
+            //Reservations
             modelBuilder.Entity<Reservation>().HasData(new Reservation
             {
                 Id=1,
                 UserId=5,
-                Date="04.07.2024",
+                Date="04.03.2024",
                 Time="09:00",
                 Status=null,
                 TreatmentId=2
@@ -231,7 +283,7 @@ namespace wellness.Service.Database
             {
                 Id=3,
                 UserId=5,
-                Date="24.03.2024",
+                Date="04.04.2024",
                 Time="13:00",
                 Status=null,
                 TreatmentId=2
@@ -247,7 +299,7 @@ namespace wellness.Service.Database
                 TreatmentId=2
 
             });
-
+     
 
         }
 
@@ -276,7 +328,7 @@ namespace wellness.Service.Database
         {
             string currentDirectory = Directory.GetCurrentDirectory();
             string imagePath = Path.Combine(currentDirectory, folder, imageName);
-           
+
 
             try
             {

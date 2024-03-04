@@ -1,10 +1,13 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using wellness.Model;
 using wellness.Model.Report;
 using wellness.Service.IServices;
 
 namespace wellness.Controllers
 {
+
+    [Authorize(Roles = "Administrator")]
     public class ReportController : CrudController<Report, BaseSearchObject, ReportPostRequest, ReportPostRequest>
     {
 

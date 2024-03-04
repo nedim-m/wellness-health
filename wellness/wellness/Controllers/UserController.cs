@@ -11,7 +11,7 @@ using wellness.Service.Services;
 namespace wellness.Controllers
 {
 
-
+    [Authorize(Roles = "Administrator,Zaposlenik")]
     public class UserController : CrudController<Models.User.User, UserSearchObj, UserPostRequest, UserPostRequest>
     {
         private new readonly IUserService _service;
@@ -30,7 +30,7 @@ namespace wellness.Controllers
         }
 
 
-        [HttpPost("register")]
+        [HttpPost("register"),Authorize(Roles ="Administrator,Zaposlenik")]
         public async Task<ActionResult<User>> RegisterUser(UserDesktopInsert request)
         {
             var response = await _service.RegisterUser(request);
@@ -40,7 +40,7 @@ namespace wellness.Controllers
 
         }
 
-        [HttpPut("{id}/update")]
+        [HttpPut("{id}/update"), Authorize(Roles = "Administrator,Zaposlenik")]
         public async Task<ActionResult<User>> UpdateUser(int id, [FromBody] UserDesktopInsert request)
         {
             var response = await _service.UpdateUser(id, request);
@@ -50,7 +50,7 @@ namespace wellness.Controllers
 
         }
 
-        [HttpPut("{id}/update-employee")]
+        [HttpPut("{id}/update-employee"),Authorize(Roles = "Zaposlenik")]
         public async Task<ActionResult<User>> UpdateEmployee(int id, [FromBody] UserEmployeeDesktopUpdate request)
         {
             var response = await _service.UpdateEmployee(id, request);

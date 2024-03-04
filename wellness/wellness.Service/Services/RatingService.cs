@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -33,37 +34,49 @@ namespace wellness.Service.Services
 
             return base.AddFilter(query, search);
         }
+        private bool TryParseDateTime(string dateString, out DateTime parsedDateTime)
+        {
+            return DateTime.TryParseExact(dateString, "dd.MM.yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out parsedDateTime);
+        }
 
         public override  Task BeforeInsert(Database.Rating entity, RatingPostRequest insert)
         {
 
-            
 
-            DateTime currentDate = DateTime.Now;
+
+            DateTime currentDate = DateTime.UtcNow;
+
 
 
             var reservation =  _context.Reservations.FindAsync(insert.ReservationId).Result;
 
-            
 
-            if (reservation!=null && reservation.Status==true)
+
+            if (reservation != null && reservation.Status == true)
             {
-                var rating = _context.Ratings.Where(x=>x.ReservationId==reservation.Id);
-                if (rating!=null)
+                var rating = _context.Ratings.Where(x => x.ReservationId == reservation.Id).FirstOrDefault();
+                if (rating != null)
                 {
                     throw new InvalidOperationException("Already left rating");
                 }
 
-                DateTime parsedDateTime = DateTime.Parse(reservation.Date + " " + reservation.Time);
-                if (currentDate<parsedDateTime)
+                DateTime parsedDateTime;
+                if (TryParseDateTime(reservation.Date + " " + reservation.Time, out parsedDateTime))
                 {
-                    throw new InvalidOperationException("You can't review something you haven't attend!");
+                    if (currentDate < parsedDateTime)
+                    {
+                        throw new InvalidOperationException("You can't review something you haven't attended!");
+                    }
                 }
-
+                else
+                {
+                    
+                    throw new InvalidOperationException("Invalid date format");
+                }
             }
             else
             {
-                throw new InvalidOperationException("You can't review something you haven't attend!");
+                throw new InvalidOperationException("You can't review something you haven't attended!");
             }
 
             return  base.BeforeInsert(entity, insert);

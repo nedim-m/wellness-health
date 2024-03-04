@@ -1,8 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using wellness.Service.IServices;
 
 namespace wellness.Controllers
 {
+    [Authorize(Roles = "Korisnik")]
     [ApiController]
     [Route("[controller]")]
     public class RecommendationController:ControllerBase

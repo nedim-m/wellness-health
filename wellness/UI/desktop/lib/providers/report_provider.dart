@@ -21,6 +21,8 @@ class ReportProvider extends BaseProvider<Report> {
     String dateToString = dateTo.toString();
     String dateFromString = dateFrom.toString();
 
+    
+
     var jsonRequest = jsonEncode(<String, dynamic>{
       "dateTo": dateToString,
       "dateFrom": dateFromString,

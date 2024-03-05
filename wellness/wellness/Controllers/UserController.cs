@@ -11,7 +11,7 @@ using wellness.Service.Services;
 namespace wellness.Controllers
 {
 
-    [Authorize(Roles = "Administrator,Zaposlenik")]
+    
     public class UserController : CrudController<Models.User.User, UserSearchObj, UserPostRequest, UserPostRequest>
     {
         private new readonly IUserService _service;
@@ -58,6 +58,17 @@ namespace wellness.Controllers
                 return Ok(response);
             return BadRequest();
 
+        }
+        [Authorize(Roles = "Administrator,Zaposlenik,Korisnik")]
+        public override Task<User> GetById(int id)
+        {
+            return base.GetById(id);
+        }
+
+        [Authorize(Roles = "Administrator,Zaposlenik,Korisnik")]
+        public override Task<User> Update(int id, [FromBody] UserPostRequest update)
+        {
+            return base.Update(id, update);
         }
     }
 }

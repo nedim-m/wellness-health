@@ -130,21 +130,27 @@ class _ReportShowWidgetState extends State<ReportShowWidget> {
       ),
     );
 
-    final directory = Directory(
-        'C:/Users/Nedim/Documents/GitHub/wellness-health/wellness/UI/desktop/assets/pdf');
+    final appDirectory = Directory.current.path;
+    final pdfDirectory = '$appDirectory/assets/pdf';
 
-    final path = '${directory.path}/report.pdf';
+    final directory = Directory(pdfDirectory);
+
+    print('PDF Direktorijum: $pdfDirectory');
 
     if (!directory.existsSync()) {
+      print('Kreiranje direktorijuma...');
       directory.createSync(recursive: true);
     }
 
-    final file = File(path);
+    final pdfPath = '${directory.path}/report.pdf';
+
+    final file = File(pdfPath);
     final pdfBytes = await pdf.save();
     await file.writeAsBytes(pdfBytes);
 
     try {
-      open_file.OpenFile.open(path);
+      print('Otvaram PDF...');
+      await open_file.OpenFile.open(pdfPath);
     } catch (error) {
       print('Pogreška pri otvaranju PDF-a: $error');
     }

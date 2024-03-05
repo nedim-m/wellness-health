@@ -244,7 +244,8 @@ namespace wellness.Service.Database
                 Amount=500,
                 MemberShipTypeId=4,
                 UserId=5,
-                Currency="BAM"
+                Currency="BAM",
+                Timestamp=DateTime.UtcNow,
 
             });
             modelBuilder.Entity<Transaction>().HasData(new Transaction
@@ -254,11 +255,13 @@ namespace wellness.Service.Database
                 Amount=300,
                 MemberShipTypeId=3,
                 UserId=4,
-                Currency="BAM"
+                Currency="BAM",
+                Timestamp=DateTime.UtcNow,
 
             });
 
             //Reservations
+
             modelBuilder.Entity<Reservation>().HasData(new Reservation
             {
                 Id=1,
@@ -274,9 +277,9 @@ namespace wellness.Service.Database
                 Id=2,
                 UserId=5,
                 Date="24.04.2024",
-                Time="11:00",
+                Time="18:00",
                 Status=null,
-                TreatmentId=2
+                TreatmentId=3
 
             });
             modelBuilder.Entity<Reservation>().HasData(new Reservation
@@ -292,14 +295,54 @@ namespace wellness.Service.Database
             modelBuilder.Entity<Reservation>().HasData(new Reservation
             {
                 Id=4,
-                UserId=5,
+                UserId=4,
                 Date="04.04.2024",
                 Time="18:00",
                 Status=null,
                 TreatmentId=2
 
             });
-     
+            modelBuilder.Entity<Reservation>().HasData(new Reservation
+            {
+                Id=5,
+                UserId=5,
+                Date="04.07.2024",
+                Time="09:00",
+                Status=null,
+                TreatmentId=2
+
+            });
+            modelBuilder.Entity<Reservation>().HasData(new Reservation
+            {
+                Id=6,
+                UserId=5,
+                Date="24.04.2024",
+                Time="11:00",
+                Status=null,
+                TreatmentId=2
+
+            });
+            modelBuilder.Entity<Reservation>().HasData(new Reservation
+            {
+                Id=7,
+                UserId=5,
+                Date="24.03.2024",
+                Time="13:00",
+                Status=null,
+                TreatmentId=3
+
+            });
+            modelBuilder.Entity<Reservation>().HasData(new Reservation
+            {
+                Id=8,
+                UserId=5,
+                Date="09.04.2024",
+                Time="18:00",
+                Status=null,
+                TreatmentId=5
+
+            });
+
 
         }
 

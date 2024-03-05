@@ -11,7 +11,7 @@ using wellness.Service.IServices;
 
 namespace wellness.Controllers
 {
-    [Authorize(Roles = "Administrator")]
+    [Authorize(Roles = "Administrator,Zaposlenik")]
     public class TreatmentTypeController : CrudController<Model.TreatmentType.TreatmentType, BaseSearchObject, Model.TreatmentType.TreatmentTypePostRequest, Model.TreatmentType.TreatmentTypePostRequest>
     {
         private new readonly ITreatmentTypeService _service;

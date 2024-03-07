@@ -546,7 +546,7 @@ namespace wellness.Service.Migrations
                             Currency = "BAM",
                             MemberShipTypeId = 4,
                             PaymentMethod = "Stripe",
-                            Timestamp = new DateTime(2024, 3, 6, 23, 46, 59, 80, DateTimeKind.Utc).AddTicks(7367),
+                            Timestamp = new DateTime(2024, 3, 7, 10, 14, 49, 821, DateTimeKind.Utc).AddTicks(7047),
                             UserId = 5
                         },
                         new
@@ -556,7 +556,7 @@ namespace wellness.Service.Migrations
                             Currency = "BAM",
                             MemberShipTypeId = 3,
                             PaymentMethod = "Stripe",
-                            Timestamp = new DateTime(2024, 3, 6, 23, 46, 59, 80, DateTimeKind.Utc).AddTicks(7392),
+                            Timestamp = new DateTime(2024, 3, 7, 10, 14, 49, 821, DateTimeKind.Utc).AddTicks(7103),
                             UserId = 4
                         });
                 });
@@ -584,7 +584,6 @@ namespace wellness.Service.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<byte[]>("Picture")
-                        .IsRequired()
                         .HasColumnType("varbinary(max)");
 
                     b.Property<float>("Price")
@@ -792,8 +791,8 @@ namespace wellness.Service.Migrations
                             RoleId = 1,
                             ShiftId = 1,
                             Status = true,
-                            TokenCreated = new DateTime(2024, 3, 6, 23, 46, 59, 79, DateTimeKind.Utc).AddTicks(204),
-                            TokenExpires = new DateTime(2024, 3, 7, 0, 46, 59, 79, DateTimeKind.Utc).AddTicks(210),
+                            TokenCreated = new DateTime(2024, 3, 7, 10, 14, 49, 799, DateTimeKind.Utc).AddTicks(5005),
+                            TokenExpires = new DateTime(2024, 3, 7, 11, 14, 49, 799, DateTimeKind.Utc).AddTicks(5010),
                             UserName = "admin"
                         },
                         new
@@ -810,8 +809,8 @@ namespace wellness.Service.Migrations
                             RoleId = 2,
                             ShiftId = 2,
                             Status = true,
-                            TokenCreated = new DateTime(2024, 3, 6, 23, 46, 59, 79, DateTimeKind.Utc).AddTicks(630),
-                            TokenExpires = new DateTime(2024, 3, 7, 0, 46, 59, 79, DateTimeKind.Utc).AddTicks(633),
+                            TokenCreated = new DateTime(2024, 3, 7, 10, 14, 49, 799, DateTimeKind.Utc).AddTicks(5783),
+                            TokenExpires = new DateTime(2024, 3, 7, 11, 14, 49, 799, DateTimeKind.Utc).AddTicks(5784),
                             UserName = "zaposlenik"
                         },
                         new
@@ -828,8 +827,8 @@ namespace wellness.Service.Migrations
                             RoleId = 4,
                             ShiftId = 1,
                             Status = true,
-                            TokenCreated = new DateTime(2024, 3, 6, 23, 46, 59, 80, DateTimeKind.Utc).AddTicks(75),
-                            TokenExpires = new DateTime(2024, 3, 7, 0, 46, 59, 80, DateTimeKind.Utc).AddTicks(83),
+                            TokenCreated = new DateTime(2024, 3, 7, 10, 14, 49, 800, DateTimeKind.Utc).AddTicks(3835),
+                            TokenExpires = new DateTime(2024, 3, 7, 11, 14, 49, 800, DateTimeKind.Utc).AddTicks(3838),
                             UserName = "trener"
                         },
                         new
@@ -845,8 +844,8 @@ namespace wellness.Service.Migrations
                             RoleId = 3,
                             ShiftId = 1,
                             Status = true,
-                            TokenCreated = new DateTime(2024, 3, 6, 23, 46, 59, 80, DateTimeKind.Utc).AddTicks(6908),
-                            TokenExpires = new DateTime(2024, 3, 7, 0, 46, 59, 80, DateTimeKind.Utc).AddTicks(6913),
+                            TokenCreated = new DateTime(2024, 3, 7, 10, 14, 49, 821, DateTimeKind.Utc).AddTicks(5796),
+                            TokenExpires = new DateTime(2024, 3, 7, 11, 14, 49, 821, DateTimeKind.Utc).AddTicks(5800),
                             UserName = "korisnik"
                         },
                         new
@@ -862,8 +861,8 @@ namespace wellness.Service.Migrations
                             RoleId = 3,
                             ShiftId = 1,
                             Status = true,
-                            TokenCreated = new DateTime(2024, 3, 6, 23, 46, 59, 80, DateTimeKind.Utc).AddTicks(7128),
-                            TokenExpires = new DateTime(2024, 3, 7, 0, 46, 59, 80, DateTimeKind.Utc).AddTicks(7129),
+                            TokenCreated = new DateTime(2024, 3, 7, 10, 14, 49, 821, DateTimeKind.Utc).AddTicks(6677),
+                            TokenExpires = new DateTime(2024, 3, 7, 11, 14, 49, 821, DateTimeKind.Utc).AddTicks(6678),
                             UserName = "nedim"
                         });
                 });

@@ -54,7 +54,7 @@ namespace wellness.Service.Services
                 };
             }
 
-            if (user.RoleId != 3 && user.RoleId != 1 && user.RoleId != 4)
+            if (user.RoleId != 3 && user.RoleId != 1 && user.RoleId != 2)
             {
                 return new AuthResponse
                 {

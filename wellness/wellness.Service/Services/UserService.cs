@@ -128,37 +128,6 @@ namespace wellness.Service.Services
         }
 
 
-        /*public override async Task<Models.User.User> Insert(UserPostRequest insert)
-        {
-            if (!IsAvailable(null, insert.UserName, insert.Email))
-                return null;
-
-
-
-            if (insert.Password!=insert.ConfrimPassword)
-            {
-                return null;
-            }
-            CreatePasswordHash(insert.Password, out byte[] passwordHash, out byte[] passwordSalt);
-
-            var user = _mapper.Map<Database.User>(insert);
-            user.PasswordHash= passwordHash;
-            user.PasswordSalt=passwordSalt;
-            user.RoleId=insert.RoleId;
-            user.ShiftId=insert.ShiftId;
-            _context.Users.Add(user);
-
-
-
-            await _context.SaveChangesAsync();
-
-
-
-
-            return _mapper.Map<Models.User.User>(user);
-        }*/
-
-
         
 
 
@@ -174,58 +143,44 @@ namespace wellness.Service.Services
 
         public async Task<string> ForgotPassword(UserForgotPassword request)
         {
-          
             var filteredEntity = await _context.Set<Database.User>()
-                .Where(x => x.UserName == request.UserName && x.Email == request.Email)
+                .Where(x => x.UserName == request.UserName && x.Email == request.Email && (x.RoleId == 2 || x.RoleId == 3))
                 .FirstOrDefaultAsync();
 
-            if (filteredEntity != null && filteredEntity.RoleId == 3 && !request.Mobile)
-            {
-                
-                return null;
-            }
-            if(filteredEntity != null && filteredEntity.RoleId != 3 && request.Mobile)
-            {
-                return null;
-            }
-            
-
-          
             if (filteredEntity != null)
             {
-        
-                string password = GeneratePassword();
-
-               
-                var userToUpdate = await _context.Users.FindAsync(filteredEntity.Id);
-                if (userToUpdate == null)
+                if ((filteredEntity.RoleId == 3 && !request.Mobile) || (filteredEntity.RoleId != 3 && request.Mobile))
                 {
-                    
                     return null;
                 }
 
-               
+                string password = GeneratePassword();
+
+                var userToUpdate = await _context.Users.FindAsync(filteredEntity.Id);
+
+                if (userToUpdate == null)
+                {
+                    return null;
+                }
+
                 CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
 
                 userToUpdate.PasswordHash = passwordHash;
                 userToUpdate.PasswordSalt = passwordSalt;
 
-            
                 await _context.SaveChangesAsync();
 
-                
                 string subject = "Resetiranje lozinke";
                 string body = $"Poštovanje, Vaša nova lozinka za korisničko ime: {request.UserName} je uspešno postavljena. Molimo Vas da je odmah promenite. Nova lozinka: {password}. Lijep pozdrav. Wellness centar - Health.";
 
                 _mailService.SendEmail(request.Email, subject, body);
 
-         
                 return "Iniciran je reset lozinke. Proverite svoj email za uputstva.";
             }
 
-
             return null;
         }
+
 
 
 

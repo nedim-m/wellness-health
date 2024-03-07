@@ -37,84 +37,117 @@ namespace wellness.Service.Database
             modelBuilder.Entity<MembershipType>().HasData(new MembershipType { Id = 4, Name ="Godisnja", Description="Opis godisnje clanarine", Duration=365, Price=500 });
 
             //Categories
-            modelBuilder.Entity<Category>().HasData(new Category { Id=1, Name="Kategorija jedan", Description="Opis kategorije jedan" });
-            modelBuilder.Entity<Category>().HasData(new Category { Id=2, Name="Kategorija dva", Description="Opis kategorije dva" });
-            modelBuilder.Entity<Category>().HasData(new Category { Id=3, Name="Kategorija tri", Description="Opis kategorije tri" });
+            modelBuilder.Entity<Category>().HasData(new Category { Id = 1, Name = "Masaže", Description = "Različite vrste masaža za opuštanje i relaksaciju tela." });
+            modelBuilder.Entity<Category>().HasData(new Category { Id = 2, Name = "Tretmani lica", Description = "Raznovrsni tretmani za negu lica i kože." });
+            modelBuilder.Entity<Category>().HasData(new Category { Id = 3, Name = "Tretmani tela", Description = "Različite usluge za tretiranje tela i poboljšanje izgleda kože." });
+            modelBuilder.Entity<Category>().HasData(new Category { Id = 4, Name = "Relaksacija", Description = "Prostor za opuštanje, sauna, đakuzi i meditacija." });
+            modelBuilder.Entity<Category>().HasData(new Category { Id = 5, Name = "Nail Bar", Description = "Usluge za negu noktiju, manikir i pedikir." });
+            modelBuilder.Entity<Category>().HasData(new Category { Id = 6, Name = "Fitnes i Wellness", Description = "Teretana, grupni treninzi i wellness programi." });
+            modelBuilder.Entity<Category>().HasData(new Category { Id = 7, Name = "Estetski tretmani", Description = "Depilacija, tretmani za kožu i maderoterapija." });
+
 
             //TreatmentTypes
-            modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id=1, Name="Tip tretman jedan", Description="Opis tipa tretmana jedan" });
-            modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id=2, Name="Tip tretmana dva", Description="Opis tipa tretmana dva" });
-            modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id=3, Name="Tip tretmana tri", Description="Opis tipa tretmana tri" });
+            modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id = 1, Name = "Klasična masaža", Description = "Osnovna masaža za opuštanje mišića." });
+            modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id = 2, Name = "Masaža sa toplim kamenjem", Description = "Masaža koja koristi tople kamene da opusti mišiće." });
+            modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id = 3, Name = "Masaža aromaterapijom", Description = "Masaža sa mirisnim uljima za dodatnu relaksaciju." });
+            modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id = 4, Name = "Thai masaža", Description = "Tradicionalna thai masaža za poboljšanje fleksibilnosti." });
+            modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id = 5, Name = "Hidratacija kože", Description = "Tretman za hidrataciju i osveženje kože lica." });
+            modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id = 6, Name = "Čišćenje lica", Description = "Dubinsko čišćenje lica radi uklanjanja nečistoća." });
+            modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id = 7, Name = "Tretmani oblikovanja tela", Description = "Usluge za oblikovanje tela i smanjenje obima." });
+            modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id = 8, Name = "Piling tela", Description = "Piling za uklanjanje odumrlih ćelija kože." });
+            modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id = 9, Name = "Sauna", Description = "Suva sauna za detoksikaciju tela." });
+            modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id = 10, Name = "Manikir", Description = "Nega noktiju na rukama." });
+         
+
 
             //Treatments
 
             modelBuilder.Entity<Treatment>().HasData(new Treatment
             {
                 Id = 1,
-                Name = "Tretman lica jedan",
+                Name = "Relaksaciona masaža",
                 TreatmentTypeId = 1,
-                CategoryId = 1,
-                Description = "Opis tretmana lica jedan",
-                Duration = 120,
-                Price = 120,
-                Picture = ConvertImageToByteArray("wwwroot", "tretman-lica1.jpg")
+                CategoryId = 1, 
+                Description = "Masaža koja opušta telo i um.",
+                Duration = 60,
+                Price = 80,
+                Picture = ConvertImageToByteArray("wwwroot", "relaksaciona-masaza.jpg")
             });
 
             modelBuilder.Entity<Treatment>().HasData(new Treatment
             {
                 Id = 2,
-                Name = "Tretman lica dva",
-                TreatmentTypeId = 2,
-                CategoryId = 2,
-                Description = "Opis  tretmana lica dva",
+                Name = "Tretman lica sa hidratacijom",
+                TreatmentTypeId = 2, 
+                CategoryId = 2, 
+                Description = "Tretman za hidrataciju kože lica.",
                 Duration = 45,
-                Price = 30,
-                Picture = ConvertImageToByteArray("wwwroot", "tretman-lica2.jpg")
+                Price = 60,
+                Picture = ConvertImageToByteArray("wwwroot", "tretman-lica-hidratacija.jpg")
             });
+
+       
+
             modelBuilder.Entity<Treatment>().HasData(new Treatment
             {
                 Id = 3,
-                Name = "Tretman lica tri",
-                TreatmentTypeId = 2,
-                CategoryId = 2,
-                Description = "Opis  tretmana lica tri",
-                Duration = 45,
-                Price = 30,
-                Picture = ConvertImageToByteArray("wwwroot", "tretman-lica3.jpg")
+                Name = "Anticelulit tretman",
+                TreatmentTypeId = 3,
+                CategoryId = 3, 
+                Description = "Tretman koji cilja na smanjenje celulita.",
+                Duration = 60,
+                Price = 100,
+                Picture = ConvertImageToByteArray("wwwroot", "anticelulit-tretman.jpg")
             });
+
             modelBuilder.Entity<Treatment>().HasData(new Treatment
             {
                 Id = 4,
-                Name = "Tretman lica cetri",
-                TreatmentTypeId = 1,
-                CategoryId = 1,
-                Description = "Opis  tretmana lica cetri",
+                Name = "Mediteranski piling",
+                TreatmentTypeId = 4, 
+                CategoryId = 4, 
+                Description = "Piling sa sastojcima inspirisanim mediteranskom kuhinjom.",
                 Duration = 45,
-                Price = 30,
-                Picture = ConvertImageToByteArray("wwwroot", "tretman-lica4.jpg")
+                Price = 75,
+                Picture = ConvertImageToByteArray("wwwroot", "mediteranski-piling.jpg")
             });
+
             modelBuilder.Entity<Treatment>().HasData(new Treatment
             {
                 Id = 5,
-                Name = "Tretman lica pet",
-                TreatmentTypeId = 3,
-                CategoryId = 1,
-                Description = "Opis  tretmana lica pet",
-                Duration = 45,
-                Price = 30,
-                Picture = ConvertImageToByteArray("wwwroot", "tretman-lica5.jpg")
+                Name = "Aromaterapija",
+                TreatmentTypeId = 5, 
+                CategoryId = 4, 
+                Description = "Tretman sa mirisnim uljima za potpunu relaksaciju.",
+                Duration = 90,
+                Price = 120,
+                Picture = ConvertImageToByteArray("wwwroot", "aromaterapija.jpg")
             });
+
             modelBuilder.Entity<Treatment>().HasData(new Treatment
             {
                 Id = 6,
-                Name = "Tretman lica sest",
-                TreatmentTypeId = 1,
-                CategoryId =2,
-                Description = "Opis  tretmana lica sest",
-                Duration = 45,
-                Price = 30,
-                Picture = ConvertImageToByteArray("wwwroot", "tretman-lica5.jpg")
+                Name = "Manikir i pedikir",
+                TreatmentTypeId = 6,
+                CategoryId = 5, 
+                Description = "Kompletna nega noktiju na rukama i nogama.",
+                Duration = 75,
+                Price = 70,
+                Picture = ConvertImageToByteArray("wwwroot", "manikir-pedikir.jpg")
             });
+
+            modelBuilder.Entity<Treatment>().HasData(new Treatment
+            {
+                Id = 7,
+                Name = "Yoga sesija",
+                TreatmentTypeId = 7, // Pretpostavljamo da je 7 tip tretmana za wellness
+                CategoryId = 6, // Pretpostavljamo da je 6 kategorija za fitnes i wellness
+                Description = "Sesija joge za fizičko i mentalno blagostanje.",
+                Duration = 60,
+                Price = 50,
+                Picture = ConvertImageToByteArray("wwwroot", "yoga-sesija.jpg")
+            });
+
 
 
 
@@ -349,7 +382,7 @@ namespace wellness.Service.Database
                 UserId=5,
                 Date="04.03.2024",
                 Time="11:00",
-                Status=null,
+                Status=true,
                 TreatmentId=3
 
             });
@@ -360,7 +393,7 @@ namespace wellness.Service.Database
                 UserId=4,
                 Date="04.03.2024",
                 Time="13:00",
-                Status=null,
+                Status=true,
                 TreatmentId=2
 
             });
@@ -371,7 +404,7 @@ namespace wellness.Service.Database
                 UserId=4,
                 Date="05.03.2024",
                 Time="13:00",
-                Status=null,
+                Status=true,
                 TreatmentId=2
 
             });
@@ -383,14 +416,47 @@ namespace wellness.Service.Database
                 UserId=4,
                 Date="05.03.2024",
                 Time="13:00",
-                Status=null,
+                Status=true,
                 TreatmentId=1
 
             });
 
+            modelBuilder.Entity<Reservation>().HasData(new Reservation
+            {
+                Id = 13,
+                UserId = 5,
+                Date = "10.03.2024",
+                Time = "10:00",
+                Status = true,
+                TreatmentId = 2
+            });
+
+            modelBuilder.Entity<Reservation>().HasData(new Reservation
+            {
+                Id = 14,
+                UserId = 5,
+                Date = "15.03.2024",
+                Time = "12:00",
+                Status = false,
+                TreatmentId = 5
+            });
+
+            modelBuilder.Entity<Reservation>().HasData(new Reservation
+            {
+                Id = 15,
+                UserId = 4,
+                Date = "18.03.2024",
+                Time = "09:30",
+                Status = true,
+                TreatmentId = 3
+            });
+
+
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=1,ReservationId=11,StarRating=4 });
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=2, ReservationId=10, StarRating=5 });
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=3, ReservationId=9, StarRating=3 });
+            modelBuilder.Entity<Rating>().HasData(new Rating { Id=4, ReservationId=15, StarRating=3 });
+            modelBuilder.Entity<Rating>().HasData(new Rating { Id=5, ReservationId=13, StarRating=2 });
 
 
 

@@ -63,14 +63,14 @@ class TreatmentRecomendationView extends StatelessWidget {
           ),
           const Gap(8),
           Text(
-            'Duration: ${treatment.duration} min',
+            'Trajanje: ${treatment.duration} min',
             style: Styles.headLineStyle3.copyWith(color: Colors.white),
           ),
           const Gap(8),
           Row(
             children: [
               Text(
-                'Average Rating: ${treatment.averageRating!.toStringAsFixed(1)}',
+                'Ocjena: ${treatment.averageRating != null && treatment.averageRating != 0 ? treatment.averageRating!.toStringAsFixed(1) : 'N/A'}',
                 style: Styles.headLineStyle3.copyWith(color: Colors.white),
               ),
               const Icon(

@@ -114,10 +114,11 @@ namespace wellness.Service.Services
 
             userToUpdate.PasswordHash= passwordHash;
             userToUpdate.PasswordSalt=passwordSalt;
+           
 
             _mapper.Map(update, userToUpdate);
 
-
+            userToUpdate.ShiftId=1;
 
 
             await _context.SaveChangesAsync();

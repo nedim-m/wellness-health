@@ -23,7 +23,7 @@ namespace wellness.Models.UserPostRequest
         public bool Status { get; set; }
 
         public string ConfrimPassword { get; set; } = null!;
-        public byte[]? Picture { get; set; }
+        public byte[]? Picture { get; set; } 
         public int RoleId { get; set; }
         public int ShiftId { get; set; }
 

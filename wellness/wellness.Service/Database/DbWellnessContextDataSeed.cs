@@ -343,6 +343,56 @@ namespace wellness.Service.Database
 
             });
 
+            modelBuilder.Entity<Reservation>().HasData(new Reservation
+            {
+                Id=9,
+                UserId=5,
+                Date="04.03.2024",
+                Time="11:00",
+                Status=null,
+                TreatmentId=3
+
+            });
+
+            modelBuilder.Entity<Reservation>().HasData(new Reservation
+            {
+                Id=10,
+                UserId=4,
+                Date="04.03.2024",
+                Time="13:00",
+                Status=null,
+                TreatmentId=2
+
+            });
+
+            modelBuilder.Entity<Reservation>().HasData(new Reservation
+            {
+                Id=11,
+                UserId=4,
+                Date="05.03.2024",
+                Time="13:00",
+                Status=null,
+                TreatmentId=2
+
+            });
+
+
+            modelBuilder.Entity<Reservation>().HasData(new Reservation
+            {
+                Id=12,
+                UserId=4,
+                Date="05.03.2024",
+                Time="13:00",
+                Status=null,
+                TreatmentId=1
+
+            });
+
+            modelBuilder.Entity<Rating>().HasData(new Rating { Id=1,ReservationId=11,StarRating=4 });
+            modelBuilder.Entity<Rating>().HasData(new Rating { Id=2, ReservationId=10, StarRating=5 });
+            modelBuilder.Entity<Rating>().HasData(new Rating { Id=3, ReservationId=9, StarRating=3 });
+
+
 
         }
 

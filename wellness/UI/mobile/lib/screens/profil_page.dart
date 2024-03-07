@@ -23,6 +23,7 @@ class _ProfilPageViewState extends State<ProfilPageView> {
       TextEditingController();
   final UserProvider _userProvider = UserProvider();
   final ValidationRules _validation = ValidationRules();
+  late User userData;
 
   Map<String, String?> _errorMessages = {};
 
@@ -34,7 +35,7 @@ class _ProfilPageViewState extends State<ProfilPageView> {
 
   Future<void> _loadUserData() async {
     try {
-      User userData = await _userProvider.getById();
+      userData = await _userProvider.getById();
 
       setState(() {
         _firstNameController =
@@ -82,6 +83,7 @@ class _ProfilPageViewState extends State<ProfilPageView> {
           _passwordController.text,
           _confirmPasswordController.text,
           _phoneController.text,
+          userData.status ?? false,
         );
 
         _showSuccessDialog();

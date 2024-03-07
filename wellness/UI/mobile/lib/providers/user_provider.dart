@@ -89,13 +89,15 @@ class UserProvider extends BaseProvider<User> {
   }
 
   Future<dynamic> updateUser(
-      String firstName,
-      String lastName,
-      String email,
-      String userName,
-      String password,
-      String confrimPassword,
-      String phone) async {
+    String firstName,
+    String lastName,
+    String email,
+    String userName,
+    String password,
+    String confrimPassword,
+    String phone,
+    bool status,
+  ) async {
     int id = int.parse(UserManager.getUserId()!);
     var url = "$baseUrl$endpoint/$id";
     var uri = Uri.parse(url);
@@ -109,7 +111,9 @@ class UserProvider extends BaseProvider<User> {
       "password": password,
       "confrimPassword": confrimPassword,
       "roleId": 3,
-      "phone": phone
+      "phone": phone,
+      "status": status,
+      
     });
 
     var response = await http!.put(uri, headers: headers, body: jsonRequest);

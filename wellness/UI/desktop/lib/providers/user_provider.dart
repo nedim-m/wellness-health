@@ -234,7 +234,7 @@ class UserProvider extends BaseProvider<User> {
     var headers = createJwtHeaders(token ?? '');
 
     var jsonRequest =
-        jsonEncode(<String, dynamic>{"userName": userName, "email": email});
+        jsonEncode(<String, dynamic>{"userName": userName, "email": email, "mobile":false});
 
     var response = await http.post(uri, headers: headers, body: jsonRequest);
 

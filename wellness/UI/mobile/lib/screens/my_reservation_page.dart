@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:mobile/models/reservation.dart';
 import 'package:mobile/models/treatment.dart';

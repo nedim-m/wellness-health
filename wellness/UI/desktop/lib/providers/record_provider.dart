@@ -50,7 +50,7 @@ class RecordProvider extends BaseProvider<Records> {
     DateTime now = DateTime.now();
     String formattedDateTime = DateFormat('dd.MM.yy - HH:mm').format(now);
 
-    print("Formatiran datum : $formattedDateTime");
+    
     var jsonRequest = jsonEncode(<String, dynamic>{
       "entryDate": formattedDateTime,
       "userId": data.id,

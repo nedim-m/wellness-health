@@ -85,7 +85,7 @@ class _LoginPageViewState extends State<LoginPageView> {
                   child: TextField(
                     controller: _usernameController,
                     decoration: const InputDecoration(
-                      labelText: 'Username',
+                      labelText: 'Korisničko ime',
                       border: OutlineInputBorder(),
                     ),
                   ),

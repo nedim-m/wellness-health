@@ -140,8 +140,8 @@ namespace wellness.Service.Database
             {
                 Id = 7,
                 Name = "Yoga sesija",
-                TreatmentTypeId = 7, // Pretpostavljamo da je 7 tip tretmana za wellness
-                CategoryId = 6, // Pretpostavljamo da je 6 kategorija za fitnes i wellness
+                TreatmentTypeId = 7, 
+                CategoryId = 6, 
                 Description = "Sesija joge za fizičko i mentalno blagostanje.",
                 Duration = 60,
                 Price = 50,
@@ -159,13 +159,13 @@ namespace wellness.Service.Database
                 FirstName = "Admin",
                 LastName = "Admin",
                 Email = "admin@admin.com",
-                PasswordHash = HexToByteArray("79C4E5E29CE28441CFFE5A980F30930A59BC4176DC5F7A546AFBA7140ADED201F0F34416F324DE2A72CF75AE2287431E289015FA2118DC8E271780EEBC8B044E"),
-                PasswordSalt = HexToByteArray("4B2A9EAAF28F31D90B1F3C6E03A2F40F405E501BC2E05F5430896198BF4D0440E4BB5DCBD1C30A4F68665DEFDDC6CDA3E929425E0C5EDD53256DAE04398254ADE81A47FCB3BEE0225994BF8C8E90F943D25F4A67D4E33196D2C996F91CD6759073F7AFF9068F05DC7DB154E3F3E6BDDF0E06D5F153D3157A93E13EEF35E069A0"),
+                PasswordHash = HexToByteArray("0xE82F9D33958051FB08CF22F9C66ADAD2BBBEDA0BF8A3251BFF99D70862BB720E7AE1BC033E6733334416E3CA946A75414E390E420E4BB2339B3B810D96F1AA5F"),
+                PasswordSalt = HexToByteArray("0x9D3D009C23EBD3BF47F809780D87C78001C20E70410701D9478E4ADFDBD6C1AFA93D5C5AC47EA8E14586DDA0AC7AEAE335375A04BE1E5B453D6EF133798677BC4417AFB030A4B3CEB013DB562B8BF79927F8ED058CF87BFD55AF8622FAEF311BB56B913387B6217C840A0D842F4A907C317B5946A153C72966087B9FDFF8EBCA"),
                 RefreshToken = String.Empty,
                 TokenCreated = DateTime.UtcNow,
                 TokenExpires = DateTime.UtcNow.AddHours(1),
                 UserName = "admin",
-                Phone = "061111222",
+                Phone = "061399222",
                 Status = true,
                 RoleId = 1,
                 ShiftId=1,
@@ -176,13 +176,13 @@ namespace wellness.Service.Database
                 FirstName = "Zaposlenik",
                 LastName = "Zaposlenik",
                 Email = "employee@admin.com",
-                PasswordHash = HexToByteArray("0x6F8D511EF54DA2CA269CB4797A3B8052D7F757288E4F413F3F2C130FD9FF85A6341061AAF594F20F69DED9CE6DFA618AC909B67C60349E2BC80EF8BF480D2372"),
-                PasswordSalt = HexToByteArray("0xADB638E16237D57B09654217FF8DE3E761BA1E18A29211E81821279FE9E8D3124313A05E4C1B873823DCAF1FA3070DCA913711E7BE5665AA7B7FB0AAD32E34D2676E69B78A20541C9477355C4CD014BC877FB4DFCEECA060816BEB5770950D949A292A3EFBB30641DDE21A00D204ACD5F06073953293E3426FAE3AD1D65EF067"),
+                PasswordHash = HexToByteArray("0xE82F9D33958051FB08CF22F9C66ADAD2BBBEDA0BF8A3251BFF99D70862BB720E7AE1BC033E6733334416E3CA946A75414E390E420E4BB2339B3B810D96F1AA5F"),
+                PasswordSalt = HexToByteArray("0x9D3D009C23EBD3BF47F809780D87C78001C20E70410701D9478E4ADFDBD6C1AFA93D5C5AC47EA8E14586DDA0AC7AEAE335375A04BE1E5B453D6EF133798677BC4417AFB030A4B3CEB013DB562B8BF79927F8ED058CF87BFD55AF8622FAEF311BB56B913387B6217C840A0D842F4A907C317B5946A153C72966087B9FDFF8EBCA"),
                 RefreshToken = String.Empty,
                 TokenCreated = DateTime.UtcNow,
                 TokenExpires = DateTime.UtcNow.AddHours(1),
                 UserName = "zaposlenik",
-                Phone = "061112333",
+                Phone = "061162333",
                 Status = true,
                 RoleId = 2,
                 ShiftId=2,
@@ -200,26 +200,45 @@ namespace wellness.Service.Database
                 TokenCreated = DateTime.UtcNow,
                 TokenExpires = DateTime.UtcNow.AddHours(1),
                 UserName = "trener",
-                Phone = "061110121",
+                Phone = "061440121",
                 Status = true,
                 RoleId = 4,
-                ShiftId=1,
-                Picture=ConvertImageToByteArray("wwwroot", "splinter.jpg")
+                ShiftId=3,
+      
             });
+
+ 
 
             modelBuilder.Entity<User>().HasData(new User
             {
                 Id = 4,
+                FirstName = "Nedim",
+                LastName = "Misic",
+                Email = "nedim_misic@hotmail.com",
+                PasswordHash = HexToByteArray("0xE82F9D33958051FB08CF22F9C66ADAD2BBBEDA0BF8A3251BFF99D70862BB720E7AE1BC033E6733334416E3CA946A75414E390E420E4BB2339B3B810D96F1AA5F"),
+                PasswordSalt = HexToByteArray("0x9D3D009C23EBD3BF47F809780D87C78001C20E70410701D9478E4ADFDBD6C1AFA93D5C5AC47EA8E14586DDA0AC7AEAE335375A04BE1E5B453D6EF133798677BC4417AFB030A4B3CEB013DB562B8BF79927F8ED058CF87BFD55AF8622FAEF311BB56B913387B6217C840A0D842F4A907C317B5946A153C72966087B9FDFF8EBCA"),
+                RefreshToken = String.Empty,
+                TokenCreated = DateTime.UtcNow,
+                TokenExpires = DateTime.UtcNow.AddHours(1),
+                UserName = "nedim",
+                Phone = "061110123",
+                Status = true,
+                RoleId = 3,
+                ShiftId=1,
+            });
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 5,
                 FirstName = "Korisnik",
                 LastName = "Korisnik",
-                Email = "korisnik@korisnik.com",
-                PasswordHash = HexToByteArray("0xAA483434B7BB1BD1A189FC3B8AA81B8C0EAB71F9416A40A52C4087989EDF49BA17BB8C4DFBA19007C0EF93CD5DA52D544D950BB6509181E5BB20B0782D3D4821"),
-                PasswordSalt = HexToByteArray("0xB0951D72CC15473EF80A72C2EBE7473DB8E9263BD9DE87A2E2B6D38850324676FD827BAD25BB47F190690E7B413DF1A9DE546D6D7B62922A35D1E036CED8E88312A8DBC51D441AEDFE39F714483A8ECEBC7D21CF66A9CADFB3F19984546C21E776E42E7F69CA204F7F7779CCC5EDB33289DCE65C96CF846EFC90BC98F9937352"),
+                Email = "user.2.wellness2024@gmail.com",
+                PasswordHash = HexToByteArray("0xE82F9D33958051FB08CF22F9C66ADAD2BBBEDA0BF8A3251BFF99D70862BB720E7AE1BC033E6733334416E3CA946A75414E390E420E4BB2339B3B810D96F1AA5F"),
+                PasswordSalt = HexToByteArray("0x9D3D009C23EBD3BF47F809780D87C78001C20E70410701D9478E4ADFDBD6C1AFA93D5C5AC47EA8E14586DDA0AC7AEAE335375A04BE1E5B453D6EF133798677BC4417AFB030A4B3CEB013DB562B8BF79927F8ED058CF87BFD55AF8622FAEF311BB56B913387B6217C840A0D842F4A907C317B5946A153C72966087B9FDFF8EBCA"),
                 RefreshToken = String.Empty,
                 TokenCreated = DateTime.UtcNow,
                 TokenExpires = DateTime.UtcNow.AddHours(1),
                 UserName = "korisnik",
-                Phone = "061110123",
+                Phone = "061810123",
                 Status = true,
                 RoleId = 3,
                 ShiftId=1,
@@ -227,18 +246,110 @@ namespace wellness.Service.Database
 
             modelBuilder.Entity<User>().HasData(new User
             {
-                Id = 5,
-                FirstName = "Nedim",
-                LastName = "Misic",
-                Email = "nedim_misic@hotmail.com",
-                PasswordHash = HexToByteArray("79C4E5E29CE28441CFFE5A980F30930A59BC4176DC5F7A546AFBA7140ADED201F0F34416F324DE2A72CF75AE2287431E289015FA2118DC8E271780EEBC8B044E"),
-                PasswordSalt = HexToByteArray("4B2A9EAAF28F31D90B1F3C6E03A2F40F405E501BC2E05F5430896198BF4D0440E4BB5DCBD1C30A4F68665DEFDDC6CDA3E929425E0C5EDD53256DAE04398254ADE81A47FCB3BEE0225994BF8C8E90F943D25F4A67D4E33196D2C996F91CD6759073F7AFF9068F05DC7DB154E3F3E6BDDF0E06D5F153D3157A93E13EEF35E069A0"),
+                Id = 6,
+                FirstName = "Masazer",
+                LastName = "Masazer",
+                Email = "masazer@member.com",
+                PasswordHash = HexToByteArray("0xB7C4947F10280F80E6B3B2C48AB849C9F07449C433C66DA4AA79C9C2419D3431C4C9623D8A91F3ABAB8D89AFD2F14CD8DF5F2B09B3A6DF0066A79DF3BDFD4BC9"),
+                PasswordSalt = HexToByteArray("0x755A04682B60A3AA91A4C3E4393CEF9CC55E4EF13E5D560BF815BD10E80282D9B2E79E58EDC2464AE19087C8B69671B83B858843613CAA433988D024A77F518512F978D69802E524188DF5A2D03638568D58F60D5E002541C8FC5BC2B1E39A71D9CCC05D4F40986D1984299D887B5099312DAF72B01D77590ABE78E6D2A6733A"),
                 RefreshToken = String.Empty,
                 TokenCreated = DateTime.UtcNow,
                 TokenExpires = DateTime.UtcNow.AddHours(1),
-                UserName = "nedim",
-                Phone = "061110123",
+                UserName = "masazer",
+                Phone = "061110191",
                 Status = true,
+                RoleId = 5,
+                ShiftId=2,
+
+            });
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 7,
+                FirstName = "Employee",
+                LastName = "Employee",
+                Email = "employee@member.com",
+                PasswordHash = HexToByteArray("0xE82F9D33958051FB08CF22F9C66ADAD2BBBEDA0BF8A3251BFF99D70862BB720E7AE1BC033E6733334416E3CA946A75414E390E420E4BB2339B3B810D96F1AA5F"),
+                PasswordSalt = HexToByteArray("0x9D3D009C23EBD3BF47F809780D87C78001C20E70410701D9478E4ADFDBD6C1AFA93D5C5AC47EA8E14586DDA0AC7AEAE335375A04BE1E5B453D6EF133798677BC4417AFB030A4B3CEB013DB562B8BF79927F8ED058CF87BFD55AF8622FAEF311BB56B913387B6217C840A0D842F4A907C317B5946A153C72966087B9FDFF8EBCA"),
+                RefreshToken = String.Empty,
+                TokenCreated = DateTime.UtcNow,
+                TokenExpires = DateTime.UtcNow.AddHours(1),
+                UserName = "employee",
+                Phone = "061618333",
+                Status = true,
+                RoleId = 2,
+                ShiftId=2,
+                Picture=ConvertImageToByteArray("wwwroot", "splinter.jpg")
+            });
+
+
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 8,
+                FirstName = "Neko",
+                LastName = "Nekic",
+                Email = "neko@gmail.com",
+                PasswordHash = HexToByteArray("0xE82F9D33958051FB08CF22F9C66ADAD2BBBEDA0BF8A3251BFF99D70862BB720E7AE1BC033E6733334416E3CA946A75414E390E420E4BB2339B3B810D96F1AA5F"),
+                PasswordSalt = HexToByteArray("0x9D3D009C23EBD3BF47F809780D87C78001C20E70410701D9478E4ADFDBD6C1AFA93D5C5AC47EA8E14586DDA0AC7AEAE335375A04BE1E5B453D6EF133798677BC4417AFB030A4B3CEB013DB562B8BF79927F8ED058CF87BFD55AF8622FAEF311BB56B913387B6217C840A0D842F4A907C317B5946A153C72966087B9FDFF8EBCA"),
+                RefreshToken = String.Empty,
+                TokenCreated = DateTime.UtcNow,
+                TokenExpires = DateTime.UtcNow.AddHours(1),
+                UserName = "neko",
+                Phone = "065118123",
+                Status = true,
+                RoleId = 3,
+                ShiftId=1,
+            });
+
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 9,
+                FirstName = "Test",
+                LastName = "Test",
+                Email = "test@gmail.com",
+                PasswordHash = HexToByteArray("0xE82F9D33958051FB08CF22F9C66ADAD2BBBEDA0BF8A3251BFF99D70862BB720E7AE1BC033E6733334416E3CA946A75414E390E420E4BB2339B3B810D96F1AA5F"),
+                PasswordSalt = HexToByteArray("0x9D3D009C23EBD3BF47F809780D87C78001C20E70410701D9478E4ADFDBD6C1AFA93D5C5AC47EA8E14586DDA0AC7AEAE335375A04BE1E5B453D6EF133798677BC4417AFB030A4B3CEB013DB562B8BF79927F8ED058CF87BFD55AF8622FAEF311BB56B913387B6217C840A0D842F4A907C317B5946A153C72966087B9FDFF8EBCA"),
+                RefreshToken = String.Empty,
+                TokenCreated = DateTime.UtcNow,
+                TokenExpires = DateTime.UtcNow.AddHours(1),
+                UserName = "test",
+                Phone = "066999993",
+                Status = true,
+                RoleId = 3,
+                ShiftId=1,
+            });
+
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 10,
+                FirstName = "User",
+                LastName = "User",
+                Email = "user@gmail.com",
+                PasswordHash = HexToByteArray("0xE82F9D33958051FB08CF22F9C66ADAD2BBBEDA0BF8A3251BFF99D70862BB720E7AE1BC033E6733334416E3CA946A75414E390E420E4BB2339B3B810D96F1AA5F"),
+                PasswordSalt = HexToByteArray("0x9D3D009C23EBD3BF47F809780D87C78001C20E70410701D9478E4ADFDBD6C1AFA93D5C5AC47EA8E14586DDA0AC7AEAE335375A04BE1E5B453D6EF133798677BC4417AFB030A4B3CEB013DB562B8BF79927F8ED058CF87BFD55AF8622FAEF311BB56B913387B6217C840A0D842F4A907C317B5946A153C72966087B9FDFF8EBCA"),
+                RefreshToken = String.Empty,
+                TokenCreated = DateTime.UtcNow,
+                TokenExpires = DateTime.UtcNow.AddHours(1),
+                UserName = "user",
+                Phone = "066999993",
+                Status = true,
+                RoleId = 3,
+                ShiftId=1,
+            });
+
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 11,
+                FirstName = "Ime",
+                LastName = "Prezime",
+                Email = "ime@gmail.com",
+                PasswordHash = HexToByteArray("0xE82F9D33958051FB08CF22F9C66ADAD2BBBEDA0BF8A3251BFF99D70862BB720E7AE1BC033E6733334416E3CA946A75414E390E420E4BB2339B3B810D96F1AA5F"),
+                PasswordSalt = HexToByteArray("0x9D3D009C23EBD3BF47F809780D87C78001C20E70410701D9478E4ADFDBD6C1AFA93D5C5AC47EA8E14586DDA0AC7AEAE335375A04BE1E5B453D6EF133798677BC4417AFB030A4B3CEB013DB562B8BF79927F8ED058CF87BFD55AF8622FAEF311BB56B913387B6217C840A0D842F4A907C317B5946A153C72966087B9FDFF8EBCA"),
+                RefreshToken = String.Empty,
+                TokenCreated = DateTime.UtcNow,
+                TokenExpires = DateTime.UtcNow.AddHours(1),
+                UserName = "ime",
+                Phone = "066944559",
+                Status = false,
                 RoleId = 3,
                 ShiftId=1,
             });
@@ -266,7 +377,35 @@ namespace wellness.Service.Database
                 UserId=4,
                 MemberShipTypeId=3
             });
+            modelBuilder.Entity<Membership>().HasData(new Membership
+            {
+                Id=3,
+                ExpirationDate="03.09.2024",
+                StartDate="03.03.2024",
+                Status=true,
+                UserId=8,
+                MemberShipTypeId=3
+            });
 
+            modelBuilder.Entity<Membership>().HasData(new Membership
+            {
+                Id=4,
+                ExpirationDate="03.03.2025",
+                StartDate="03.03.2024",
+                Status=true,
+                UserId=9,
+                MemberShipTypeId=4
+            });
+
+            modelBuilder.Entity<Membership>().HasData(new Membership
+            {
+                Id=5,
+                ExpirationDate="03.03.2025",
+                StartDate="03.03.2024",
+                Status=true,
+                UserId=10,
+                MemberShipTypeId=4
+            });
 
 
             //Transactions
@@ -292,6 +431,46 @@ namespace wellness.Service.Database
                 Timestamp=DateTime.UtcNow,
 
             });
+            modelBuilder.Entity<Transaction>().HasData(new Transaction
+            {
+                Id=3,
+                PaymentMethod="PayPal",
+                Amount=153.84m,
+                MemberShipTypeId=3,
+                UserId=8,
+                Currency="EUR",
+                Timestamp=DateTime.UtcNow,
+
+            });
+
+            modelBuilder.Entity<Transaction>().HasData(new Transaction
+            {
+                Id=4,
+                PaymentMethod="Stripe",
+                Amount=500,
+                MemberShipTypeId=4,
+                UserId=9,
+                Currency="BAM",
+                Timestamp=DateTime.UtcNow,
+
+            });
+            modelBuilder.Entity<Transaction>().HasData(new Transaction
+            {
+                Id=5,
+                PaymentMethod="Stripe",
+                Amount=500,
+                MemberShipTypeId=4,
+                UserId=10,
+                Currency="BAM",
+                Timestamp=DateTime.UtcNow,
+
+            });
+
+
+
+
+
+
 
             //Reservations
 
@@ -402,7 +581,7 @@ namespace wellness.Service.Database
             {
                 Id=11,
                 UserId=4,
-                Date="05.03.2024",
+                Date="03.03.2024",
                 Time="13:00",
                 Status=true,
                 TreatmentId=2
@@ -440,16 +619,66 @@ namespace wellness.Service.Database
                 Status = false,
                 TreatmentId = 5
             });
-
+            
             modelBuilder.Entity<Reservation>().HasData(new Reservation
             {
                 Id = 15,
                 UserId = 4,
-                Date = "18.03.2024",
-                Time = "09:30",
+                Date = "09.03.2024",
+                Time = "09:00",
                 Status = true,
                 TreatmentId = 3
             });
+
+            modelBuilder.Entity<Reservation>().HasData(new Reservation
+            {
+                Id = 16,
+                UserId = 8,
+                Date = "06.03.2024",
+                Time = "09:00",
+                Status = true,
+                TreatmentId = 4
+            });
+            modelBuilder.Entity<Reservation>().HasData(new Reservation
+            {
+                Id = 17,
+                UserId = 9,
+                Date = "06.03.2024",
+                Time = "11:00",
+                Status = true,
+                TreatmentId = 5
+            });
+            modelBuilder.Entity<Reservation>().HasData(new Reservation
+            {
+                Id = 18,
+                UserId = 10,
+                Date = "06.03.2024",
+                Time = "13:00",
+                Status = true,
+                TreatmentId = 6
+            });
+            modelBuilder.Entity<Reservation>().HasData(new Reservation
+            {
+                Id = 19,
+                UserId = 10,
+                Date = "09.03.2024",
+                Time = "13:00",
+                Status = true,
+                TreatmentId = 7
+            });
+            modelBuilder.Entity<Reservation>().HasData(new Reservation
+            {
+                Id = 20,
+                UserId = 10,
+                Date = "07.03.2024",
+                Time = "13:00",
+                Status = true,
+                TreatmentId = 7
+            });
+
+
+
+
 
 
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=1,ReservationId=11,StarRating=4 });
@@ -457,6 +686,12 @@ namespace wellness.Service.Database
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=3, ReservationId=9, StarRating=3 });
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=4, ReservationId=15, StarRating=3 });
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=5, ReservationId=13, StarRating=2 });
+            modelBuilder.Entity<Rating>().HasData(new Rating { Id=6, ReservationId=12, StarRating=2 });
+            modelBuilder.Entity<Rating>().HasData(new Rating { Id=7, ReservationId=16, StarRating=5 });
+            modelBuilder.Entity<Rating>().HasData(new Rating { Id=8, ReservationId=17, StarRating=5 });
+            modelBuilder.Entity<Rating>().HasData(new Rating { Id=9, ReservationId=18, StarRating=4 });
+            modelBuilder.Entity<Rating>().HasData(new Rating { Id=10, ReservationId=19, StarRating=4 });
+            modelBuilder.Entity<Rating>().HasData(new Rating { Id=11, ReservationId=20, StarRating=4 });
 
 
 

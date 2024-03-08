@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:mobile/providers/user_provider.dart';
 import 'package:mobile/screens/login_page.dart';

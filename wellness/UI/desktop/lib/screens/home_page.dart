@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:desktop/screens/category_page.dart';
 import 'package:desktop/screens/employee_profil.dart';
 import 'package:desktop/screens/record_page.dart';

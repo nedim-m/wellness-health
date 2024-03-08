@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:jwt_decoder/jwt_decoder.dart';
 
 class RoleManager {

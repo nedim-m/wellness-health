@@ -51,6 +51,25 @@ class ValidationRules {
     return null;
   }
 
+  String? validateConfirmPassword(String? password, String? confirmpassword) {
+    if (confirmpassword == null || confirmpassword.isEmpty) {
+      return 'Unesite lozinku.';
+    }
+    if (confirmpassword.length < 8) {
+      return 'Lozinka mora imati najmanje 8 znakova.';
+    }
+    if (!RegExp(r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+])')
+        .hasMatch(confirmpassword)) {
+      return 'Lozinka mora sadržavati najmanje jedno veliko slovo, jedan broj i jedan poseban znak.';
+    }
+
+    if (confirmpassword != password) {
+      return "Potvrda lozinke mora biti identična loziniki.";
+    }
+
+    return null;
+  }
+
   String? validateDropdown(dynamic value) {
     if (value == null) {
       return 'Molimo odaberite iz padajućeg menija.';

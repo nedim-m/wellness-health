@@ -211,11 +211,12 @@ namespace wellness.Service.Services
             await _context.SaveChangesAsync();
 
 
-            string subject = "Vaša lozinka";
+            if (request.RoleId==3 || request.RoleId==2) { 
+                string subject = "Vaša lozinka";
             string body = $"Poštovanje, Vaša lozinka za username: {request.UserName} je uspješno postavljena. Molimo Vas da odmah istu postavite na željenu. Nova lozinka: {password}  .Lijep pozdrav. Wellness centar - Health.";
 
             _mailService.SendEmail(request.Email, subject, body);
-
+            }
 
 
             return _mapper.Map<Models.User.User>(user);

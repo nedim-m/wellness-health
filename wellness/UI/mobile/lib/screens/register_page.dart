@@ -29,17 +29,15 @@ class _RegistrationPageViewState extends State<RegistrationPageView> {
     setState(() {
       _errorMessages = {
         'firstName': _validation.validateTextInput(
-            _firstNameController.text, 'Please enter your first name.'),
+            _firstNameController.text, 'Unesite Vaše ime.'),
         'lastName': _validation.validateTextInput(
-            _lastNameController.text, 'Please enter your last name.'),
+            _lastNameController.text, 'Unesite Vaše prezime.'),
         'email': _validation.validateEmail(_emailController.text),
         'userName': _validation.validateTextInput(
-            _userNameController.text, 'Please enter your username.'),
+            _userNameController.text, 'Unesite Vaše korisničko ime'),
         'password': _validation.validatePassword(_passwordController.text),
-        'confirmPassword':
-            _passwordController.text == _confirmPasswordController.text
-                ? null
-                : 'Passwords do not match',
+        'confirmPassword': _validation.validateConfirmPassword(
+            _passwordController.text, _confirmPasswordController.text),
         'phone': _validation.validatePhone(_phoneController.text),
       };
     });
@@ -64,22 +62,22 @@ class _RegistrationPageViewState extends State<RegistrationPageView> {
   }
 
   void _showRegistrationAlert(bool response) {
-    String message = 'Unknown error';
+    String message = 'Nepoznata greška';
     bool isSuccess = false;
 
     if (response) {
       isSuccess = true;
-      message = 'Registration Successful';
+      message = 'Uspješna Registracija';
     } else {
       message =
-          'Registration failed, User with that Username or Mail already exists';
+          'Greška prilikom registracije, korisnik sa tim korisničkim imenom i/ili postoji.';
     }
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: isSuccess ? const Text('Success') : const Text('Error'),
+          title: isSuccess ? const Text('Uspješno') : const Text('Greška'),
           content: Text(message),
           actions: [
             TextButton(
@@ -106,7 +104,7 @@ class _RegistrationPageViewState extends State<RegistrationPageView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Registration Page'),
+        title: const Text('Registracija'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -117,13 +115,13 @@ class _RegistrationPageViewState extends State<RegistrationPageView> {
             children: [
               _buildTextField(
                 _firstNameController,
-                'First Name',
+                'Ime',
                 errorText: _errorMessages['firstName'],
               ),
               const SizedBox(height: 8.0),
               _buildTextField(
                 _lastNameController,
-                'Last Name',
+                'Prezime',
                 errorText: _errorMessages['lastName'],
               ),
               const SizedBox(height: 8.0),
@@ -135,33 +133,33 @@ class _RegistrationPageViewState extends State<RegistrationPageView> {
               const SizedBox(height: 8.0),
               _buildTextField(
                 _userNameController,
-                'Username',
+                'Korisničko ime',
                 errorText: _errorMessages['userName'],
               ),
               const SizedBox(height: 8.0),
               _buildTextField(
                 _passwordController,
-                'Password',
+                'Lozinka',
                 isObscure: true,
                 errorText: _errorMessages['password'],
               ),
               const SizedBox(height: 8.0),
               _buildTextField(
                 _confirmPasswordController,
-                'Confirm Password',
+                'Potvrda lozinke',
                 isObscure: true,
                 errorText: _errorMessages['confirmPassword'],
               ),
               const SizedBox(height: 8.0),
               _buildTextField(
                 _phoneController,
-                'Phone',
+                'Telefon',
                 errorText: _errorMessages['phone'],
               ),
               const SizedBox(height: 16.0),
               ElevatedButton(
                 onPressed: _saveChanges,
-                child: const Text('Register'),
+                child: const Text('Registruj se'),
               ),
             ],
           ),

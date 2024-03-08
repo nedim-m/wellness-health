@@ -61,19 +61,19 @@ namespace wellness.Service.Services
 
         public float AverageRating(int treatmentId)
         {
-  
-            var reservations = _context.Reservations.Where(x => x.TreatmentId == treatmentId && x.Status==true).ToList();
+            var reservationsWithRating = _context.Reservations
+                .Where(x => x.TreatmentId == treatmentId && x.Status == true)
+                .Where(x => _context.Ratings.Any(r => r.ReservationId == x.Id))
+                .ToList();
 
-            
-            if (reservations.Count == 0)
+            if (reservationsWithRating.Count == 0)
             {
-                return 0.0f; 
+                return 0.0f;
             }
 
-           
             float totalRatingSum = 0;
 
-            foreach (var reservation in reservations)
+            foreach (var reservation in reservationsWithRating)
             {
                 var rating = _context.Ratings.FirstOrDefault(x => x.ReservationId == reservation.Id);
 
@@ -83,11 +83,11 @@ namespace wellness.Service.Services
                 }
             }
 
-          
-            float averageRating = totalRatingSum / reservations.Count;
+            float averageRating = totalRatingSum / reservationsWithRating.Count;
 
             return averageRating;
         }
+
 
 
 

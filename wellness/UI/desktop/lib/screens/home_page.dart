@@ -1,10 +1,14 @@
+// ignore_for_file: avoid_print
+
 import 'package:desktop/screens/category_page.dart';
+import 'package:desktop/screens/employee_profil.dart';
 import 'package:desktop/screens/record_page.dart';
 import 'package:desktop/screens/reservation_page.dart';
 import 'package:desktop/screens/treatment_page.dart';
 import 'package:desktop/screens/treatment_type_page.dart';
 import 'package:desktop/screens/user_page.dart';
 import 'package:desktop/screens/worker_page.dart';
+import 'package:desktop/utils/app_constants.dart';
 import 'package:desktop/utils/role_store.dart';
 import 'package:desktop/utils/token_store.dart';
 import 'package:desktop/widgets/report_charts.dart';
@@ -41,12 +45,18 @@ class _HomepageViewState extends State<HomepageView> {
 
   Future<void> _initPlatformState() async {
     _signalR = HubConnectionBuilder()
-        .withUrl("http://localhost:5000/notificationHub")
+        .withUrl(
+            "${AppConstants.baseUrl}${AppConstants.signalRPort}/notificationHub")
         .build();
 
     _signalR.on("ReceiveNotification", _onNewMessage);
 
-    await _signalR.start();
+    try {
+      await _signalR.start();
+      print('Connected to SignalR hub.');
+    } catch (e) {
+      print('Error connecting to SignalR hub: $e');
+    }
   }
 
   void _onNewMessage(List<dynamic>? parameters) {
@@ -58,10 +68,12 @@ class _HomepageViewState extends State<HomepageView> {
   }
 
   void _updateNotifications(bool remove) {
-    setState(() {
-      _numberOfNotifications = remove ? 0 : _numberOfNotifications + 1;
-      initializeItemsBasedOnRole();
-    });
+    if (mounted) {
+      setState(() {
+        _numberOfNotifications = remove ? 0 : _numberOfNotifications + 1;
+        initializeItemsBasedOnRole();
+      });
+    }
   }
 
   void removeCredentials() {
@@ -116,6 +128,12 @@ class _HomepageViewState extends State<HomepageView> {
             _updateNotifications(true);
           },
           body: const ReservationPageView(),
+        ),
+      if (!isAdmin)
+        PaneItem(
+          icon: const Icon(FluentIcons.profile_search),
+          title: const Text('Profil'),
+          body: const EmployeeUpdateScreen(),
         ),
       if (isAdmin)
         PaneItemExpander(

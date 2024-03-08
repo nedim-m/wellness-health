@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:mobile/providers/user_provider.dart';
 import 'package:mobile/screens/login_page.dart';
@@ -24,7 +26,7 @@ class _ForgotPageViewState extends State<ForgotPageView> {
         'email': _validation.validateEmail(_emailController.text),
         'userName': _validation.validateTextInput(
           _userNameController.text,
-          'Please enter your username.',
+          'Unesite Vaše korisničko ime',
         ),
       };
     });
@@ -42,22 +44,22 @@ class _ForgotPageViewState extends State<ForgotPageView> {
   }
 
   void _showRegistrationAlert(bool response) {
-    String message = 'Unknown error';
+    String message = 'Greška';
     bool isSuccess = false;
 
     if (response) {
       isSuccess = true;
-      message = 'Password changed successfuly';
+      message = 'Lozinka uspješno promjenjena.';
     } else {
       message =
-          "Password change failed, User with that Username or Mail already doesn't exists";
+          "Neuspješna promjena lozinke, korisnik sa tim korisničkim imenom ili emailom ne postoji";
     }
 
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: isSuccess ? const Text('Success') : const Text('Error'),
+          title: isSuccess ? const Text('Uspješno') : const Text('Greška'),
           content: Text(message),
           actions: [
             TextButton(
@@ -84,7 +86,7 @@ class _ForgotPageViewState extends State<ForgotPageView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Forgot Password Page'),
+        title: const Text('Zaboravljena lozinka'),
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -97,7 +99,7 @@ class _ForgotPageViewState extends State<ForgotPageView> {
                 controller: _emailController,
                 decoration: const InputDecoration(
                   labelText: 'Email',
-                  hintText: 'Enter your email',
+                  hintText: 'Unesite email',
                 ),
               ),
               if (_errorMessages['email'] != null)
@@ -112,8 +114,8 @@ class _ForgotPageViewState extends State<ForgotPageView> {
               TextField(
                 controller: _userNameController,
                 decoration: const InputDecoration(
-                  labelText: 'Username',
-                  hintText: 'Enter your username',
+                  labelText: 'Korisničko ime',
+                  hintText: 'Unesite Vaše korisničko ime',
                 ),
               ),
               if (_errorMessages['userName'] != null)
@@ -127,7 +129,7 @@ class _ForgotPageViewState extends State<ForgotPageView> {
               const SizedBox(height: 32.0),
               ElevatedButton(
                 onPressed: _saveChanges,
-                child: const Text('Send Request'),
+                child: const Text('Pošalji zahtjev'),
               ),
             ],
           ),

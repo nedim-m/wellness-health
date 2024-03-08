@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:mobile/models/user.dart';
 import 'package:mobile/providers/user_provider.dart';
+import 'package:mobile/screens/home_page.dart';
 
 import '/blocs/blocs.dart';
 
@@ -11,6 +12,7 @@ class StripePaymentPage extends StatefulWidget {
       : super(key: key);
   final int memberShipTypeId;
   @override
+  // ignore: library_private_types_in_public_api
   _StripePaymentPageState createState() => _StripePaymentPageState();
 }
 
@@ -32,24 +34,24 @@ class _StripePaymentPageState extends State<StripePaymentPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Pay with a Credit Card'),
+        title: const Text('Uplata putem kreditne kartice'),
       ),
-      body: SingleChildScrollView(
-        child: BlocBuilder<PaymentBloc, PaymentState>(
-          builder: (context, state) {
-            CardFormEditController controller = CardFormEditController(
-              initialDetails: state.cardFieldInputDetails,
-            );
+      body: BlocBuilder<PaymentBloc, PaymentState>(
+        builder: (context, state) {
+          CardFormEditController controller = CardFormEditController(
+            initialDetails: state.cardFieldInputDetails,
+          );
 
-            if (state.status == PaymentStatus.initial) {
-              return Padding(
+          if (state.status == PaymentStatus.initial) {
+            return SingleChildScrollView(
+              child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Text(
-                      'Card Form',
+                      'Kreditna kartica',
                       style: Theme.of(context).textTheme.headlineSmall,
                     ),
                     const SizedBox(height: 20),
@@ -70,57 +72,65 @@ class _StripePaymentPageState extends State<StripePaymentPage> {
                                 )
                             : ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('The form is not complete.'),
+                                  content: Text('Molim Vas unesite podatke.'),
                                 ),
                               );
                       },
-                      child: const Text('Pay'),
+                      child: const Text('Plati'),
                     ),
                   ],
                 ),
-              );
-            }
-            if (state.status == PaymentStatus.success) {
-              return Column(
+              ),
+            );
+          }
+          if (state.status == PaymentStatus.success) {
+            return Container(
+              alignment: Alignment.center,
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('The payment is successful.'),
+                  const Text('Uplata uspješna!'),
                   const SizedBox(
                     height: 10,
-                    width: double.infinity,
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      context.read<PaymentBloc>().add(
-                          PaymentStart());
+                      context.read<PaymentBloc>().add(PaymentFinish());
+                      Navigator.of(context).pushReplacement(
+                        MaterialPageRoute(
+                          builder: (context) => const HomepageView(),
+                        ),
+                      );
                     },
-                    child: const Text('Back to Home'),
+                    child: const Text('Nazad na početnu'),
                   ),
                 ],
-              );
-            }
-            if (state.status == PaymentStatus.failure) {
-              return Column(
+              ),
+            );
+          }
+
+          if (state.status == PaymentStatus.failure) {
+            return Center(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Text('The payment failed.'),
+                  const Text('Uplata neuspješna.'),
                   const SizedBox(
                     height: 10,
-                    width: double.infinity,
                   ),
                   ElevatedButton(
                     onPressed: () {
                       context.read<PaymentBloc>().add(PaymentStart());
                     },
-                    child: const Text('Try again'),
+                    child: const Text('Pokušajte ponovo.'),
                   ),
                 ],
-              );
-            } else {
-              return const Center(child: CircularProgressIndicator());
-            }
-          },
-        ),
+              ),
+            );
+          } else {
+            return const Center(child: CircularProgressIndicator());
+          }
+        },
       ),
     );
   }

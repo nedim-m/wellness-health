@@ -14,18 +14,40 @@ public class RabbitMQService
 
     public RabbitMQService()
     {
-        var factory = new ConnectionFactory() { Uri = new Uri("amqp://guest:guest@localhost:5672") };
+        var factory = new ConnectionFactory() { Uri = new Uri("amqp://guest:guest@rabbitmq:5672") };
+
+
         var connection = factory.CreateConnection();
         _channel = connection.CreateModel();
 
         _channel.QueueDeclare(queue: "notifications_queue", durable: true, exclusive: false, autoDelete: false, arguments: null);
-
-        _hubConnection = new HubConnectionBuilder()
-            .WithUrl("http://localhost:5000/notificationHub")
-            .Build();
        
 
-        _hubConnection.StartAsync().Wait();
+
+        try
+        {
+
+         
+
+            _hubConnection = new HubConnectionBuilder()
+    .WithUrl("http://localhost:5630/notificationHub")
+    .Build();
+
+
+
+
+            _hubConnection.StartAsync().Wait();
+            Console.WriteLine("Povezan na SignalR hub.");
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Greška prilikom povezivanja na SignalR hub: {ex}");
+        }
+
+
+
+
+       
     }
 
     public MailService MailServiceInstance
@@ -62,11 +84,15 @@ public class RabbitMQService
 
                 signalRnotification="Desktop";
             }
+            else
+            {
+                MailServiceInstance.SendMailNotification(notificationData!);
+            }
             
 
             await _hubConnection.InvokeAsync("ReceiveNotification", signalRnotification);
 
-            MailServiceInstance.SendMailNotification(notificationData!);
+           
         };
 
         _channel.BasicConsume(queue: "notifications_queue", autoAck: true, consumer: consumer);

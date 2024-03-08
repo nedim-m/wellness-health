@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -5,6 +7,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:http/io_client.dart';
+import 'package:mobile/utils/app_constants.dart';
 import 'package:mobile/utils/user_store.dart';
 
 part 'payment_event.dart';
@@ -16,15 +19,23 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     on<PaymentStart>(_onPaymentStart);
     on<PaymentCreateIntent>(_onPaymentCreateIntent);
     on<PaymentConfirmIntent>(_onPaymentConfirmIntent);
+    on<PaymentFinish>(_onPaymentFinish);
   }
 
   late int userId;
-  
+
   HttpClient client = HttpClient();
   IOClient? http;
 
   void _onPaymentStart(
     PaymentStart event,
+    Emitter<PaymentState> emit,
+  ) {
+    emit(state.copyWith(status: PaymentStatus.initial));
+  }
+
+  void _onPaymentFinish(
+    PaymentFinish event,
     Emitter<PaymentState> emit,
   ) {
     emit(state.copyWith(status: PaymentStatus.initial));
@@ -106,7 +117,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     client.badCertificateCallback = (cert, host, port) => true;
     http = IOClient(client);
     final url = Uri.parse(
-      'https://10.0.2.2:7012/StripePayment/process-payment/',
+      '${AppConstants.baseUrl}${AppConstants.paymentServicePort}/StripePayment/process-payment/',
     );
     final response = await http!.post(
       url,
@@ -129,7 +140,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     http = IOClient(client);
 
     final url = Uri.parse(
-      'https://10.0.2.2:7012/StripePayment/confirm-payment/',
+      '${AppConstants.baseUrl}${AppConstants.paymentServicePort}/StripePayment/confirm-payment/',
     );
     final response = await http!.post(
       url,

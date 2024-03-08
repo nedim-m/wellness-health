@@ -54,6 +54,16 @@ namespace wellness.Service.Services
                 };
             }
 
+            if (user.RoleId != 3 && user.RoleId != 1 && user.RoleId != 2)
+            {
+                return new AuthResponse
+                {
+                    Message = "You don't have the access to app",
+                    Success = false,
+                };
+            }
+
+
 
             string token = CreateToken(user);
             var refreshToken = CreateRefreshToken();

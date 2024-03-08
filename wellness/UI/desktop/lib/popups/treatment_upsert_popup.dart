@@ -60,6 +60,7 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
       description = TextEditingController(text: widget.data!.description);
       price = TextEditingController(text: widget.data!.price.toString());
       name = TextEditingController(text: widget.data!.name);
+      _base64Image = widget.data!.picture;
     }
 
     fetchData();
@@ -86,56 +87,66 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
       type: FileType.image,
     );
 
+    setState(() {
+      _imageValidationError = null;
+    });
+
     if (result != null) {
       setState(() {
         selectedPhoto = File(result.files.single.path!);
+        _base64Image = base64Encode(selectedPhoto!.readAsBytesSync());
       });
-
-      _base64Image = base64Encode(selectedPhoto!.readAsBytesSync());
-      _validateImage();
+    } else {
+      setState(() {
+        _imageValidationError = 'Molimo odaberite fotografiju.';
+      });
     }
   }
 
-  void _validateImage() {
-    setState(() {
-      if (selectedPhoto == null) {
+  bool validateForm() {
+    bool isValid = _formKey.currentState!.validate();
+
+    if (selectedPhoto == null &&
+        (_base64Image == null || _base64Image!.isEmpty)) {
+      setState(() {
         _imageValidationError = 'Molimo odaberite fotografiju.';
-      } else {
-        _imageValidationError = null;
-      }
-    });
+        isValid = false;
+      });
+    }
+
+    return isValid;
   }
 
   void _saveChanges() async {
-    _validateImage();
-
     final provider = Provider.of<TreatmentProvider>(context, listen: false);
-    if (_formKey.currentState!.validate() && _imageValidationError == null) {
-      if (widget.edit == true && widget.data != null) {
-        await provider.updateTreatment(
-          widget.data!.id,
-          selectedTreatmentTypeId!,
-          selectedCategoryId!,
-          description.text,
-          int.parse(duration.text),
-          double.parse(price.text),
-          _base64Image!,
-          name.text,
-        );
-      } else {
-        await provider.addTreatment(
-          selectedTreatmentTypeId!,
-          selectedCategoryId!,
-          description.text,
-          int.parse(duration.text),
-          double.parse(price.text),
-          _base64Image!,
-          name.text,
-        );
+    if (validateForm()) {
+      {
+        if (widget.edit == true && widget.data != null) {
+          await provider.updateTreatment(
+            widget.data!.id,
+            selectedTreatmentTypeId!,
+            selectedCategoryId!,
+            description.text,
+            int.parse(duration.text),
+            double.parse(price.text),
+            _base64Image ?? widget.data!.picture,
+            name.text,
+          );
+        } else {
+          await provider.addTreatment(
+            selectedTreatmentTypeId!,
+            selectedCategoryId!,
+            description.text,
+            int.parse(duration.text),
+            double.parse(price.text),
+            _base64Image!,
+            name.text,
+          );
+        }
+        widget.refreshCallback();
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pop();
       }
-      widget.refreshCallback();
-      // ignore: use_build_context_synchronously
-      Navigator.of(context).pop();
     }
   }
 
@@ -153,30 +164,47 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
             children: [
               GestureDetector(
                 onTap: _selectPhoto,
-                child: Container(
-                  width: 100,
-                  height: 100,
-                  decoration: BoxDecoration(
-                    color: Colors.grey[200],
-                    border: Border.all(color: Colors.grey),
-                  ),
-                  child: selectedPhoto != null
-                      ? Image.file(selectedPhoto!, fit: BoxFit.cover)
-                      : const Center(
-                          child: Text(
-                            "Dodajte fotografiju",
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              color: Colors.grey,
+                child: Column(
+                  children: [
+                    Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        border: Border.all(color: Colors.grey),
+                      ),
+                      child: Stack(
+                        alignment: Alignment.center,
+                        children: [
+                          if (selectedPhoto != null)
+                            Image.file(selectedPhoto!, fit: BoxFit.cover),
+                          if (_base64Image != null && _base64Image!.isNotEmpty)
+                            Image.memory(
+                              base64.decode(_base64Image!),
+                              fit: BoxFit.cover,
                             ),
-                          ),
+                          if (selectedPhoto == null &&
+                              (_base64Image == null || _base64Image!.isEmpty))
+                            const Center(
+                              child: Text(
+                                "Dodajte fotografiju",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: Colors.grey,
+                                ),
+                              ),
+                            ),
+                        ],
+                      ),
+                    ),
+                    if (_imageValidationError != null)
+                      Text(
+                        _imageValidationError!,
+                        style: const TextStyle(
+                          color: Colors.red,
                         ),
-                ),
-              ),
-              Text(
-                _imageValidationError ?? '',
-                style: const TextStyle(
-                  color: Colors.red,
+                      ),
+                  ],
                 ),
               ),
               TextFormField(

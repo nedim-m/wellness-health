@@ -1,5 +1,8 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import 'package:mobile/models/rating.dart';
 import 'package:mobile/models/reservation.dart';
 import 'package:mobile/models/treatment.dart';
@@ -38,6 +41,20 @@ class _ReservationPageState extends State<ReservationPage> {
   final RatingProvider _ratingProvider = RatingProvider();
   final ReservationProvider _reservationProvider = ReservationProvider();
 
+  bool isReservationDatePastOrEqual(String reservationDate) {
+    final dateFormat = DateFormat('dd.MM.yyyy');
+    final currentDate = DateTime.now();
+    final parsedReservationDate = dateFormat.parse(reservationDate);
+
+    return currentDate.isAfter(parsedReservationDate) ||
+        currentDate.isAtSameMomentAs(parsedReservationDate);
+  }
+
+  bool isReservationFinished() {
+    return widget.reservation.status == true &&
+        isReservationDatePastOrEqual(widget.reservation.date);
+  }
+
   Future<void> _postRating(int numberOfSelectedStars) async {
     try {
       Rating newRating = Rating(
@@ -56,7 +73,7 @@ class _ReservationPageState extends State<ReservationPage> {
   void showError() {
     setState(() {
       errorText = rated
-          ? "Već ste ocijenuli tretma!"
+          ? "Već ste ocijenuli tretman!"
           : "Ne možete ocijeniti ako niste bili na tretmanu!";
     });
   }
@@ -97,7 +114,9 @@ class _ReservationPageState extends State<ReservationPage> {
             TextButton(
               onPressed: () async {
                 await _cancelReservation();
+                // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
+                // ignore: use_build_context_synchronously
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(
@@ -130,6 +149,7 @@ class _ReservationPageState extends State<ReservationPage> {
             TextButton(
               onPressed: () async {
                 await _postRating(numberOfSelectedStars);
+                // ignore: use_build_context_synchronously
                 Navigator.of(context).pop();
               },
               child: const Text("Potvrdi"),
@@ -149,6 +169,7 @@ class _ReservationPageState extends State<ReservationPage> {
 
   @override
   Widget build(BuildContext context) {
+    bool isFinished = isReservationFinished();
     return Scaffold(
       appBar: const AppBarWidget(),
       body: SingleChildScrollView(
@@ -222,36 +243,53 @@ class _ReservationPageState extends State<ReservationPage> {
                   if (errorText != null)
                     Text(
                       errorText!,
-                      style: TextStyle(color: Colors.red),
+                      style: const TextStyle(color: Colors.red),
                     ),
                 ],
               ),
               const SizedBox(height: 20),
-              SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: widget.reservation.status != false
-                      ? () {
-                          _showConfirmationDialog();
-                        }
-                      : null,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: widget.reservation.status == false
-                        ? Colors.grey.shade700
-                        : Colors.red,
+              if (isFinished)
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.grey.shade700,
+                    ),
+                    child: const Text(
+                      "Rezervacija završena",
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
                   ),
-                  child: Text(
-                    widget.reservation.status != false
-                        ? "Odjavi rezervaciju"
-                        : "Žao nam je, Vaša rezervacija je odbijena/odjavljena",
-                    style: TextStyle(
-                      color: widget.reservation.status == false
-                          ? Colors.black
-                          : Colors.white,
+                )
+              else
+                SizedBox(
+                  width: double.infinity,
+                  child: ElevatedButton(
+                    onPressed: widget.reservation.status != false
+                        ? () {
+                            _showConfirmationDialog();
+                          }
+                        : null,
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: widget.reservation.status == false
+                          ? Colors.grey.shade700
+                          : Colors.red,
+                    ),
+                    child: Text(
+                      widget.reservation.status != false
+                          ? "Odjavi rezervaciju"
+                          : "Žao nam je, Vaša rezervacija je odbijena/odjavljena",
+                      style: TextStyle(
+                        color: widget.reservation.status == false
+                            ? Colors.black
+                            : Colors.white,
+                      ),
                     ),
                   ),
                 ),
-              ),
               const Gap(20),
               SingleChildScrollView(
                 padding: const EdgeInsets.only(left: 20),

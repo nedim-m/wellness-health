@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:io';
 
 import 'package:desktop/models/membership_type.dart';
@@ -12,7 +14,9 @@ import 'package:open_file/open_file.dart' as open_file;
 import 'package:pdf/widgets.dart' as pw;
 
 class ReportShowWidget extends StatefulWidget {
-  const ReportShowWidget({Key? key});
+  const ReportShowWidget({
+    super.key,
+  });
 
   @override
   State<ReportShowWidget> createState() => _ReportShowWidgetState();
@@ -108,7 +112,7 @@ class _ReportShowWidgetState extends State<ReportShowWidget> {
             pw.Row(
               mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
               children: [
-                pw.Text('Broj korisnika:',
+                pw.Text('Broj jedinstvenih korisnika:',
                     style: pw.TextStyle(fontWeight: pw.FontWeight.bold)),
                 pw.Text('${report.totalUsers}',
                     style: const pw.TextStyle(fontSize: 16)),
@@ -128,21 +132,27 @@ class _ReportShowWidgetState extends State<ReportShowWidget> {
       ),
     );
 
-    final directory = Directory(
-        'C:/Users/Nedim/Documents/GitHub/wellness-health/wellness/UI/desktop/assets/pdf');
+    final appDirectory = Directory.current.path;
+    final pdfDirectory = '$appDirectory/assets/pdf';
 
-    final path = '${directory.path}/report.pdf';
+    final directory = Directory(pdfDirectory);
+
+    print('PDF Direktorijum: $pdfDirectory');
 
     if (!directory.existsSync()) {
+      print('Kreiranje direktorijuma...');
       directory.createSync(recursive: true);
     }
 
-    final file = File(path);
+    final pdfPath = '${directory.path}/report.pdf';
+
+    final file = File(pdfPath);
     final pdfBytes = await pdf.save();
     await file.writeAsBytes(pdfBytes);
 
     try {
-      open_file.OpenFile.open(path);
+      print('Otvaram PDF...');
+      await open_file.OpenFile.open(pdfPath);
     } catch (error) {
       print('Pogreška pri otvaranju PDF-a: $error');
     }

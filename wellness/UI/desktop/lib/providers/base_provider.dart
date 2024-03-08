@@ -1,5 +1,8 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 
+import 'package:desktop/utils/app_constants.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/http.dart';
@@ -17,7 +20,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
   BaseProvider(this._endpoint) {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://localhost:7081/");
+        defaultValue: "${AppConstants.baseUrl}${AppConstants.apiPort}/");
   }
 
   Future<SearchResult<T>> get({dynamic filter}) async {

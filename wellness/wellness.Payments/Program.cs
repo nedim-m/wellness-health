@@ -28,7 +28,10 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddLogging(builder => builder.AddConsole());
 
 builder.Services.AddDbContext<DbWellnessContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")), ServiceLifetime.Scoped);
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+    options.EnableServiceProviderCaching(false); 
+}, ServiceLifetime.Scoped);
 
 var app = builder.Build();
 

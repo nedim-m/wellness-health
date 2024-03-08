@@ -28,7 +28,7 @@ class _UserPageViewState extends State<UserPageView> {
   }
 
   Future fetchData() async {
-    myData = await _userProvider.get(filter: {'role': "Member"});
+    myData = await _userProvider.get(filter: {'role': "Korisnik"});
     setState(() {
       filterData = myData.result;
     });

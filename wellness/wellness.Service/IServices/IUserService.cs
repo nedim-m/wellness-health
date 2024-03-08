@@ -10,10 +10,14 @@ using wellness.Models.UserPostRequest;
 
 namespace wellness.Service.IServices
 {
-    public interface IUserService : ICrudService<User,UserSearchObj,UserPostRequest, UserPostRequest>
+    public interface IUserService : ICrudService<User, UserSearchObj, UserPostRequest, UserPostRequest>
     {
         Task<string> ForgotPassword(UserForgotPassword request);
-        
+        Task<User?> RegisterUser(UserDesktopInsert request);
+        Task<User?> UpdateUser(int id, UserDesktopInsert request);
+
+        Task<User?> UpdateEmployee(int id, UserEmployeeDesktopUpdate request);
+
 
     }
 }

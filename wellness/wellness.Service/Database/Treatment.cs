@@ -18,7 +18,7 @@ public partial class Treatment
 
     public float Price { get; set; }
 
-    public byte[] Picture { get; set; } = null!;
+    public byte[]? Picture { get; set; } = null!;
 
     public virtual Category Category { get; set; } = null!;
 

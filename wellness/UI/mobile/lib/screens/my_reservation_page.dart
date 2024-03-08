@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:mobile/models/reservation.dart';
 import 'package:mobile/models/treatment.dart';
@@ -34,6 +36,7 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
         await _reservationProvider.get(filter: {
       'userId': _userId,
     });
+    print("UserId : $_userId");
 
     treatments = await _treatmentProvider.recommendation();
 

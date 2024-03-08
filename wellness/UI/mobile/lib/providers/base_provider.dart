@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:io';
 
@@ -5,6 +7,7 @@ import 'package:flutter/material.dart';
 
 import 'package:http/http.dart';
 import 'package:http/io_client.dart';
+import 'package:mobile/utils/app_constants.dart';
 import 'package:mobile/utils/token_store.dart';
 
 abstract class BaseProvider<T> with ChangeNotifier {
@@ -20,7 +23,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
 
   BaseProvider(this._endpoint) {
     _baseUrl = const String.fromEnvironment("baseUrl",
-        defaultValue: "https://10.0.2.2:7081/");
+        defaultValue: "${AppConstants.baseUrl}${AppConstants.apiPort}/");
     if (_baseUrl!.endsWith("/") == false) {
       _baseUrl = "${_baseUrl!}/";
     }
@@ -38,7 +41,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
     }
 
     var uri = Uri.parse(url);
-    var headers = createJwtHeaders(_token!); 
+    var headers = createJwtHeaders(_token!);
 
     var response = await http!.get(uri, headers: headers);
 
@@ -54,7 +57,7 @@ abstract class BaseProvider<T> with ChangeNotifier {
   Future<T> insert(dynamic request) async {
     var url = "$_baseUrl$_endpoint";
     var uri = Uri.parse(url);
-    var headers = createJwtHeaders(_token!); 
+    var headers = createJwtHeaders(_token!);
 
     var jsonRequest = jsonEncode(request);
     var response = await http!.post(uri, headers: headers, body: jsonRequest);

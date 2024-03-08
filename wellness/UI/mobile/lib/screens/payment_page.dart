@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:mobile/providers/paypal_provider.dart';

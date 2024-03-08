@@ -7,17 +7,11 @@ class Category {
   final int id;
   final String name;
   final String description;
-  final bool status;
 
-  Category(this.id, this.name, this.description, this.status);
+  Category(this.id, this.name, this.description);
 
-  factory Category.fromJson(Map<String, dynamic> json) => _$CategoryFromJson(json);
+  factory Category.fromJson(Map<String, dynamic> json) =>
+      _$CategoryFromJson(json);
 
-  
   Map<String, dynamic> toJson() => _$CategoryToJson(this);
-
-
 }
-
-
-

@@ -1,0 +1,28 @@
+﻿# Koristi oficijelni .NET SDK image kao osnovu
+FROM mcr.microsoft.com/dotnet/sdk:6.0 AS build
+
+# Postavi radni direktorijum unutar Docker kontejnera
+WORKDIR /src
+EXPOSE 80
+EXPOSE 443
+
+# Kopiraj csproj i restore-uj zavisnosti
+COPY ["wellness.Payments/wellness.Payments.csproj", "wellness.Payments/"]
+RUN dotnet restore "wellness.Payments/wellness.Payments.csproj"
+
+# Kopiraj sve ostalo i build-uj aplikaciju
+COPY . .
+WORKDIR "/src/wellness.Payments"
+RUN dotnet build "wellness.Payments.csproj" -c Release -o /app/build
+
+# Izgradi i objavi aplikaciju
+FROM build AS publish
+RUN dotnet publish "wellness.Payments.csproj" -c Release -o /app/publish /p:UseAppHost=false
+
+# Koristi oficijelni .NET ASP.NET Runtime image za izvršavanje aplikacije
+FROM mcr.microsoft.com/dotnet/aspnet:6.0
+WORKDIR /app
+COPY --from=publish /app/publish .
+
+# Entry point za izvršavanje aplikacije
+ENTRYPOINT ["dotnet", "wellness.Payments.dll"]

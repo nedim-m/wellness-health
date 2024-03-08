@@ -125,41 +125,67 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
     return isValid;
   }
 
+  void showAddAlert(bool response) {
+    String message = response
+        ? 'Uspješno izmjenjeno'
+        : 'Neuspješna akcija, korisnik sa ovim korisničkim imenom ili email-om već postoji';
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: response ? const Text('Uspješno') : const Text('Neuspješno'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   void _saveChanges() async {
     final provider = Provider.of<UserProvider>(context, listen: false);
-    if (validateForm()) {
-      if (widget.edit == true && widget.data != null) {
-        await provider.updateWorker(
-          widget.data!.id,
-          firstName.text,
-          lastName.text,
-          email.text,
-          userName.text,
-          phone.text,
-          password.text,
-          selectedRole!.id,
-          _base64Image ?? widget.data!.picture,
-          selectedStatus!,
-          selectedShift!.id,
-        );
-      } else {
-        await provider.addWorker(
-          firstName.text,
-          lastName.text,
-          email.text,
-          userName.text,
-          phone.text,
-          password.text,
-          selectedRole!.id,
-          _base64Image ?? "N/A",
-          selectedStatus!,
-          selectedShift!.id,
-        );
-      }
+    try {
+      if (validateForm()) {
+        if (widget.edit == true && widget.data != null) {
+          await provider.updateWorker(
+            widget.data!.id,
+            firstName.text,
+            lastName.text,
+            email.text,
+            userName.text,
+            phone.text,
+            selectedRole!.id,
+            _base64Image ?? widget.data!.picture,
+            selectedStatus!,
+            selectedShift!.id,
+          );
+        } else {
+          await provider.addWorker(
+            firstName.text,
+            lastName.text,
+            email.text,
+            userName.text,
+            phone.text,
+            selectedRole!.id,
+            _base64Image ?? "N/A",
+            selectedStatus!,
+            selectedShift!.id,
+          );
+        }
 
-      widget.refreshCallback();
-      // ignore: use_build_context_synchronously
-      Navigator.of(context).pop();
+        widget.refreshCallback();
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pop();
+      }
+    } catch (e) {
+      showAddAlert(false);
     }
   }
 
@@ -249,19 +275,6 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
                 decoration: const InputDecoration(labelText: "Telefon"),
                 keyboardType: TextInputType.phone,
                 validator: _validation.validatePhone,
-              ),
-              TextFormField(
-                controller: password,
-                decoration: const InputDecoration(labelText: "Lozinka"),
-                obscureText: true,
-                validator: _validation.validatePassword,
-              ),
-              TextFormField(
-                controller: confirmPassword,
-                decoration: const InputDecoration(labelText: "Potvrda lozinke"),
-                obscureText: true,
-                validator: (value) =>
-                    _validation.validateConfirmPassword(password.text, value),
               ),
               DropdownButtonFormField<Role>(
                 value: selectedRole,

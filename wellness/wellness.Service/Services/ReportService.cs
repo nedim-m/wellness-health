@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +30,8 @@ namespace wellness.Service.Services
         }
 
 
-        public override  Task BeforeInsert(Database.Report entity, ReportPostRequest insert)
+
+        public override Task BeforeInsert(Database.Report entity, ReportPostRequest insert)
         {
             var fromDate = DateTime.Parse(insert.DateFrom).Date;
             var toDate = DateTime.Parse(insert.DateTo).Date;
@@ -49,6 +51,7 @@ namespace wellness.Service.Services
 
             return base.BeforeInsert(entity, insert);
         }
+
 
         public async Task<ReportChart> GetNumOfActiveMemeberships()
         {

@@ -171,7 +171,7 @@ public class PayPalService : IPayPalService
             Amount = amount,
             PaymentMethod = "PayPal",
             Currency = "EUR",
-            Timestamp = DateTime.Now,
+            Timestamp = DateTime.Now.AddHours(1),
             MemberShipTypeId = membershipTypeId,
             UserId=userId,
         };
@@ -192,7 +192,7 @@ public class PayPalService : IPayPalService
     private async Task SendMail(string email, int membershipTypeId, decimal amount)
     {
         var membershipType = await _context.MembershipTypes.FindAsync(membershipTypeId);
-        var timestamp = DateTime.Now;
+        var timestamp = DateTime.Now.AddHours(1);
 
         decimal price = amount;
         string subject = "Potvrda plačanja članstva";

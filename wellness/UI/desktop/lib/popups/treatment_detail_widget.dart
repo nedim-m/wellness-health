@@ -11,7 +11,7 @@ class TreatmentDetailWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final List<int> imageBytes = base64.decode(data.picture ?? '');
+    final List<int> imageBytes = base64.decode(data.picture);
     final ImageProvider decodedImage =
         MemoryImage(Uint8List.fromList(imageBytes));
 
@@ -61,17 +61,16 @@ class TreatmentDetailWidget extends StatelessWidget {
               ],
             ),
           ),
-          if (data.picture != null)
-            Container(
-              height: 200,
-              width: 200,
-              decoration: BoxDecoration(
-                image: DecorationImage(
-                  image: decodedImage,
-                  fit: BoxFit.cover,
-                ),
+          Container(
+            height: 200,
+            width: 200,
+            decoration: BoxDecoration(
+              image: DecorationImage(
+                image: decodedImage,
+                fit: BoxFit.contain,
               ),
             ),
+          ),
         ],
       ),
       actions: [

@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:mobile/providers/user_provider.dart';
 import 'package:mobile/screens/login_page.dart';
@@ -5,6 +7,7 @@ import 'package:mobile/screens/my_reservation_page.dart';
 import 'package:mobile/screens/membership_page.dart';
 import 'package:mobile/screens/profil_page.dart';
 import 'package:mobile/screens/treatment_overview_page.dart';
+import 'package:mobile/utils/app_constants.dart';
 import 'package:mobile/utils/user_store.dart';
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/custom_button.dart';
@@ -14,6 +17,7 @@ class HomepageView extends StatefulWidget {
   const HomepageView({Key? key}) : super(key: key);
 
   @override
+  // ignore: library_private_types_in_public_api
   _HomepageViewState createState() => _HomepageViewState();
 }
 
@@ -33,12 +37,18 @@ class _HomepageViewState extends State<HomepageView> {
 
   Future<void> _initPlatformState() async {
     _signalR = HubConnectionBuilder()
-        .withUrl("http://10.0.2.2:5000/notificationHub")
+        .withUrl(
+            "${AppConstants.baseUrl}${AppConstants.signalRPort}/notificationHub")
         .build();
 
     _signalR.on("ReceiveNotification", _onNewMessage);
 
-    await _signalR.start();
+    try {
+      await _signalR.start();
+      print('Connected to SignalR hub.');
+    } catch (e) {
+      print('Error connecting to SignalR hub: $e');
+    }
   }
 
   void _onNewMessage(List<dynamic>? parameters) {

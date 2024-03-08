@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:mobile/models/user.dart';
 import 'package:mobile/providers/user_provider.dart';
@@ -23,6 +25,7 @@ class _ProfilPageViewState extends State<ProfilPageView> {
       TextEditingController();
   final UserProvider _userProvider = UserProvider();
   final ValidationRules _validation = ValidationRules();
+  late User userData;
 
   Map<String, String?> _errorMessages = {};
 
@@ -34,7 +37,7 @@ class _ProfilPageViewState extends State<ProfilPageView> {
 
   Future<void> _loadUserData() async {
     try {
-      User userData = await _userProvider.getById();
+      userData = await _userProvider.getById();
 
       setState(() {
         _firstNameController =
@@ -57,18 +60,17 @@ class _ProfilPageViewState extends State<ProfilPageView> {
     setState(() {
       _errorMessages = {
         'firstName': _validation.validateTextInput(
-            _firstNameController.text, 'Please enter your first name.'),
+            _firstNameController.text, 'Unesite Vaše ime.'),
         'lastName': _validation.validateTextInput(
-            _lastNameController.text, 'Please enter your last name.'),
+            _lastNameController.text, 'Unesite Vaše prezime.'),
         'email': _validation.validateEmail(_emailController.text),
         'userName': _validation.validateTextInput(
-            _userNameController.text, 'Please enter your username.'),
+            _userNameController.text, 'Unesite Vaše korisničko ime'),
         'password': _validation.validatePassword(_passwordController.text),
-        'confirmPassword':
-            _passwordController.text == _confirmPasswordController.text
-                ? null
-                : 'Passwords do not match',
+        'confirmPassword': _validation.validateConfirmPassword(
+            _passwordController.text, _confirmPasswordController.text),
         'phone': _validation.validatePhone(_phoneController.text),
+        
       };
     });
 
@@ -82,6 +84,7 @@ class _ProfilPageViewState extends State<ProfilPageView> {
           _passwordController.text,
           _confirmPasswordController.text,
           _phoneController.text,
+          userData.status ?? false,
         );
 
         _showSuccessDialog();

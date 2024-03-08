@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/providers/paypal_provider.dart';
+
+import 'package:mobile/widgets/paypal_finish.dart';
 import 'package:provider/provider.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 
@@ -26,7 +28,7 @@ class _PayPalCheckoutState extends State<PayPalCheckout> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('PayPal Checkout'),
+        title: const Text('Uplata putem PayPala'),
       ),
       body: WebView(
         initialUrl: widget.paypalUrl,
@@ -38,7 +40,11 @@ class _PayPalCheckoutState extends State<PayPalCheckout> {
             paypalProvider.capturePayment(
                 widget.orderId, widget.membershipTypeId, widget.price);
 
-            Navigator.of(context).pop();
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => const PaypalFinishPage(),
+              ),
+            );
           }
           return NavigationDecision.navigate;
         },

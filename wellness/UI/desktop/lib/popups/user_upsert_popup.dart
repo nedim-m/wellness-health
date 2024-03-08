@@ -49,6 +49,30 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
     super.initState();
   }
 
+  void showAddAlert(bool response) {
+    String message = response
+        ? 'Uspješno izmjenjeno'
+        : 'Neuspješna akcija, korisnik sa ovim korisničkim imenom ili email-om već postoji';
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: response ? const Text('Uspješno') : const Text('Neuspješno'),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text('OK'),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   void dispose() {
     firstName.dispose();
@@ -63,30 +87,33 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
   void _saveChanges() async {
     final provider = Provider.of<UserProvider>(context, listen: false);
     if (_formKey.currentState!.validate()) {
-      if (widget.edit == true && widget.data != null) {
-        await provider.updateUser(
-          widget.data!.id,
-          firstName.text,
-          lastName.text,
-          email.text,
-          userName.text,
-          phone.text,
-          password.text,
-        );
-      } else {
-        await provider.addUser(
-          firstName.text,
-          lastName.text,
-          email.text,
-          userName.text,
-          phone.text,
-          password.text,
-        );
-      }
+      try {
+        if (widget.edit == true && widget.data != null) {
+          await provider.updateUser(
+            widget.data!.id,
+            firstName.text,
+            lastName.text,
+            email.text,
+            userName.text,
+            phone.text,
+            widget.data!.status,
+          );
+        } else {
+          await provider.addUser(
+            firstName.text,
+            lastName.text,
+            email.text,
+            userName.text,
+            phone.text,
+          );
+        }
 
-      widget.refreshCallback();
-      // ignore: use_build_context_synchronously
-      Navigator.of(context).pop();
+        widget.refreshCallback();
+        // ignore: use_build_context_synchronously
+        Navigator.of(context).pop();
+      } catch (e) {
+        showAddAlert(false);
+      }
     }
   }
 
@@ -106,13 +133,13 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
                 controller: firstName,
                 decoration: const InputDecoration(labelText: "Ime"),
                 validator: (value) => _validation.validateTextInput(
-                    value, 'Molim Vas unesti Vaše ime.'),
+                    value, 'Molim Vas unesite Vaše ime.'),
               ),
               TextFormField(
                 controller: lastName,
                 decoration: const InputDecoration(labelText: "Prezime"),
                 validator: (value) => _validation.validateTextInput(
-                    value, 'Molim Vas unesti Vaše prezime.'),
+                    value, 'Molim Vas unesite Vaše prezime.'),
               ),
               TextFormField(
                 controller: email,
@@ -124,26 +151,13 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
                 controller: userName,
                 decoration: const InputDecoration(labelText: "Korisničko ime"),
                 validator: (value) => _validation.validateTextInput(
-                    value, 'Molim Vas unesti Vaše korisničko ime'),
+                    value, 'Molim Vas unesite Vaše korisničko ime'),
               ),
               TextFormField(
                 controller: phone,
                 decoration: const InputDecoration(labelText: "Telefon"),
                 keyboardType: TextInputType.phone,
                 validator: _validation.validatePhone,
-              ),
-              TextFormField(
-                controller: password,
-                decoration: const InputDecoration(labelText: "Lozinka"),
-                obscureText: true,
-                validator: _validation.validatePassword,
-              ),
-              TextFormField(
-                controller: confirmPassword,
-                decoration: const InputDecoration(labelText: "Potvrda lozinke"),
-                obscureText: true,
-                validator: (value) =>
-                    _validation.validateConfirmPassword(password.text, value),
               ),
             ],
           ),

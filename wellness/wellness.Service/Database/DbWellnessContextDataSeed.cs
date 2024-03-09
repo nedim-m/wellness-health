@@ -686,7 +686,7 @@ namespace wellness.Service.Database
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=3, ReservationId=9, StarRating=3 });
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=4, ReservationId=15, StarRating=3 });
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=5, ReservationId=13, StarRating=2 });
-            modelBuilder.Entity<Rating>().HasData(new Rating { Id=6, ReservationId=12, StarRating=2 });
+            modelBuilder.Entity<Rating>().HasData(new Rating { Id=6, ReservationId=12, StarRating=5 });
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=7, ReservationId=16, StarRating=5 });
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=8, ReservationId=17, StarRating=5 });
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=9, ReservationId=18, StarRating=4 });

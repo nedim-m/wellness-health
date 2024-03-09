@@ -290,6 +290,17 @@ class _ReservationPageState extends State<ReservationPage> {
                     ),
                   ),
                 ),
+              const SizedBox(height: 30),
+              const Center(
+                child: Text(
+                  'Preporučeni tretmani',
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.blue,
+                  ),
+                ),
+              ),
               const Gap(20),
               SingleChildScrollView(
                 padding: const EdgeInsets.only(left: 20),

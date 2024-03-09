@@ -25,6 +25,7 @@ class _MemberShipPageViewState extends State<MemberShipPageView> {
   void initState() {
     super.initState();
     _userId = int.parse(UserManager.getUserId()!);
+   
     fetchData();
   }
 

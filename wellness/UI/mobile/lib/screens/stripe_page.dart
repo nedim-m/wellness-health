@@ -28,6 +28,7 @@ class _StripePaymentPageState extends State<StripePaymentPage> {
 
   Future<void> fetchData() async {
     loggedUser = await _userProvider.getById();
+    
   }
 
   @override

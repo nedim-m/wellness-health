@@ -74,6 +74,8 @@ class UserProvider extends BaseProvider<User> {
 
   Future<User> getById() async {
     int id = int.parse(UserManager.getUserId()!);
+
+    
     var url = "$baseUrl$endpoint/$id";
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token!);
@@ -113,7 +115,6 @@ class UserProvider extends BaseProvider<User> {
       "roleId": 3,
       "phone": phone,
       "status": status,
-      
     });
 
     var response = await http!.put(uri, headers: headers, body: jsonRequest);

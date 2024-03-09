@@ -4,6 +4,7 @@ import 'package:mobile/screens/forgot_password_page.dart';
 
 import 'package:mobile/screens/home_page.dart';
 import 'package:mobile/screens/register_page.dart';
+
 import 'package:mobile/utils/user_store.dart';
 
 class LoginPageView extends StatefulWidget {
@@ -20,6 +21,8 @@ class _LoginPageViewState extends State<LoginPageView> {
   bool _loginFailed = false;
   final String _errorMessage = "Neispravano korisničko ime ili lozinka!";
 
+
+
   Future<void> _login() async {
     final String username = _usernameController.text;
     final String password = _passwordController.text;
@@ -35,6 +38,7 @@ class _LoginPageViewState extends State<LoginPageView> {
         context,
         MaterialPageRoute(builder: (context) => const HomepageView()),
       );
+
       UserManager.removeCredentials();
       UserManager.getFullNameAsync();
     } else {

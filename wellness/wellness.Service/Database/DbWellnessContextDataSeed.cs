@@ -44,6 +44,7 @@ namespace wellness.Service.Database
             modelBuilder.Entity<Category>().HasData(new Category { Id = 5, Name = "Nail Bar", Description = "Usluge za negu noktiju, manikir i pedikir." });
             modelBuilder.Entity<Category>().HasData(new Category { Id = 6, Name = "Fitnes i Wellness", Description = "Teretana, grupni treninzi i wellness programi." });
             modelBuilder.Entity<Category>().HasData(new Category { Id = 7, Name = "Estetski tretmani", Description = "Depilacija, tretmani za kožu i maderoterapija." });
+            modelBuilder.Entity<Category>().HasData(new Category { Id = 8, Name = "Kategorija za brisanje", Description = "Moguće pobrisati jer nema veze sa tretmanima" });
 
 
             //TreatmentTypes
@@ -57,7 +58,8 @@ namespace wellness.Service.Database
             modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id = 8, Name = "Piling tela", Description = "Piling za uklanjanje odumrlih ćelija kože." });
             modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id = 9, Name = "Sauna", Description = "Suva sauna za detoksikaciju tela." });
             modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id = 10, Name = "Manikir", Description = "Nega noktiju na rukama." });
-         
+            modelBuilder.Entity<TreatmentType>().HasData(new TreatmentType { Id = 11, Name = "Tip tretmana za brisanje", Description = "Moguće pobrisati jer nema veze sa tretmanima" });
+
 
 
             //Treatments
@@ -143,6 +145,18 @@ namespace wellness.Service.Database
                 TreatmentTypeId = 7, 
                 CategoryId = 6, 
                 Description = "Sesija joge za fizičko i mentalno blagostanje.",
+                Duration = 60,
+                Price = 50,
+                Picture = ConvertImageToByteArray("wwwroot", "yoga-sesija.jpg")
+            });
+
+            modelBuilder.Entity<Treatment>().HasData(new Treatment
+            {
+                Id = 8,
+                Name = "Tretman za brisanje",
+                TreatmentTypeId = 7,
+                CategoryId = 6,
+                Description = "Ovaj tretman je moguće obrisati jer nema povezanosti sa rezervacijama",
                 Duration = 60,
                 Price = 50,
                 Picture = ConvertImageToByteArray("wwwroot", "yoga-sesija.jpg")
@@ -680,7 +694,7 @@ namespace wellness.Service.Database
 
 
 
-
+            //Ratings
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=1,ReservationId=11,StarRating=4 });
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=2, ReservationId=10, StarRating=5 });
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=3, ReservationId=9, StarRating=3 });
@@ -692,6 +706,31 @@ namespace wellness.Service.Database
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=9, ReservationId=18, StarRating=4 });
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=10, ReservationId=19, StarRating=4 });
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=11, ReservationId=20, StarRating=4 });
+
+
+            //Reports
+            modelBuilder.Entity<Report>().HasData(new Report
+            {
+                Id = 1,
+                DateFrom = new DateTime(2024, 3, 1),  
+                DateTo = new DateTime(2024, 3, 30),    
+                EarnedMoney = 1500.00m,
+                TotalUsers = 3,
+                Timestamp = DateTime.Now,  
+                MemberShipTypeId = 4
+            });
+
+            modelBuilder.Entity<Report>().HasData(new Report
+            {
+                Id = 2,
+                DateFrom = new DateTime(2024, 3, 1), 
+                DateTo = new DateTime(2024, 3, 30),    
+                EarnedMoney = 599.99m,
+                TotalUsers = 2,
+                Timestamp = DateTime.Now, 
+                MemberShipTypeId = 3
+            });
+
 
 
 

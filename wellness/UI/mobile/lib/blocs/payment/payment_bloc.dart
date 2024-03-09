@@ -15,7 +15,6 @@ part 'payment_state.dart';
 
 class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
   PaymentBloc() : super(const PaymentState()) {
-    userId = int.parse(UserManager.getUserId()!);
     on<PaymentStart>(_onPaymentStart);
     on<PaymentCreateIntent>(_onPaymentCreateIntent);
     on<PaymentConfirmIntent>(_onPaymentConfirmIntent);
@@ -46,7 +45,7 @@ class PaymentBloc extends Bloc<PaymentEvent, PaymentState> {
     Emitter<PaymentState> emit,
   ) async {
     emit(state.copyWith(status: PaymentStatus.loading));
-
+    userId = int.parse(UserManager.getUserId()!);
     final paymentMethod = await Stripe.instance.createPaymentMethod(
       params: PaymentMethodParams.card(
         paymentMethodData: PaymentMethodData(

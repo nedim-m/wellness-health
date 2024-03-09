@@ -16,7 +16,7 @@ namespace wellness.Controllers
             _service=service;
         }
 
-        [HttpDelete("{id}"), Authorize(Roles = "Administrator")]
+        [HttpDelete("{id}"), Authorize(Roles = "Administrator, Zaposlenik")]
         public async Task<ActionResult> Delete(int id)
         {
             var response = await _service.Delete(id);
@@ -32,13 +32,13 @@ namespace wellness.Controllers
         {
             return base.Get(search);
         }
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator,Zaposlenik")]
         public override Task<Category> Insert([FromBody] CategoryPostRequest insert)
         {
             return base.Insert(insert);
 
         }
-        [Authorize(Roles = "Administrator")]
+        [Authorize(Roles = "Administrator,Zaposlenik")]
         public override Task<Category> Update(int id, [FromBody] CategoryPostRequest update)
         {
             return base.Update(id, update);

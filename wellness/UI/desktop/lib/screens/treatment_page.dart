@@ -352,7 +352,7 @@ DataRow recentFileDataRow(BuildContext context, var data,
                       builder: (context) {
                         return AlertDialog(
                           title: const Text(
-                            'Deletion Error',
+                            'Greška prilikom brisanja',
                             style: TextStyle(color: Colors.red),
                           ),
                           content:

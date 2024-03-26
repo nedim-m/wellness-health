@@ -154,6 +154,7 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: AlertDialog(
+        backgroundColor: Colors.white,
         title: widget.edit
             ? const Text("Ažuriraj tretman")
             : const Text("Dodaj tretman"),

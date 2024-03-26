@@ -39,6 +39,7 @@ class _MembershipTypeEditPopUpWidgetState
       name = TextEditingController(text: widget.data!.name);
       description = TextEditingController(text: widget.data!.description);
       price = TextEditingController(text: widget.data!.price.toString());
+      duration = TextEditingController(text: widget.data!.duration.toString());
     }
     super.initState();
   }
@@ -76,6 +77,7 @@ class _MembershipTypeEditPopUpWidgetState
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.white,
       title: widget.edit
           ? const Text("Ažuriraj članarinu")
           : const Text("Dodaj članarinu"),

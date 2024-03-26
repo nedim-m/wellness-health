@@ -40,6 +40,7 @@ class _ReservationPageViewState extends State<ReservationPageView> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           title: const Text("Potvrda"),
           content: Text(message),
           actions: [

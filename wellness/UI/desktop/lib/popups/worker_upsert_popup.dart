@@ -134,6 +134,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           title: response ? const Text('Uspješno') : const Text('Neuspješno'),
           content: Text(message),
           actions: [
@@ -192,6 +193,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.white,
       title: widget.edit
           ? const Text("Ažuriraj zaposlenika")
           : const Text("Dodaj zaposlenika"),

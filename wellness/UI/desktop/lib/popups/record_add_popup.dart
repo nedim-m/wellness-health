@@ -49,6 +49,7 @@ class _RecordAddPopupWidgetState extends State<RecordAddPopupWidget> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.white,
       title: const Text("Evidentiraj ulazak"),
       content: Form(
         key: _formKey,

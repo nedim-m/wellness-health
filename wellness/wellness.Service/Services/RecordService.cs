@@ -31,30 +31,38 @@ namespace wellness.Service.Services
 
         public override async Task<PagedResult<Record>> Get(RecordSearchObj? search = null)
         {
-            var filteredEntity = _context.Set<Database.Record>().AsQueryable().Include("User"); 
+            IQueryable<Database.Record> filteredEntity = _context.Set<Database.Record>().AsQueryable().Include("User");
 
-            if (!string.IsNullOrWhiteSpace(search?.Prisutni)&& search.Prisutni=="DA")
+            // Ako je search objekat null, ili ako je Prisutni null ili prazan, ili ako nije "DA", ne primjenjujte dodatne filtere
+            if (search == null || string.IsNullOrWhiteSpace(search.Prisutni) || search.Prisutni != "DA")
             {
-                filteredEntity=filteredEntity.Where(x => x.User.Prisutan==true && x.User.RoleId==3 && x.LeaveEntryDate==null);
+                var list = await filteredEntity.ToListAsync();
+                var mappedList = _mapper.Map<List<Record>>(list);
+
+                var result = new PagedResult<Record>
+                {
+                    Result = mappedList,
+                    Count = mappedList.Count
+                };
+
+                return result;
             }
-            else
+
+            // Ako je Prisutni "DA", primjenjujte filtere
+            filteredEntity = filteredEntity.Where(x => x.User.Prisutan == true && x.User.RoleId == 3 && x.LeaveEntryDate == null);
+
+            var filteredList = await filteredEntity.ToListAsync();
+            var mappedFilteredList = _mapper.Map<List<Record>>(filteredList);
+
+            var filteredResult = new PagedResult<Record>
             {
-                filteredEntity=filteredEntity.Where(x => x.User.Prisutan!=true && x.User.RoleId==3);
-            }
-
-
-            var list = await filteredEntity.ToListAsync();
-
-            var mappedList = _mapper.Map<List<Record>>(list);
-
-            var result = new PagedResult<Record>
-            {
-                Result = mappedList,
-                Count = mappedList.Count
+                Result = mappedFilteredList,
+                Count = mappedFilteredList.Count
             };
 
-            return result;
+            return filteredResult;
         }
+
 
         public override async Task<Record> Insert(RecordPostRequest insert)
         {

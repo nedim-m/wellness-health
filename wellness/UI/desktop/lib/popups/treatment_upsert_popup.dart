@@ -61,6 +61,8 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
       price = TextEditingController(text: widget.data!.price.toString());
       name = TextEditingController(text: widget.data!.name);
       _base64Image = widget.data!.picture;
+      selectedCategoryId = widget.data!.categoryId;
+      selectedTreatmentTypeId = widget.data!.treatmentTypeId;
     }
 
     fetchData();

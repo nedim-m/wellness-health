@@ -15,7 +15,7 @@ namespace wellness.Models.User
 
         public string Email { get; set; } = null!;
 
-        
+
         public string UserName { get; set; } = null!;
 
         public string? Phone { get; set; }
@@ -23,8 +23,11 @@ namespace wellness.Models.User
         public bool Status { get; set; }
 
         public byte[]? Picture { get; set; }
-        
-        public string Role { get; set; }=string.Empty;
+
+        public string Role { get; set; } = string.Empty;
+
         public string ShiftTime { get; set; } = string.Empty;
+        public int RoleId { get; set; }
+        public int ShiftId { get; set; }
     }
 }

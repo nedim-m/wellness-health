@@ -33,7 +33,7 @@ namespace wellness.Service.Services
         {
             IQueryable<Database.Record> filteredEntity = _context.Set<Database.Record>().AsQueryable().Include("User");
 
-            // Ako je search objekat null, ili ako je Prisutni null ili prazan, ili ako nije "DA", ne primjenjujte dodatne filtere
+            
             if (search == null || string.IsNullOrWhiteSpace(search.Prisutni) || search.Prisutni != "DA")
             {
                 var list = await filteredEntity.ToListAsync();
@@ -48,7 +48,7 @@ namespace wellness.Service.Services
                 return result;
             }
 
-            // Ako je Prisutni "DA", primjenjujte filtere
+            
             filteredEntity = filteredEntity.Where(x => x.User.Prisutan == true && x.User.RoleId == 3 && x.LeaveEntryDate == null);
 
             var filteredList = await filteredEntity.ToListAsync();

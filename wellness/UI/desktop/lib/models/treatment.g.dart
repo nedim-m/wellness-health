@@ -15,6 +15,8 @@ Treatment _$TreatmentFromJson(Map<String, dynamic> json) => Treatment(
       json['picture'] as String,
       json['duration'] as int,
       json['name'] as String,
+      json['treatmentTypeId'] as int,
+      json['categoryId'] as int,
     );
 
 Map<String, dynamic> _$TreatmentToJson(Treatment instance) => <String, dynamic>{
@@ -26,4 +28,6 @@ Map<String, dynamic> _$TreatmentToJson(Treatment instance) => <String, dynamic>{
       'price': instance.price,
       'duration': instance.duration,
       'picture': instance.picture,
+      'treatmentTypeId': instance.treatmentTypeId,
+      'categoryId': instance.categoryId,
     };

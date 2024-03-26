@@ -14,9 +14,11 @@ class User {
   final String picture;
   final String? role;
   final String? shiftTime;
+  final int roleId;
+  final int shiftId;
 
   User(this.id, this.firstName, this.lastName, this.email, this.userName,
-      this.phone, this.status, this.picture, this.role, this.shiftTime);
+      this.phone, this.status, this.picture, this.role, this.shiftTime, this.roleId, this.shiftId);
 
   factory User.fromJson(Map<String, dynamic> json) => _$UserFromJson(json);
 

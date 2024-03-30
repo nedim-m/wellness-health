@@ -29,5 +29,7 @@ namespace wellness.Models.User
         public string ShiftTime { get; set; } = string.Empty;
         public int RoleId { get; set; }
         public int ShiftId { get; set; }
+
+        public string? MembershipType { get; set; }
     }
 }

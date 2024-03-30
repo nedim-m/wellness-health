@@ -34,8 +34,12 @@ namespace wellness.Service.Services
             CreateMap<UserDesktopInsert, Database.User>();
             CreateMap<UserEmployeeDesktopUpdate, Database.User>();
 
-            CreateMap<Database.User, User>().ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.Name))
-                                            .ForMember(dest => dest.ShiftTime, opt => opt.MapFrom(src => src.Shift.WorkingHours));
+            CreateMap<Database.User, User>()
+     .ForMember(dest => dest.Role, opt => opt.MapFrom(src => src.Role.Name))
+     .ForMember(dest => dest.ShiftTime, opt => opt.MapFrom(src => src.Shift.WorkingHours))
+     .ForMember(dest => dest.MembershipType, opt => opt.MapFrom(src => src.Memberships.FirstOrDefault().MemberShipType.Name));
+
+
             CreateMap<CategoryPostRequest, Database.Category>();
             CreateMap<Database.Category, Category>();
 
@@ -61,7 +65,7 @@ namespace wellness.Service.Services
                                                 .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.User.Phone))
                                                 .ForMember(dest => dest.UserName, opt => opt.MapFrom(src => src.User.UserName));
 
-           
+
             CreateMap<Database.Role, Role>();
             CreateMap<Database.Shift, Shift>();
 
@@ -91,7 +95,7 @@ namespace wellness.Service.Services
 
             CreateMap<ReportPostRequest, Database.Report>();
             CreateMap<Database.Report, Report>().ForMember(dest => dest.MemberShipTypeName, opt => opt.MapFrom(src => src.MemberShipType.Name));
-            
+
 
         }
     }

@@ -13,5 +13,6 @@ namespace wellness.Model.User
 
         public string? Prisutan { get; set; }
 
+
     }
 }

@@ -1,4 +1,5 @@
 import 'package:desktop/providers/category_provider.dart';
+import 'package:desktop/providers/membership_provider.dart';
 import 'package:desktop/providers/membership_type.provider.dart';
 import 'package:desktop/providers/record_provider.dart';
 import 'package:desktop/providers/report_provider.dart';
@@ -27,6 +28,7 @@ void main() {
       ChangeNotifierProvider(create: (_) => ReservationProvider()),
       ChangeNotifierProvider(create: (_) => ReportProvider()),
       ChangeNotifierProvider(create: (_) => ShiftProvider()),
+      ChangeNotifierProvider(create: (_) => MembershipProvider()),
     ],
     child: const MyApp(),
   ));

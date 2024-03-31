@@ -271,7 +271,8 @@ DataRow recentFileDataRow(
                     },
                   );
                 },
-                child: const Text("Dodaj clanarinu"),
+                child:
+                    Text(data.status ? "Produži članarinu" : "Dodaj članarinu"),
               ),
             ),
           ],

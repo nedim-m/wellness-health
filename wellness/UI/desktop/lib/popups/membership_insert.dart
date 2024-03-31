@@ -1,7 +1,10 @@
+import 'package:desktop/models/membership.dart';
 import 'package:desktop/models/membership_type.dart';
 import 'package:desktop/models/search_result.dart';
 import 'package:desktop/models/user.dart';
+import 'package:desktop/providers/membership_provider.dart';
 import 'package:desktop/providers/membership_type.provider.dart';
+import 'package:desktop/utils/current_date.dart';
 import 'package:desktop/utils/validation_rules.dart';
 import 'package:flutter/material.dart';
 
@@ -27,21 +30,31 @@ class _MembershipInsertPopUpWidgetState
   TextEditingController email = TextEditingController();
   final MembershipTypeProvider membershipTypeProvider =
       MembershipTypeProvider();
+  final MembershipProvider membershipProvider = MembershipProvider();
 
-  SearchResult<MembershipType> membershipType = SearchResult<MembershipType>();
+  MembershipType? selectedMembershipType;
+  List<MembershipType> allMembershipType = [];
+  SearchResult<MembershipType> myData = SearchResult<MembershipType>();
+  SearchResult<Membership> myDataUser = SearchResult<Membership>();
+  Membership? userMembership;
 
-  int? selectedMembershipTypeId;
+  var currentDate = CurrentDate();
 
   @override
   void initState() {
-    fetchData();
+    fetchData(); // Ovdje inicijalizirajte varijablu userMembership
     super.initState();
   }
 
   Future<void> fetchData() async {
-    membershipType = await membershipTypeProvider.get();
-
-    setState(() {});
+    myData = await membershipTypeProvider.get();
+    myDataUser =
+        await membershipProvider.get(filter: {'userId': widget.data.id});
+    setState(() {
+      allMembershipType = myData.result;
+      userMembership =
+          myDataUser.result.isNotEmpty ? myDataUser.result.first : null;
+    });
   }
 
   void showAddAlert(bool response) {
@@ -75,40 +88,85 @@ class _MembershipInsertPopUpWidgetState
     userName.text = widget.data.userName;
     email.text = widget.data.email;
 
+    final bool showMembershipInfo = widget.data.status;
+
     return AlertDialog(
       backgroundColor: Colors.white,
-      title: const Text("Dodaj članarinu"),
-      content: SingleChildScrollView(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            _buildReadOnlyField("Ime", firstName.text),
-            _buildReadOnlyField("Prezime", lastName.text),
-            _buildReadOnlyField("Email", email.text),
-            _buildReadOnlyField("Korisničko ime", userName.text),
-            DropdownButtonFormField<int>(
-              value: selectedMembershipTypeId,
-              onChanged: (newValue) {
-                setState(() {
-                  selectedMembershipTypeId = newValue;
-                });
-              },
-              items: membershipType.result.map((membershipType) {
-                return DropdownMenuItem<int>(
-                  value: membershipType.id,
-                  child: Text(membershipType.name),
-                );
-              }).toList(),
-              decoration: const InputDecoration(labelText: 'Tip članarine'),
-              validator: _validation.validateDropdown,
-            ),
-          ],
+      title: Text(
+        widget.data.status ? "Produži članarinu" : "Dodaj članarinu",
+      ),
+      content: Form(
+        key: _formKey,
+        child: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildReadOnlyField(
+                  "Ime i prezime", "${firstName.text} ${lastName.text}"),
+              _buildReadOnlyField("Korisničko ime", userName.text),
+              const Divider(),
+              if (showMembershipInfo) ...[
+                _buildReadOnlyField(
+                    "Trenutno aktivni tip članarine",
+                    userMembership != null
+                        ? userMembership!.memberShipTypeName!
+                        : 'N/A'),
+                _buildReadOnlyField(
+                    "Datum prve aktivacije",
+                    userMembership != null
+                        ? userMembership!.startDate!
+                        : 'N/A'),
+                _buildReadOnlyField(
+                    "Datum isteka",
+                    userMembership != null
+                        ? userMembership!.expirationDate!
+                        : 'N/A'),
+                const Divider(),
+              ],
+              DropdownButtonFormField<MembershipType>(
+                value: selectedMembershipType,
+                onChanged: (newValue) {
+                  setState(() {
+                    selectedMembershipType = newValue!;
+                  });
+                },
+                items: allMembershipType.map<DropdownMenuItem<MembershipType>>(
+                    (MembershipType membershipType) {
+                  return DropdownMenuItem<MembershipType>(
+                    value: membershipType,
+                    child: Text(membershipType.name),
+                  );
+                }).toList(),
+                hint: const Text("Izaberite Tip članarine"),
+                validator: _validation.validateDropdown,
+              ),
+              _buildReadOnlyField(
+                "Trajanje",
+                selectedMembershipType != null
+                    ? "${selectedMembershipType!.duration.toString()} dana"
+                    : "N/A",
+              ),
+              _buildReadOnlyField(
+                "Cijena",
+                selectedMembershipType != null
+                    ? "${selectedMembershipType!.price.toString()} BAM"
+                    : "N/A",
+              ),
+              _buildReadOnlyField("Datum aktivacije", currentDate.currentDate),
+            ],
+          ),
         ),
       ),
       actions: [
-        const TextButton(
-          onPressed: null, //_saveChanges,
-          child: Text("Spremi"),
+        TextButton(
+          onPressed: () {
+            if (_formKey.currentState!.validate()) {
+              _formKey.currentState!.save();
+
+              showAddAlert(true);
+            }
+          },
+          child: const Text("Spremi"),
         ),
         TextButton(
           onPressed: () {
@@ -126,8 +184,8 @@ class _MembershipInsertPopUpWidgetState
       child: Row(
         children: [
           Text(
-            label + ": ",
-            style: TextStyle(fontWeight: FontWeight.bold),
+            "$label: ",
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           Expanded(
             child: Text(value),

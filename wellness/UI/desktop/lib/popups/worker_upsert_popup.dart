@@ -333,6 +333,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
                   ),
                 ],
                 decoration: const InputDecoration(labelText: 'Status'),
+                validator: _validation.validateDropdown,
               ),
             ],
           ),

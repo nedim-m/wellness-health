@@ -207,38 +207,41 @@ class _ReservationPageState extends State<ReservationPage> {
               const Gap(20),
               Column(
                 children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      const Text(
-                        'Ocijeni tretman',
-                        style: TextStyle(
-                            fontSize: 18, fontWeight: FontWeight.bold),
-                      ),
-                      Row(
-                        children: List.generate(
-                          5,
-                          (index) => IconButton(
-                            onPressed: widget.reservation.status != false
-                                ? () {
-                                    setState(() {
-                                      selectedRating = index + 1;
-                                    });
-                                    _showStarRatingDialog(selectedRating);
-                                  }
-                                : null,
-                            icon: Icon(
-                              Icons.star,
-                              color: index < selectedRating
-                                  ? Colors.amber
-                                  : widget.reservation.status != false
-                                      ? Colors.grey
-                                      : Colors.grey.shade300,
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'Ocijeni tretman',
+                          style: TextStyle(
+                              fontSize: 18, fontWeight: FontWeight.bold),
+                        ),
+                        Row(
+                          children: List.generate(
+                            5,
+                            (index) => IconButton(
+                              onPressed: widget.reservation.status != false
+                                  ? () {
+                                      setState(() {
+                                        selectedRating = index + 1;
+                                      });
+                                      _showStarRatingDialog(selectedRating);
+                                    }
+                                  : null,
+                              icon: Icon(
+                                Icons.star,
+                                color: index < selectedRating
+                                    ? Colors.amber
+                                    : widget.reservation.status != false
+                                        ? Colors.grey
+                                        : Colors.grey.shade300,
+                              ),
                             ),
                           ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                   if (errorText != null)
                     Text(

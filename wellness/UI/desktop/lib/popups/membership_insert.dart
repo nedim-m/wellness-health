@@ -7,6 +7,7 @@ import 'package:desktop/providers/membership_type.provider.dart';
 import 'package:desktop/utils/current_date.dart';
 import 'package:desktop/utils/validation_rules.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MembershipInsertPopUpWidget extends StatefulWidget {
   const MembershipInsertPopUpWidget(
@@ -42,7 +43,7 @@ class _MembershipInsertPopUpWidgetState
 
   @override
   void initState() {
-    fetchData(); // Ovdje inicijalizirajte varijablu userMembership
+    fetchData();
     super.initState();
   }
 
@@ -55,6 +56,29 @@ class _MembershipInsertPopUpWidgetState
       userMembership =
           myDataUser.result.isNotEmpty ? myDataUser.result.first : null;
     });
+  }
+
+  void _saveChanges() async {
+    final provider = Provider.of<MembershipProvider>(context, listen: false);
+    if (_formKey.currentState!.validate()) {
+      try {
+        if (!widget.data.status) {
+          await provider.addMembership(
+              widget.data.id, selectedMembershipType!.id);
+        } else {
+          int membershipId = 0;
+          if (userMembership != null) {
+            membershipId = userMembership!.id!;
+          }
+
+          await provider.updateMembership(
+              membershipId, selectedMembershipType!.id);
+        }
+      } catch (e) {
+        showAddAlert(false);
+      }
+    }
+    widget.refreshCallback();
   }
 
   void showAddAlert(bool response) {
@@ -157,13 +181,70 @@ class _MembershipInsertPopUpWidgetState
           ),
         ),
       ),
-      actions: [
+      actions: <Widget>[
         TextButton(
           onPressed: () {
             if (_formKey.currentState!.validate()) {
-              _formKey.currentState!.save();
-
-              showAddAlert(true);
+              showDialog(
+                context: context,
+                builder: (BuildContext context) {
+                  return AlertDialog(
+                    backgroundColor: Colors.white,
+                    title: const Text('Potvrda'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'Ova izmjena je nepovratna. Jeste li sigurni da želite nastaviti?',
+                          style: TextStyle(fontSize: 18, color: Colors.red),
+                        ),
+                        const SizedBox(height: 20),
+                        const Center(
+                          child: Text(
+                            'Izabrani tip članarine',
+                            style: TextStyle(fontSize: 18),
+                          ),
+                        ),
+                        const SizedBox(height: 5),
+                        Center(
+                          child: Text(
+                            'Tip članarine: ${selectedMembershipType?.name ?? 'N/A'}',
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ),
+                        Center(
+                          child: Text(
+                            'Trajanje: ${selectedMembershipType?.duration ?? 'N/A'} dana',
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ),
+                        Center(
+                          child: Text(
+                            'Cijena: ${selectedMembershipType?.price ?? 'N/A'} BAM',
+                            style: const TextStyle(fontSize: 14),
+                          ),
+                        ),
+                      ],
+                    ),
+                    actions: <Widget>[
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                          _saveChanges();
+                        },
+                        child: const Text('Prihvati'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Otkazi'),
+                      ),
+                    ],
+                  );
+                },
+              );
             }
           },
           child: const Text("Spremi"),

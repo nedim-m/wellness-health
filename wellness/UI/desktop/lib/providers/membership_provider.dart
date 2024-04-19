@@ -20,6 +20,7 @@ class MembershipProvider extends BaseProvider<Membership> {
     var jsonRequest = jsonEncode(<String, dynamic>{
       "userId": userId,
       "memberShipTypeId": memberShipTypeId,
+      "isDesktop": true
     });
 
     var response = await http.post(uri, headers: headers, body: jsonRequest);
@@ -39,6 +40,7 @@ class MembershipProvider extends BaseProvider<Membership> {
 
     var jsonRequest = jsonEncode(<String, dynamic>{
       "memberShipTypeId": memberShipTypeId,
+      "isDesktop": true
     });
 
     var response = await http.put(uri, headers: headers, body: jsonRequest);

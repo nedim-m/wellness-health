@@ -9,5 +9,6 @@ namespace wellness.Model.Membership
     public class MembershipUpdateRequest
     {
         public int MemberShipTypeId { get; set; }
+        public bool IsDesktop { get; set; } = false;
     }
 }

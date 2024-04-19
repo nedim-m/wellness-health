@@ -38,6 +38,7 @@ class _MembershipInsertPopUpWidgetState
   SearchResult<MembershipType> myData = SearchResult<MembershipType>();
   SearchResult<Membership> myDataUser = SearchResult<Membership>();
   Membership? userMembership;
+  BuildContext? dialogContext;
 
   var currentDate = CurrentDate();
 
@@ -74,6 +75,7 @@ class _MembershipInsertPopUpWidgetState
           await provider.updateMembership(
               membershipId, selectedMembershipType!.id);
         }
+        showAddAlert(true);
       } catch (e) {
         showAddAlert(false);
       }
@@ -96,6 +98,7 @@ class _MembershipInsertPopUpWidgetState
             TextButton(
               onPressed: () {
                 Navigator.of(context).pop();
+                Navigator.of(dialogContext!).pop();
               },
               child: const Text('OK'),
             ),
@@ -111,7 +114,7 @@ class _MembershipInsertPopUpWidgetState
     lastName.text = widget.data.lastName;
     userName.text = widget.data.userName;
     email.text = widget.data.email;
-
+    dialogContext = context;
     final bool showMembershipInfo = widget.data.status;
 
     return AlertDialog(
@@ -239,7 +242,7 @@ class _MembershipInsertPopUpWidgetState
                         onPressed: () {
                           Navigator.of(context).pop();
                         },
-                        child: const Text('Otkazi'),
+                        child: const Text('Otkaži'),
                       ),
                     ],
                   );

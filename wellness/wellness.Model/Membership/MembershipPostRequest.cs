@@ -13,5 +13,7 @@ namespace wellness.Model.Membership
         public int UserId { get; set; }
 
         public int MemberShipTypeId { get; set; }
+
+        public bool IsDesktop { get; set; } = false;
     }
 }

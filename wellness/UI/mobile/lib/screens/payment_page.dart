@@ -6,6 +6,7 @@ import 'package:mobile/providers/paypal_provider.dart';
 
 import 'package:mobile/screens/paypal_page.dart';
 import 'package:mobile/screens/stripe_page.dart';
+import 'package:mobile/utils/app_styles.dart';
 
 import 'package:mobile/utils/current_date.dart';
 
@@ -35,6 +36,7 @@ class _PaymentPageViewState extends State<PaymentPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Styles.bgColor,
       appBar: const AppBarWidget(),
       body: SingleChildScrollView(
         child: Padding(

@@ -4,6 +4,7 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:mobile/models/user.dart';
 import 'package:mobile/providers/user_provider.dart';
 import 'package:mobile/screens/home_page.dart';
+import 'package:mobile/utils/app_styles.dart';
 
 import '/blocs/blocs.dart';
 
@@ -34,6 +35,7 @@ class _StripePaymentPageState extends State<StripePaymentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Styles.bgColor,
       appBar: AppBar(
         title: const Text('Uplata putem kreditne kartice'),
       ),

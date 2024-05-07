@@ -6,6 +6,7 @@ import 'package:mobile/models/treatment.dart';
 
 import 'package:mobile/providers/reservation_provider.dart';
 import 'package:mobile/providers/treatment_provider.dart';
+import 'package:mobile/utils/app_styles.dart';
 import 'package:mobile/utils/user_store.dart';
 import 'package:mobile/widgets/reservation_page.dart';
 import 'package:mobile/widgets/app_bar.dart';
@@ -105,6 +106,7 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Styles.bgColor,
       appBar: const AppBarWidget(),
       body: Padding(
         padding: const EdgeInsets.all(16.0),

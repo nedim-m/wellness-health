@@ -4,6 +4,7 @@ import 'package:mobile/screens/forgot_password_page.dart';
 
 import 'package:mobile/screens/home_page.dart';
 import 'package:mobile/screens/register_page.dart';
+import 'package:mobile/utils/app_styles.dart';
 
 import 'package:mobile/utils/user_store.dart';
 
@@ -20,8 +21,6 @@ class _LoginPageViewState extends State<LoginPageView> {
   final UserProvider _userProvider = UserProvider();
   bool _loginFailed = false;
   final String _errorMessage = "Neispravano korisničko ime ili lozinka!";
-
-
 
   Future<void> _login() async {
     final String username = _usernameController.text;
@@ -53,7 +52,7 @@ class _LoginPageViewState extends State<LoginPageView> {
     final double fontSize = MediaQuery.of(context).size.width * 0.05;
 
     return Scaffold(
-      backgroundColor: Colors.blue[100],
+      backgroundColor: Styles.bgColor,
       body: SingleChildScrollView(
         child: Center(
           child: Container(
@@ -122,9 +121,7 @@ class _LoginPageViewState extends State<LoginPageView> {
                 const SizedBox(height: 24.0),
                 ElevatedButton(
                   onPressed: _login,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                  ),
+                  style: ElevatedButton.styleFrom(),
                   child: Text(
                     'Ulogujte se',
                     style: TextStyle(

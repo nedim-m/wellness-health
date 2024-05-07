@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:mobile/models/treatment.dart';
+import 'package:mobile/utils/app_styles.dart';
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/color_coded_calendar.dart';
 
@@ -22,6 +23,7 @@ class _TreatmenTimeState extends State<TreatmenTime> {
   Widget build(BuildContext context) {
     final DateFormat formatter = DateFormat('dd.MM.yyyy');
     return Scaffold(
+      backgroundColor: Styles.bgColor,
       appBar: const AppBarWidget(),
       body: SingleChildScrollView(
         child: Padding(

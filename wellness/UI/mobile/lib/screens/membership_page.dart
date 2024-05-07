@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:mobile/models/membership.dart';
 import 'package:mobile/providers/membership_provider.dart';
+import 'package:mobile/utils/app_styles.dart';
 
 import 'package:mobile/utils/user_store.dart';
 import 'package:mobile/widgets/app_bar.dart';
@@ -25,7 +26,7 @@ class _MemberShipPageViewState extends State<MemberShipPageView> {
   void initState() {
     super.initState();
     _userId = int.parse(UserManager.getUserId()!);
-   
+
     fetchData();
   }
 
@@ -44,6 +45,7 @@ class _MemberShipPageViewState extends State<MemberShipPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Styles.bgColor,
       appBar: const AppBarWidget(),
       body: SingleChildScrollView(
         child: Padding(

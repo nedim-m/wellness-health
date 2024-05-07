@@ -7,6 +7,7 @@ import 'package:mobile/providers/category_provider.dart';
 import 'package:mobile/providers/treatment_provider.dart';
 import 'package:mobile/providers/treatment_type_provider.dart';
 import 'package:mobile/screens/treatment_details.dart';
+import 'package:mobile/utils/app_styles.dart';
 import 'package:mobile/widgets/app_bar.dart';
 
 class TreatmentOverview extends StatefulWidget {
@@ -67,6 +68,7 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Styles.bgColor,
       appBar: const AppBarWidget(),
       body: SingleChildScrollView(
         child: Column(

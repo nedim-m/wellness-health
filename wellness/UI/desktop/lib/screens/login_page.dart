@@ -34,7 +34,6 @@ class _LoginPageViewState extends State<LoginPageView> {
         context,
         MaterialPageRoute(builder: (context) => const HomepageView()),
       );
-  
     } else {
       setState(() {
         _loginFailed = true;
@@ -113,9 +112,7 @@ class _LoginPageViewState extends State<LoginPageView> {
               const SizedBox(height: 24.0),
               ElevatedButton(
                 onPressed: _login,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                ),
+                style: ElevatedButton.styleFrom(),
                 child: const Text(
                   'Ulogujte se',
                   style: TextStyle(

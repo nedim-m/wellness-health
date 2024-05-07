@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/providers/user_provider.dart';
 import 'package:mobile/screens/login_page.dart';
+import 'package:mobile/utils/app_styles.dart';
 import 'package:mobile/utils/validation_rules.dart';
 
 class RegistrationPageView extends StatefulWidget {
@@ -103,6 +104,7 @@ class _RegistrationPageViewState extends State<RegistrationPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Styles.bgColor,
       appBar: AppBar(
         title: const Text('Registracija'),
       ),

@@ -21,6 +21,12 @@ class CustomButton extends StatelessWidget {
       height: 80,
       margin: const EdgeInsets.symmetric(vertical: 8.0),
       child: ElevatedButton(
+        style: ElevatedButton.styleFrom(
+          shape: RoundedRectangleBorder(
+            borderRadius:
+                BorderRadius.circular(0), // Postavite na 0 za kockasti oblik
+          ),
+        ),
         onPressed: () {
           Navigator.push(
             context,

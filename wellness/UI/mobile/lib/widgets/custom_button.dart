@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:mobile/utils/app_styles.dart';
 
 class CustomButton extends StatelessWidget {
   const CustomButton({
@@ -23,9 +24,9 @@ class CustomButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
-            borderRadius:
-                BorderRadius.circular(0), // Postavite na 0 za kockasti oblik
+            borderRadius: BorderRadius.circular(0),
           ),
+          backgroundColor: Styles.primaryColor,
         ),
         onPressed: () {
           Navigator.push(
@@ -40,7 +41,10 @@ class CustomButton extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(text),
+            Text(
+              text,
+              style: Styles.headLineStyle4.copyWith(color: Colors.white),
+            ),
             if (notificationCount > 0) ...[
               const SizedBox(width: 8.0),
               _buildNotificationIndicator(),

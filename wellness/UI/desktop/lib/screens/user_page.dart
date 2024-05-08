@@ -236,7 +236,11 @@ DataRow recentFileDataRow(
       DataCell(Text(data.userName)),
       DataCell(Text(data.phone)),
       DataCell(_buildStatusIcon(data.status)),
-      DataCell(Text(data.membershipType ?? 'N/A')),
+      DataCell(
+        Text(data.membershipType != null && data.status == false
+            ? 'ISTEKLA'
+            : data.membershipType ?? 'N/A'),
+      ),
       DataCell(
         Row(
           children: [

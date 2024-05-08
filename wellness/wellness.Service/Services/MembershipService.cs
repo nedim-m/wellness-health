@@ -45,7 +45,7 @@ namespace wellness.Service.Services
             return base.AddFilter(query, search);
         }
 
-        private async Task UpdateStatusForMembership(List<Database.Membership> memberships)
+        private void UpdateStatusForMembership(List<Database.Membership> memberships)
         {
             DateTime currentDate = DateTime.Now;
 
@@ -55,7 +55,7 @@ namespace wellness.Service.Services
                 {
                     membership.Status = false;
 
-                    var userToUpdate = await _context.Users.FindAsync(membership.UserId);
+                    var userToUpdate =  _context.Users.Find(membership.UserId);
                     if (userToUpdate != null)
                     {
                         userToUpdate.Status = false;
@@ -63,7 +63,7 @@ namespace wellness.Service.Services
                 }
             }
 
-            await _context.SaveChangesAsync();
+             _context.SaveChangesAsync();
         }
 
         public override async Task<Model.Membership.Membership> Update(int id, MembershipUpdateRequest update)

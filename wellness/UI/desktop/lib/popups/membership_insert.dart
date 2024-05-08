@@ -63,7 +63,7 @@ class _MembershipInsertPopUpWidgetState
     final provider = Provider.of<MembershipProvider>(context, listen: false);
     if (_formKey.currentState!.validate()) {
       try {
-        if (!widget.data.status) {
+        if (widget.data.membershipType == null) {
           await provider.addMembership(
               widget.data.id, selectedMembershipType!.id);
         } else {

@@ -353,7 +353,7 @@ public class StripePaymentService : IStripePaymentService
 
         float price = amount/100;
         string subject = "Potvrda plačanja članstva";
-        string body = $"Hvala Vam na uplati članarine : {membershipType!.Name}. \n Uspješno ste uplatili {price} BAM putem Stripe! \n Datum uplate: {timestamp.ToShortDateString()}, \n vrijeme uplate: {timestamp.ToShortTimeString()}. Lijep pozdrav i radujemo se našoj saradnji. Wellness centar - Health.";
+        string body = $"Hvala Vam na uplati članarine : <b>{membershipType!.Name}</b>. \n Uspješno ste uplatili <b>{price}</b> BAM putem Stripe! \n Datum uplate: {timestamp.ToShortDateString()}, \n vrijeme uplate: {timestamp.ToShortTimeString()}. Lijep pozdrav i radujemo se našoj saradnji. Wellness centar - Health.";
 
         _mailService.SendEmail(email, subject, body);
     }

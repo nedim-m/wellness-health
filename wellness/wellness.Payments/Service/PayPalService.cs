@@ -196,7 +196,7 @@ public class PayPalService : IPayPalService
 
         decimal price = amount;
         string subject = "Potvrda plačanja članstva";
-        string body = $"Hvala Vam na uplati članarine : {membershipType!.Name}. \n Uspješno ste uplatili {price} EUR putem PayPala! \n Datum uplate: {timestamp.ToShortDateString()}, \n vrijeme uplate: {timestamp.ToShortTimeString()}. Lijep pozdrav i radujemo se našoj saradnji. Wellness centar - Health.";
+        string body = $"Hvala Vam na uplati članarine : <b>{membershipType!.Name} </b>. \n Uspješno ste uplatili <b>{price}</b> EUR putem PayPala! \n Datum uplate: {timestamp.ToShortDateString()}, \n vrijeme uplate: {timestamp.ToShortTimeString()}. Lijep pozdrav i radujemo se našoj saradnji. Wellness centar - Health.";
 
         _mailService.SendEmail(email, subject, body);
     }

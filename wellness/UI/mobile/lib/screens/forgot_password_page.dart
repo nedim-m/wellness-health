@@ -50,7 +50,7 @@ class _ForgotPageViewState extends State<ForgotPageView> {
 
     if (response) {
       isSuccess = true;
-      message = 'Lozinka uspješno promjenjena.';
+      message = 'Lozinka uspješno promjenjena. Provjerite Vaš mail';
     } else {
       message =
           "Neuspješna promjena lozinke, korisnik sa tim korisničkim imenom ili emailom ne postoji";

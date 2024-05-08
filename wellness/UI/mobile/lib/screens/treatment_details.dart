@@ -90,7 +90,7 @@ class _TreatmentDetailsState extends State<TreatmentDetails> {
               if (isTodayOrBefore)
                 const Center(
                   child: Text(
-                    "Ne možete rezervirati za današnji dan ili u prošlosti. Molim Vas izaberite neki datum u budućnosti.",
+                    "Ne možete rezervirati za današnji dan ili u prošlosti. Molim Vas izaberite neki datum u budućnosti. Isti tretman se može samo jednom dnevno rezervisati!",
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,

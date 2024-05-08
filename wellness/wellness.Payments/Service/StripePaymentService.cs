@@ -327,7 +327,7 @@ public class StripePaymentService : IStripePaymentService
             Amount = amount,
             PaymentMethod = "Stripe",
             Currency = "BAM",
-            Timestamp = DateTime.Now.AddHours(1),
+            Timestamp = DateTime.Now,
             MemberShipTypeId = membershipTypeId,
             UserId=userId
             
@@ -349,7 +349,7 @@ public class StripePaymentService : IStripePaymentService
     private async Task SendMail(string email, int membershipTypeId, int amount)
     {
         var membershipType = await _context.MembershipTypes.FindAsync(membershipTypeId);
-        var timestamp = DateTime.Now.AddHours(1);
+        var timestamp = DateTime.Now;
 
         float price = amount/100;
         string subject = "Potvrda plačanja članstva";

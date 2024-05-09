@@ -73,7 +73,9 @@ class _MembershipTypePageViewState extends State<MembershipTypePageView> {
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: DropdownButton<MembershipType>(
-                        value: selectedMembershipType,
+                        value: filterData.contains(selectedMembershipType)
+                            ? selectedMembershipType
+                            : null,
                         onChanged: (value) {
                           setState(() {
                             selectedMembershipType = value;

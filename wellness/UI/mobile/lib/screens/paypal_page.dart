@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/providers/paypal_provider.dart';
+import 'package:mobile/utils/app_styles.dart';
 
 import 'package:mobile/widgets/paypal_finish.dart';
 import 'package:provider/provider.dart';
@@ -27,6 +28,7 @@ class _PayPalCheckoutState extends State<PayPalCheckout> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Styles.bgColor,
       appBar: AppBar(
         title: const Text('Uplata putem PayPala'),
       ),

@@ -59,6 +59,7 @@ class _ForgotPageViewState extends State<ForgotPageView> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           title: isSuccess ? const Text('Uspješno') : const Text('Neuspješno'),
           content: Text(message),
           actions: [
@@ -85,6 +86,7 @@ class _ForgotPageViewState extends State<ForgotPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.blue[100],
       appBar: AppBar(
         title: const Text('Zaboravljena lozinka'),
       ),

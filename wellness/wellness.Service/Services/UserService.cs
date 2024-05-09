@@ -42,7 +42,7 @@ namespace wellness.Service.Services
 
         public override async Task<PagedResult<Models.User.User>> Get(UserSearchObj? search = null)
         {
-            var filteredEntity = _context.Set<Database.User>().AsQueryable().Include("Role").Include("Shift");
+            var filteredEntity = _context.Set<Database.User>().AsQueryable().Include("Role").Include("Shift").Include("Memberships").Include("Memberships.MemberShipType");
 
             if (!string.IsNullOrWhiteSpace(search?.SearchName))
             {
@@ -60,13 +60,16 @@ namespace wellness.Service.Services
                     filteredEntity = filteredEntity.Where(x => x.Role.Name.Equals(search.Role));
                 }
             }
+          
+
+
 
             if (!string.IsNullOrWhiteSpace(search?.Prisutan))
             {
                 if (search.Prisutan=="DA")
-                    filteredEntity=filteredEntity.Where(x => x.Role.Id==3&& x.Prisutan==true);
+                    filteredEntity=filteredEntity.Where(x => x.Role.Id==3&& x.Prisutan==true && x.Status==true);
                 else
-                    filteredEntity=filteredEntity.Where(x => x.Role.Id==3&& x.Prisutan!=true);
+                    filteredEntity=filteredEntity.Where(x => x.Role.Id==3&& x.Prisutan!=true && x.Status==true);
 
             }
 
@@ -114,7 +117,7 @@ namespace wellness.Service.Services
 
             userToUpdate.PasswordHash= passwordHash;
             userToUpdate.PasswordSalt=passwordSalt;
-           
+
 
             _mapper.Map(update, userToUpdate);
 
@@ -128,7 +131,7 @@ namespace wellness.Service.Services
         }
 
 
-        
+
 
 
 
@@ -171,11 +174,11 @@ namespace wellness.Service.Services
                 await _context.SaveChangesAsync();
 
                 string subject = "Resetiranje lozinke";
-                string body = $"Poštovanje, Vaša nova lozinka za korisničko ime: {request.UserName} je uspešno postavljena. Molimo Vas da je odmah promenite. Nova lozinka: {password}. Lijep pozdrav. Wellness centar - Health.";
+                string body = $"Poštovanje, Vaša nova lozinka za korisničko ime: <b>{request.UserName}</b> je uspješno postavljena. Molimo Vas da je odmah promjenite. Nova lozinka: <b>{password}</b> . Lijep pozdrav. Wellness centar - Health.";
 
                 _mailService.SendEmail(request.Email, subject, body);
 
-                return "Iniciran je reset lozinke. Proverite svoj email za uputstva.";
+                return "Iniciran je reset lozinke. Provjerite svoj email za uputstva.";
             }
 
             return null;
@@ -211,11 +214,12 @@ namespace wellness.Service.Services
             await _context.SaveChangesAsync();
 
 
-            if (request.RoleId==3 || request.RoleId==2) { 
+            if (request.RoleId==3 || request.RoleId==2)
+            {
                 string subject = "Vaša lozinka";
-            string body = $"Poštovanje, Vaša lozinka za username: {request.UserName} je uspješno postavljena. Molimo Vas da odmah istu postavite na željenu. Nova lozinka: {password}  .Lijep pozdrav. Wellness centar - Health.";
+                string body = $"Poštovanje, Vaša lozinka za username: <b>{request.UserName}</b> je uspješno postavljena. Molimo Vas da odmah istu postavite na željenu. Nova lozinka: <b>{password}</b>  .Lijep pozdrav. Wellness centar - Health.";
 
-            _mailService.SendEmail(request.Email, subject, body);
+                _mailService.SendEmail(request.Email, subject, body);
             }
 
 

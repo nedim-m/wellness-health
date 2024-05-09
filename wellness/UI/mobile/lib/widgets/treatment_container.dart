@@ -22,7 +22,7 @@ class TreatmentRecomendationView extends StatelessWidget {
 
     return Container(
       width: 250,
-      height: 350,
+      height: 380,
       padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 17),
       margin: const EdgeInsets.only(right: 17, top: 5),
       decoration: BoxDecoration(

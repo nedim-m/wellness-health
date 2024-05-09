@@ -71,6 +71,7 @@ class _CategoryEditPopUpWidgetState extends State<CategoryEditPopUpWidget> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.white,
       title: widget.edit
           ? const Text("Ažuriraj kategoriju")
           : const Text("Dodaj kategoriju"),

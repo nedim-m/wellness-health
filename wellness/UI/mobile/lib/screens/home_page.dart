@@ -8,6 +8,7 @@ import 'package:mobile/screens/membership_page.dart';
 import 'package:mobile/screens/profil_page.dart';
 import 'package:mobile/screens/treatment_overview_page.dart';
 import 'package:mobile/utils/app_constants.dart';
+import 'package:mobile/utils/app_styles.dart';
 import 'package:mobile/utils/user_store.dart';
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/custom_button.dart';
@@ -91,12 +92,14 @@ class _HomepageViewState extends State<HomepageView> {
 
   @override
   Widget build(BuildContext context) {
+    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
         _resetNotifications();
         return true;
       },
       child: Scaffold(
+        backgroundColor: Styles.bgColor,
         appBar: const AppBarWidget(),
         body: SingleChildScrollView(
           child: Container(

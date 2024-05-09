@@ -56,16 +56,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
 
   @override
   void initState() {
-    if (widget.edit == true && widget.data != null) {
-      firstName = TextEditingController(text: widget.data!.firstName);
-      lastName = TextEditingController(text: widget.data!.lastName);
-      email = TextEditingController(text: widget.data!.email);
-      userName = TextEditingController(text: widget.data!.userName);
-      phone = TextEditingController(text: widget.data!.phone);
-      _base64Image = widget.data!.picture;
-      selectedStatus = widget.data!.status;
-    }
-    fetchData();
+    fetchData(); // Prvo dohvatimo podatke
 
     super.initState();
   }
@@ -77,6 +68,20 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
       allRoles = myData.result;
       allShifts = myDataShift.result;
     });
+
+    if (widget.edit == true && widget.data != null) {
+      firstName = TextEditingController(text: widget.data!.firstName);
+      lastName = TextEditingController(text: widget.data!.lastName);
+      email = TextEditingController(text: widget.data!.email);
+      userName = TextEditingController(text: widget.data!.userName);
+      phone = TextEditingController(text: widget.data!.phone);
+      _base64Image = widget.data!.picture;
+      selectedStatus = widget.data!.status;
+      selectedRole =
+          allRoles.firstWhere((role) => role.id == widget.data!.roleId);
+      selectedShift =
+          allShifts.firstWhere((shift) => shift.id == widget.data!.shiftId);
+    }
   }
 
   @override
@@ -134,6 +139,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           title: response ? const Text('Uspješno') : const Text('Neuspješno'),
           content: Text(message),
           actions: [
@@ -192,6 +198,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.white,
       title: widget.edit
           ? const Text("Ažuriraj zaposlenika")
           : const Text("Dodaj zaposlenika"),
@@ -326,6 +333,7 @@ class _WorkerEditPopUpWidgetState extends State<WorkerEditPopUpWidget> {
                   ),
                 ],
                 decoration: const InputDecoration(labelText: 'Status'),
+                validator: _validation.validateDropdown,
               ),
             ],
           ),

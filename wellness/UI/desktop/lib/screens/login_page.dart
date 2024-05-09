@@ -2,6 +2,7 @@ import 'package:desktop/providers/user_provider.dart';
 import 'package:desktop/screens/forgot_password_page.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'home_page.dart';
 
@@ -19,10 +20,32 @@ class _LoginPageViewState extends State<LoginPageView> {
   bool _loginFailed = false;
   final String _errorMessage = "Neispravano korisničko ime ili lozinka!";
 
+  @override
+  void initState() {
+    super.initState();
+
+    RawKeyboard.instance.addListener(_handleKey);
+  }
+
+  @override
+  void dispose() {
+    RawKeyboard.instance.removeListener(_handleKey);
+    super.dispose();
+  }
+
+  void _handleKey(RawKeyEvent event) {
+    if (event is RawKeyDownEvent) {
+      if (event.logicalKey == LogicalKeyboardKey.enter) {
+        _login();
+      }
+    }
+  }
+
   Future<void> _login() async {
     final String username = _usernameController.text;
     final String password = _passwordController.text;
     final response = await _userProvider.login(username, password);
+
     if (response) {
       setState(() {
         _usernameController.clear();
@@ -34,7 +57,6 @@ class _LoginPageViewState extends State<LoginPageView> {
         context,
         MaterialPageRoute(builder: (context) => const HomepageView()),
       );
-  
     } else {
       setState(() {
         _loginFailed = true;
@@ -113,9 +135,7 @@ class _LoginPageViewState extends State<LoginPageView> {
               const SizedBox(height: 24.0),
               ElevatedButton(
                 onPressed: _login,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.blue,
-                ),
+                style: ElevatedButton.styleFrom(),
                 child: const Text(
                   'Ulogujte se',
                   style: TextStyle(

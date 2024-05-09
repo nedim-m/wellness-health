@@ -3,6 +3,7 @@ import 'package:gap/gap.dart';
 
 import 'package:mobile/models/treatment.dart';
 import 'package:mobile/screens/treatment_time.dart';
+import 'package:mobile/utils/app_styles.dart';
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/date_picker.dart';
 import 'package:mobile/widgets/double_text.dart';
@@ -30,6 +31,7 @@ class _TreatmentDetailsState extends State<TreatmentDetails> {
     bool isTodayOrBefore = selectedDate.isBefore(DateTime.now());
 
     return Scaffold(
+      backgroundColor: Styles.bgColor,
       appBar: const AppBarWidget(),
       body: SingleChildScrollView(
         child: Padding(
@@ -88,7 +90,7 @@ class _TreatmentDetailsState extends State<TreatmentDetails> {
               if (isTodayOrBefore)
                 const Center(
                   child: Text(
-                    "Ne možete rezervirati za današnji dan ili u prošlosti. Molim Vas izaberite neki datum u budućnosti.",
+                    "Ne možete rezervirati za današnji dan ili u prošlosti. Molim Vas izaberite neki datum u budućnosti. Isti tretman se može samo jednom dnevno rezervisati!",
                     style: TextStyle(
                       color: Colors.red,
                       fontWeight: FontWeight.bold,

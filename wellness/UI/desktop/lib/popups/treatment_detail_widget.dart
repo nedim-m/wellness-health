@@ -16,6 +16,7 @@ class TreatmentDetailWidget extends StatelessWidget {
         MemoryImage(Uint8List.fromList(imageBytes));
 
     return AlertDialog(
+      backgroundColor: Colors.white,
       title: const Text("Detalji tretmana"),
       content: Row(
         crossAxisAlignment: CrossAxisAlignment.start,

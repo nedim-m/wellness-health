@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:mobile/models/user.dart';
 import 'package:mobile/providers/user_provider.dart';
 import 'package:mobile/screens/login_page.dart';
+import 'package:mobile/utils/app_styles.dart';
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/utils/validation_rules.dart';
 
@@ -70,7 +71,6 @@ class _ProfilPageViewState extends State<ProfilPageView> {
         'confirmPassword': _validation.validateConfirmPassword(
             _passwordController.text, _confirmPasswordController.text),
         'phone': _validation.validatePhone(_phoneController.text),
-        
       };
     });
 
@@ -144,6 +144,7 @@ class _ProfilPageViewState extends State<ProfilPageView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Styles.bgColor,
       appBar: const AppBarWidget(),
       body: SingleChildScrollView(
         child: Padding(

@@ -124,6 +124,7 @@ class _EmployeeUpdateScreenState extends State<EmployeeUpdateScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           title: isSuccess ? const Text('Uspješno') : const Text('Neuspješno'),
           content: Text(message),
           actions: [

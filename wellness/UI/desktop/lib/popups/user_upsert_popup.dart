@@ -2,8 +2,6 @@ import 'package:desktop/providers/user_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'dart:io';
-
 import '../models/user.dart';
 import '../utils/validation_rules.dart';
 
@@ -32,7 +30,6 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
   TextEditingController password = TextEditingController();
   TextEditingController confirmPassword = TextEditingController();
 
-  File? selectedPhoto;
   final _formKey = GlobalKey<FormState>();
   final _validation = ValidationRules();
 
@@ -58,6 +55,7 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
+          backgroundColor: Colors.white,
           title: response ? const Text('Uspješno') : const Text('Neuspješno'),
           content: Text(message),
           actions: [
@@ -120,6 +118,7 @@ class _UserEditPopUpWidgetState extends State<UserEditPopUpWidget> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.white,
       title: widget.edit
           ? const Text("Ažuriraj korisnika")
           : const Text("Dodaj korisnika"),

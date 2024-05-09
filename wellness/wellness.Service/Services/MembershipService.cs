@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using wellness.Model;
 using wellness.Model.Membership;
+using wellness.Model.MembershipType;
 using wellness.Service.Database;
 using wellness.Service.IServices;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
@@ -18,11 +19,13 @@ namespace wellness.Service.Services
     {
         private readonly DbWellnessContext _context;
         private readonly IMapper _mapper;
+        private readonly ITransactionService _transactionService;
 
-        public MembershipService(IMapper mapper, Database.DbWellnessContext context) : base(mapper, context)
+        public MembershipService(IMapper mapper, Database.DbWellnessContext context, ITransactionService transactionService) : base(mapper, context)
         {
             _context=context;
             _mapper=mapper;
+            _transactionService=transactionService;
         }
 
         public override IQueryable<Database.Membership> AddInclude(IQueryable<Database.Membership> query, MembershipSearchObj? search = null)
@@ -42,7 +45,7 @@ namespace wellness.Service.Services
             return base.AddFilter(query, search);
         }
 
-        private async Task UpdateStatusForMembership(List<Database.Membership> memberships)
+        private void UpdateStatusForMembership(List<Database.Membership> memberships)
         {
             DateTime currentDate = DateTime.Now;
 
@@ -52,7 +55,7 @@ namespace wellness.Service.Services
                 {
                     membership.Status = false;
 
-                    var userToUpdate = await _context.Users.FindAsync(membership.UserId);
+                    var userToUpdate =  _context.Users.Find(membership.UserId);
                     if (userToUpdate != null)
                     {
                         userToUpdate.Status = false;
@@ -60,7 +63,7 @@ namespace wellness.Service.Services
                 }
             }
 
-            await _context.SaveChangesAsync();
+             _context.SaveChangesAsync();
         }
 
         public override async Task<Model.Membership.Membership> Update(int id, MembershipUpdateRequest update)
@@ -100,6 +103,12 @@ namespace wellness.Service.Services
                 userToUpdate.Status = true;
             }
 
+            if (update.IsDesktop == true)
+            {
+               await AddTransaction(update.MemberShipTypeId, membershipToUpdate.UserId);
+            }
+
+
             await _context.SaveChangesAsync();
 
             return _mapper.Map<Model.Membership.Membership>(membershipToUpdate);
@@ -128,9 +137,45 @@ namespace wellness.Service.Services
                 userToUpdate.Result.Status = true;
             }
 
+            if (insert.IsDesktop == true)
+            {
+               await AddTransaction(insert.MemberShipTypeId, insert.UserId);
+            }
+
+
             await _context.SaveChangesAsync();
 
+            
+
             return _mapper.Map<Model.Membership.Membership>(membershipToInsert);
+        }
+
+
+        private async Task AddTransaction( int membershipTypeId, int userId)
+        {
+            var memberhsip = await _context.MembershipTypes.FindAsync(membershipTypeId);
+            decimal amount = (decimal)memberhsip!.Price;
+
+            var transaction = new
+            {
+                Amount = amount,
+                PaymentMethod = "Cash",
+                Currency = "BAM",
+                Timestamp = DateTime.Now.AddHours(1),
+                MemberShipTypeId = membershipTypeId,
+                UserId = userId
+
+            };
+            try
+            {
+                await _transactionService.SaveTransactionAsync(transaction);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error saving transaction: {ex.Message}");
+            }
+
+
         }
     }
 }

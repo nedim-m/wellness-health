@@ -1,3 +1,4 @@
+import 'package:desktop/popups/membership_insert.dart';
 import 'package:desktop/providers/user_provider.dart';
 
 import 'package:flutter/material.dart';
@@ -140,6 +141,15 @@ class _UserPageViewState extends State<UserPageView> {
                   ),
                   DataColumn(
                     label: Text(
+                      "Članarina",
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 15,
+                      ),
+                    ),
+                  ),
+                  DataColumn(
+                    label: Text(
                       "Akcija",
                       style: TextStyle(
                         fontWeight: FontWeight.w600,
@@ -227,12 +237,17 @@ DataRow recentFileDataRow(
       DataCell(Text(data.phone)),
       DataCell(_buildStatusIcon(data.status)),
       DataCell(
+        Text(data.membershipType != null && data.status == false
+            ? 'ISTEKLA'
+            : data.membershipType ?? 'N/A'),
+      ),
+      DataCell(
         Row(
           children: [
             Expanded(
               child: ElevatedButton(
-                onPressed: () async {
-                  await showDialog(
+                onPressed: () {
+                  showDialog(
                     context: context,
                     builder: (context) {
                       return UserEditPopUpWidget(
@@ -244,6 +259,24 @@ DataRow recentFileDataRow(
                   );
                 },
                 child: const Text("Ažuriraj"),
+              ),
+            ),
+            const SizedBox(width: 8),
+            Expanded(
+              child: ElevatedButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return MembershipInsertPopUpWidget(
+                        data: data,
+                        refreshCallback: refreshCallback,
+                      );
+                    },
+                  );
+                },
+                child:
+                    Text(data.status ? "Produži članarinu" : "Dodaj članarinu"),
               ),
             ),
           ],

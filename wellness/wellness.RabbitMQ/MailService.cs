@@ -46,9 +46,9 @@ namespace wellness.RabbitMQ
         {
 
             string subject = "Potvrda o rezervaciji";
-            string body = $"Poštovanje, Vaša rezervacija za tretman: '{data.TretmentName}' datuma: {data.Date} u {data.Time} je odobrena. Možete provjeriti na našoj mobilnoj aplikaciji. Vidimo se u dogovoreno vrijeme. Lijep pozdrav. Wellness centar - Health";
+            string body = $"Poštovanje, Vaša rezervacija za tretman: <b>{data.TretmentName}</b> datuma: {data.Date} u {data.Time} je <b>ODOBRENA</b>. Možete provjeriti na našoj mobilnoj aplikaciji. Vidimo se u dogovoreno vrijeme. Lijep pozdrav. Wellness centar - Health";
             if (data!=null && data.Status==false)
-                body=$"Poštovanje, Vaša rezervacija za tretman: '{data.TretmentName}' datuma: {data.Date} u {data.Time} je odbijena. Možete provjeriti na našoj mobilnoj aplikaciji. Molimo Vas za razumijevanje i nadamo se da će te pronaći novi termin. Lijep pozdrav. Wellness centar - Health";
+                body=$"Poštovanje, Vaša rezervacija za tretman: <b>{data.TretmentName}</b> datuma: {data.Date} u {data.Time} je <b>ODBIJENA</b>. Možete provjeriti na našoj mobilnoj aplikaciji. Molimo Vas za razumijevanje i nadamo se da će te pronaći novi termin. Lijep pozdrav. Wellness centar - Health";
 
 
             if (data!.Email!=null)

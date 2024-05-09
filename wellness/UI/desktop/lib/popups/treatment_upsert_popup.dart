@@ -61,6 +61,8 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
       price = TextEditingController(text: widget.data!.price.toString());
       name = TextEditingController(text: widget.data!.name);
       _base64Image = widget.data!.picture;
+      selectedCategoryId = widget.data!.categoryId;
+      selectedTreatmentTypeId = widget.data!.treatmentTypeId;
     }
 
     fetchData();
@@ -154,6 +156,7 @@ class _TreatmenUpsertPopUpWidgetState extends State<TreatmenUpsertPopUpWidget> {
   Widget build(BuildContext context) {
     return SingleChildScrollView(
       child: AlertDialog(
+        backgroundColor: Colors.white,
         title: widget.edit
             ? const Text("Ažuriraj tretman")
             : const Text("Dodaj tretman"),

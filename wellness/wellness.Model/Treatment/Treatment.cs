@@ -21,5 +21,8 @@ namespace wellness.Model.Treatment
         public float Price { get; set; }
 
         public byte[] Picture { get; set; } = null!;
+        public int TreatmentTypeId { get; set; }
+
+        public int CategoryId { get; set; }
     }
 }

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -179,7 +180,7 @@ namespace wellness.Service.Database
                 TokenCreated = DateTime.UtcNow,
                 TokenExpires = DateTime.UtcNow.AddHours(1),
                 UserName = "admin",
-                Phone = "061399222",
+                Phone = "061399232",
                 Status = true,
                 RoleId = 1,
                 ShiftId=1,
@@ -196,7 +197,7 @@ namespace wellness.Service.Database
                 TokenCreated = DateTime.UtcNow,
                 TokenExpires = DateTime.UtcNow.AddHours(1),
                 UserName = "zaposlenik",
-                Phone = "061162333",
+                Phone = "061262333",
                 Status = true,
                 RoleId = 2,
                 ShiftId=2,
@@ -235,7 +236,7 @@ namespace wellness.Service.Database
                 TokenCreated = DateTime.UtcNow,
                 TokenExpires = DateTime.UtcNow.AddHours(1),
                 UserName = "nedim",
-                Phone = "061110123",
+                Phone = "061210123",
                 Status = true,
                 RoleId = 3,
                 ShiftId=1,
@@ -313,10 +314,82 @@ namespace wellness.Service.Database
                 RoleId = 3,
                 ShiftId=1,
             });
-
             modelBuilder.Entity<User>().HasData(new User
             {
                 Id = 9,
+                FirstName = "Neaktivna",
+                LastName = "Neaktivna",
+                Email = "neaktivna@gmail.com",
+                PasswordHash = HexToByteArray("0xE82F9D33958051FB08CF22F9C66ADAD2BBBEDA0BF8A3251BFF99D70862BB720E7AE1BC033E6733334416E3CA946A75414E390E420E4BB2339B3B810D96F1AA5F"),
+                PasswordSalt = HexToByteArray("0x9D3D009C23EBD3BF47F809780D87C78001C20E70410701D9478E4ADFDBD6C1AFA93D5C5AC47EA8E14586DDA0AC7AEAE335375A04BE1E5B453D6EF133798677BC4417AFB030A4B3CEB013DB562B8BF79927F8ED058CF87BFD55AF8622FAEF311BB56B913387B6217C840A0D842F4A907C317B5946A153C72966087B9FDFF8EBCA"),
+                RefreshToken = String.Empty,
+                TokenCreated = DateTime.UtcNow,
+                TokenExpires = DateTime.UtcNow.AddHours(1),
+                UserName = "neaktivna",
+                Phone = "063744579",
+                Status = false,
+                RoleId = 3,
+                ShiftId=1,
+            });
+
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 10,
+                FirstName = "Ime",
+                LastName = "Prezime",
+                Email = "ime@gmail.com",
+                PasswordHash = HexToByteArray("0xE82F9D33958051FB08CF22F9C66ADAD2BBBEDA0BF8A3251BFF99D70862BB720E7AE1BC033E6733334416E3CA946A75414E390E420E4BB2339B3B810D96F1AA5F"),
+                PasswordSalt = HexToByteArray("0x9D3D009C23EBD3BF47F809780D87C78001C20E70410701D9478E4ADFDBD6C1AFA93D5C5AC47EA8E14586DDA0AC7AEAE335375A04BE1E5B453D6EF133798677BC4417AFB030A4B3CEB013DB562B8BF79927F8ED058CF87BFD55AF8622FAEF311BB56B913387B6217C840A0D842F4A907C317B5946A153C72966087B9FDFF8EBCA"),
+                RefreshToken = String.Empty,
+                TokenCreated = DateTime.UtcNow,
+                TokenExpires = DateTime.UtcNow.AddHours(1),
+                UserName = "ime",
+                Phone = "066944559",
+                Status = false,
+                RoleId = 3,
+                ShiftId=1,
+            });
+
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 11,
+                FirstName = "User",
+                LastName = "User",
+                Email = "user@gmail.com",
+                PasswordHash = HexToByteArray("0xE82F9D33958051FB08CF22F9C66ADAD2BBBEDA0BF8A3251BFF99D70862BB720E7AE1BC033E6733334416E3CA946A75414E390E420E4BB2339B3B810D96F1AA5F"),
+                PasswordSalt = HexToByteArray("0x9D3D009C23EBD3BF47F809780D87C78001C20E70410701D9478E4ADFDBD6C1AFA93D5C5AC47EA8E14586DDA0AC7AEAE335375A04BE1E5B453D6EF133798677BC4417AFB030A4B3CEB013DB562B8BF79927F8ED058CF87BFD55AF8622FAEF311BB56B913387B6217C840A0D842F4A907C317B5946A153C72966087B9FDFF8EBCA"),
+                RefreshToken = String.Empty,
+                TokenCreated = DateTime.UtcNow,
+                TokenExpires = DateTime.UtcNow.AddHours(1),
+                UserName = "user",
+                Phone = "066978993",
+                Status = true,
+                RoleId = 3,
+                ShiftId=1,
+            });
+
+            
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 12,
+                FirstName = "Neaktivan",
+                LastName = "Neaktivan",
+                Email = "neaktivan@gmail.com",
+                PasswordHash = HexToByteArray("0xE82F9D33958051FB08CF22F9C66ADAD2BBBEDA0BF8A3251BFF99D70862BB720E7AE1BC033E6733334416E3CA946A75414E390E420E4BB2339B3B810D96F1AA5F"),
+                PasswordSalt = HexToByteArray("0x9D3D009C23EBD3BF47F809780D87C78001C20E70410701D9478E4ADFDBD6C1AFA93D5C5AC47EA8E14586DDA0AC7AEAE335375A04BE1E5B453D6EF133798677BC4417AFB030A4B3CEB013DB562B8BF79927F8ED058CF87BFD55AF8622FAEF311BB56B913387B6217C840A0D842F4A907C317B5946A153C72966087B9FDFF8EBCA"),
+                RefreshToken = String.Empty,
+                TokenCreated = DateTime.UtcNow,
+                TokenExpires = DateTime.UtcNow.AddHours(1),
+                UserName = "neaktivan",
+                Phone = "066744579",
+                Status = false,
+                RoleId = 3,
+                ShiftId=1,
+            });
+          
+            modelBuilder.Entity<User>().HasData(new User
+            {
+                Id = 13,
                 FirstName = "Test",
                 LastName = "Test",
                 Email = "test@gmail.com",
@@ -334,35 +407,17 @@ namespace wellness.Service.Database
 
             modelBuilder.Entity<User>().HasData(new User
             {
-                Id = 10,
-                FirstName = "User",
-                LastName = "User",
-                Email = "user@gmail.com",
+                Id = 14,
+                FirstName = "Istekao",
+                LastName = "Istekao",
+                Email = "istekao@gmail.com",
                 PasswordHash = HexToByteArray("0xE82F9D33958051FB08CF22F9C66ADAD2BBBEDA0BF8A3251BFF99D70862BB720E7AE1BC033E6733334416E3CA946A75414E390E420E4BB2339B3B810D96F1AA5F"),
                 PasswordSalt = HexToByteArray("0x9D3D009C23EBD3BF47F809780D87C78001C20E70410701D9478E4ADFDBD6C1AFA93D5C5AC47EA8E14586DDA0AC7AEAE335375A04BE1E5B453D6EF133798677BC4417AFB030A4B3CEB013DB562B8BF79927F8ED058CF87BFD55AF8622FAEF311BB56B913387B6217C840A0D842F4A907C317B5946A153C72966087B9FDFF8EBCA"),
                 RefreshToken = String.Empty,
                 TokenCreated = DateTime.UtcNow,
                 TokenExpires = DateTime.UtcNow.AddHours(1),
-                UserName = "user",
-                Phone = "066999993",
-                Status = true,
-                RoleId = 3,
-                ShiftId=1,
-            });
-
-            modelBuilder.Entity<User>().HasData(new User
-            {
-                Id = 11,
-                FirstName = "Ime",
-                LastName = "Prezime",
-                Email = "ime@gmail.com",
-                PasswordHash = HexToByteArray("0xE82F9D33958051FB08CF22F9C66ADAD2BBBEDA0BF8A3251BFF99D70862BB720E7AE1BC033E6733334416E3CA946A75414E390E420E4BB2339B3B810D96F1AA5F"),
-                PasswordSalt = HexToByteArray("0x9D3D009C23EBD3BF47F809780D87C78001C20E70410701D9478E4ADFDBD6C1AFA93D5C5AC47EA8E14586DDA0AC7AEAE335375A04BE1E5B453D6EF133798677BC4417AFB030A4B3CEB013DB562B8BF79927F8ED058CF87BFD55AF8622FAEF311BB56B913387B6217C840A0D842F4A907C317B5946A153C72966087B9FDFF8EBCA"),
-                RefreshToken = String.Empty,
-                TokenCreated = DateTime.UtcNow,
-                TokenExpires = DateTime.UtcNow.AddHours(1),
-                UserName = "ime",
-                Phone = "066944559",
+                UserName = "istekao",
+                Phone = "066962993",
                 Status = false,
                 RoleId = 3,
                 ShiftId=1,
@@ -407,7 +462,7 @@ namespace wellness.Service.Database
                 ExpirationDate="03.03.2025",
                 StartDate="03.03.2024",
                 Status=true,
-                UserId=9,
+                UserId=13,
                 MemberShipTypeId=4
             });
 
@@ -417,8 +472,17 @@ namespace wellness.Service.Database
                 ExpirationDate="03.03.2025",
                 StartDate="03.03.2024",
                 Status=true,
-                UserId=10,
+                UserId=11,
                 MemberShipTypeId=4
+            });
+            modelBuilder.Entity<Membership>().HasData(new Membership
+            {
+                Id=6,
+                ExpirationDate="03.04.2024",
+                StartDate="03.03.2024",
+                Status=false,
+                UserId=14,
+                MemberShipTypeId=1
             });
 
 
@@ -463,7 +527,7 @@ namespace wellness.Service.Database
                 PaymentMethod="Stripe",
                 Amount=500,
                 MemberShipTypeId=4,
-                UserId=9,
+                UserId=13,
                 Currency="BAM",
                 Timestamp=DateTime.UtcNow,
 
@@ -474,9 +538,20 @@ namespace wellness.Service.Database
                 PaymentMethod="Stripe",
                 Amount=500,
                 MemberShipTypeId=4,
-                UserId=10,
+                UserId=11,
                 Currency="BAM",
                 Timestamp=DateTime.UtcNow,
+
+            });
+            modelBuilder.Entity<Transaction>().HasData(new Transaction
+            {
+                Id=6,
+                PaymentMethod="Cash",
+                Amount=30,
+                MemberShipTypeId=1,
+                UserId=14,
+                Currency="BAM",
+                Timestamp=DateTime.ParseExact("03.03.2024 12:49", "dd.MM.yyyy HH:mm", null),
 
             });
 
@@ -492,7 +567,7 @@ namespace wellness.Service.Database
             {
                 Id=1,
                 UserId=5,
-                Date="04.03.2024",
+                Date="30.05.2024",
                 Time="09:00",
                 Status=null,
                 TreatmentId=2
@@ -502,7 +577,7 @@ namespace wellness.Service.Database
             {
                 Id=2,
                 UserId=5,
-                Date="24.04.2024",
+                Date="24.05.2024",
                 Time="18:00",
                 Status=null,
                 TreatmentId=3
@@ -512,7 +587,7 @@ namespace wellness.Service.Database
             {
                 Id=3,
                 UserId=5,
-                Date="04.04.2024",
+                Date="04.06.2024",
                 Time="13:00",
                 Status=null,
                 TreatmentId=2
@@ -522,7 +597,7 @@ namespace wellness.Service.Database
             {
                 Id=4,
                 UserId=4,
-                Date="04.04.2024",
+                Date="04.07.2024",
                 Time="18:00",
                 Status=null,
                 TreatmentId=2
@@ -542,7 +617,7 @@ namespace wellness.Service.Database
             {
                 Id=6,
                 UserId=5,
-                Date="24.04.2024",
+                Date="24.08.2024",
                 Time="11:00",
                 Status=null,
                 TreatmentId=2
@@ -552,7 +627,7 @@ namespace wellness.Service.Database
             {
                 Id=7,
                 UserId=5,
-                Date="24.03.2024",
+                Date="24.09.2024",
                 Time="13:00",
                 Status=null,
                 TreatmentId=3
@@ -562,7 +637,7 @@ namespace wellness.Service.Database
             {
                 Id=8,
                 UserId=5,
-                Date="09.04.2024",
+                Date="09.08.2024",
                 Time="18:00",
                 Status=null,
                 TreatmentId=5
@@ -656,7 +731,7 @@ namespace wellness.Service.Database
             modelBuilder.Entity<Reservation>().HasData(new Reservation
             {
                 Id = 17,
-                UserId = 9,
+                UserId = 13,
                 Date = "06.03.2024",
                 Time = "11:00",
                 Status = true,
@@ -665,7 +740,7 @@ namespace wellness.Service.Database
             modelBuilder.Entity<Reservation>().HasData(new Reservation
             {
                 Id = 18,
-                UserId = 10,
+                UserId = 11,
                 Date = "06.03.2024",
                 Time = "13:00",
                 Status = true,
@@ -674,7 +749,7 @@ namespace wellness.Service.Database
             modelBuilder.Entity<Reservation>().HasData(new Reservation
             {
                 Id = 19,
-                UserId = 10,
+                UserId = 11,
                 Date = "09.03.2024",
                 Time = "13:00",
                 Status = true,
@@ -683,7 +758,7 @@ namespace wellness.Service.Database
             modelBuilder.Entity<Reservation>().HasData(new Reservation
             {
                 Id = 20,
-                UserId = 10,
+                UserId = 11,
                 Date = "07.03.2024",
                 Time = "13:00",
                 Status = true,

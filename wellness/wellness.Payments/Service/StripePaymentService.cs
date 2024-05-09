@@ -327,7 +327,7 @@ public class StripePaymentService : IStripePaymentService
             Amount = amount,
             PaymentMethod = "Stripe",
             Currency = "BAM",
-            Timestamp = DateTime.Now.AddHours(1),
+            Timestamp = DateTime.Now,
             MemberShipTypeId = membershipTypeId,
             UserId=userId
             
@@ -349,11 +349,11 @@ public class StripePaymentService : IStripePaymentService
     private async Task SendMail(string email, int membershipTypeId, int amount)
     {
         var membershipType = await _context.MembershipTypes.FindAsync(membershipTypeId);
-        var timestamp = DateTime.Now.AddHours(1);
+        var timestamp = DateTime.Now;
 
         float price = amount/100;
         string subject = "Potvrda plačanja članstva";
-        string body = $"Hvala Vam na uplati članarine : {membershipType!.Name}. \n Uspješno ste uplatili {price} BAM putem Stripe! \n Datum uplate: {timestamp.ToShortDateString()}, \n vrijeme uplate: {timestamp.ToShortTimeString()}. Lijep pozdrav i radujemo se našoj saradnji. Wellness centar - Health.";
+        string body = $"Hvala Vam na uplati članarine : <b>{membershipType!.Name}</b>. \n Uspješno ste uplatili <b>{price}</b> BAM putem Stripe! \n Datum uplate: {timestamp.ToShortDateString()}, \n vrijeme uplate: {timestamp.ToShortTimeString()}. Lijep pozdrav i radujemo se našoj saradnji. Wellness centar - Health.";
 
         _mailService.SendEmail(email, subject, body);
     }

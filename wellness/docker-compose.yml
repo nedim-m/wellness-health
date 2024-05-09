@@ -9,14 +9,16 @@ services:
       - ACCEPT_EULA=Y
       - SA_PASSWORD=Test123@
       - MSSQL_PID=Developer
+      - TZ=Europe/Belgrade 
     ports:
       - 1401:1433
     expose:
       - 1433
     networks:
       - wellness_network
+      
 
-  wellness-rabbitmq:
+  wellness-rabbitmq: 
     container_name: rabbitmq
     image: rabbitmq:3-management
     restart: unless-stopped
@@ -27,6 +29,9 @@ services:
       - 5672
     networks:
       - wellness_network
+    environment:
+      - TZ=Europe/Belgrade 
+
   wellness-rabbitmq-service:
     container_name: rabbitmq-service
     restart: unless-stopped
@@ -39,6 +44,8 @@ services:
       - wellness_network
     depends_on:
       - wellness-rabbitmq
+    environment:
+      - TZ=Europe/Belgrade 
 
   wellness-payment-service:
     container_name: payment-service
@@ -47,6 +54,7 @@ services:
       context: .
       dockerfile: Dockerfile_payments
     environment:
+      - TZ=Europe/Belgrade 
       - ConnectionStrings__DefaultConnection=Server=wellness-sql,1433;Database=wellness_db;User=sa;Password=Test123@;Trust Server Certificate=true;ConnectRetryCount=0
       - ASPNETCORE_ENVIRONMENT=Development
       - Stripe__PubKey=${STRIPE__PUBKEY}
@@ -67,11 +75,12 @@ services:
       context: .
       dockerfile: Dockerfile_api
     environment:
-    - ConnectionStrings__DefaultConnection=Server=wellness-sql,1433;Database=wellness_db;User=sa;Password=Test123@;Trust Server Certificate=true;ConnectRetryCount=0
-    - ASPNETCORE_ENVIRONMENT=Development
-    - AppSettings__Token=${APPSETTINGS__TOKEN}
+      - TZ=Europe/Belgrade 
+      - ConnectionStrings__DefaultConnection=Server=wellness-sql,1433;Database=wellness_db;User=sa;Password=Test123@;Trust Server Certificate=true;ConnectRetryCount=0
+      - ASPNETCORE_ENVIRONMENT=Development
+      - AppSettings__Token=${APPSETTINGS__TOKEN}
     ports:
-    - 7081:7081
+      - 7081:7081
     networks:
       - wellness_network
     depends_on:

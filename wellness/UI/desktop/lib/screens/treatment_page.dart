@@ -351,6 +351,7 @@ DataRow recentFileDataRow(BuildContext context, var data,
                       context: context,
                       builder: (context) {
                         return AlertDialog(
+                          backgroundColor: Colors.white,
                           title: const Text(
                             'Greška prilikom brisanja',
                             style: TextStyle(color: Colors.red),

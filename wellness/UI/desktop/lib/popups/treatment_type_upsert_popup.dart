@@ -75,6 +75,7 @@ class _TreatmentEditPopUpWidgetState extends State<TreatmentEditPopUpWidget> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
+      backgroundColor: Colors.white,
       title: widget.edit
           ? const Text("Ažuriraj vrstu usluge")
           : const Text("Dodaj vrstu usluge"),

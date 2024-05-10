@@ -161,7 +161,7 @@ namespace wellness.Service.Services
                 Amount = amount,
                 PaymentMethod = "Cash",
                 Currency = "BAM",
-                Timestamp = DateTime.Now.AddHours(1),
+                Timestamp = DateTime.Now,
                 MemberShipTypeId = membershipTypeId,
                 UserId = userId
 

@@ -97,18 +97,19 @@ class _HomepageViewState extends State<HomepageView> {
           title: const Text('Zaposlenici'),
           body: const WorkerPageView(),
         ),
-      PaneItemExpander(
-        title: const Text('Trenutno prisutni'),
-        icon: const Icon(FluentIcons.temporary_user),
-        body: const RecordPageView(),
-        items: [
-          PaneItem(
-            icon: const Icon(FluentIcons.full_history),
-            title: const Text('Historija prisustva'),
-            body: const HistoryPageView(),
-          ),
-        ],
-      ),
+      if (!isAdmin)
+        PaneItemExpander(
+          title: const Text('Trenutno prisutni'),
+          icon: const Icon(FluentIcons.temporary_user),
+          body: const RecordPageView(),
+          items: [
+            PaneItem(
+              icon: const Icon(FluentIcons.full_history),
+              title: const Text('Historija prisustva'),
+              body: const HistoryPageView(),
+            ),
+          ],
+        ),
       PaneItem(
         icon: const Icon(FluentIcons.service_activity),
         title: const Text('Vrste usluge'),

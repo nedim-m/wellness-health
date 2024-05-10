@@ -151,17 +151,7 @@ namespace wellness.Service.Database
                 Picture = ConvertImageToByteArray("wwwroot", "yoga-sesija.jpg")
             });
 
-            modelBuilder.Entity<Treatment>().HasData(new Treatment
-            {
-                Id = 8,
-                Name = "Tretman za brisanje",
-                TreatmentTypeId = 7,
-                CategoryId = 6,
-                Description = "Ovaj tretman je moguće obrisati jer nema povezanosti sa rezervacijama",
-                Duration = 60,
-                Price = 50,
-                Picture = ConvertImageToByteArray("wwwroot", "yoga-sesija.jpg")
-            });
+           
 
 
 
@@ -290,7 +280,7 @@ namespace wellness.Service.Database
                 TokenExpires = DateTime.UtcNow.AddHours(1),
                 UserName = "employee",
                 Phone = "061618333",
-                Status = true,
+                Status = false,
                 RoleId = 2,
                 ShiftId=2,
                 Picture=ConvertImageToByteArray("wwwroot", "splinter.jpg")

@@ -71,7 +71,7 @@ class _RegistrationPageViewState extends State<RegistrationPageView> {
       message = 'Uspješna Registracija';
     } else {
       message =
-          'Greška prilikom registracije, korisnik sa tim korisničkim imenom i/ili postoji.';
+          'Greška prilikom registracije, korisnik sa tim korisničkim imenom i/ili e-mailom postoji.';
     }
 
     showDialog(

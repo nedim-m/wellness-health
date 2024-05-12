@@ -46,7 +46,7 @@ class ValidationRules {
     }
     if (!RegExp(r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+])')
         .hasMatch(password)) {
-      return 'Lozinka mora sadržavati najmanje jedno veliko slovo, jedan broj i jedan poseban znak.';
+      return 'Lozinka mora sadržavati najmanje jedno veliko slovo, broj i poseban znak.';
     }
     return null;
   }
@@ -60,7 +60,7 @@ class ValidationRules {
     }
     if (!RegExp(r'^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*()_+])')
         .hasMatch(confirmpassword)) {
-      return 'Lozinka mora sadržavati najmanje jedno veliko slovo, jedan broj i jedan poseban znak.';
+      return 'Lozinka mora sadržavati najmanje jedno veliko slovo, broj i poseban znak.';
     }
 
     if (confirmpassword != password) {

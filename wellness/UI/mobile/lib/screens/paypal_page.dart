@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobile/providers/paypal_provider.dart';
+import 'package:mobile/screens/membership_page.dart';
 import 'package:mobile/utils/app_styles.dart';
 
 import 'package:mobile/widgets/paypal_finish.dart';
@@ -45,6 +46,12 @@ class _PayPalCheckoutState extends State<PayPalCheckout> {
             Navigator.of(context).pushReplacement(
               MaterialPageRoute(
                 builder: (context) => const PaypalFinishPage(),
+              ),
+            );
+          } else {
+            Navigator.of(context).pushReplacement(
+              MaterialPageRoute(
+                builder: (context) => const MemberShipPageView(),
               ),
             );
           }

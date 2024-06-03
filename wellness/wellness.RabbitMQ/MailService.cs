@@ -12,12 +12,18 @@ namespace wellness.RabbitMQ
         private readonly string _smtpPassword;
 
 
-        public MailService(string smtpServer = "smtp.gmail.com", int smtpPort = 587, string smtpUsername = "wellnes.centar.health@gmail.com", string smtpPassword = "nkli naol eubd pmmw")
+        public MailService()
         {
-            _smtpServer = smtpServer;
-            _smtpPort = smtpPort;
-            _smtpUsername = smtpUsername;
-            _smtpPassword = smtpPassword;
+          
+
+            _smtpServer = Environment.GetEnvironmentVariable("SMTP_SERVER") ?? throw new ArgumentNullException("SMTP_SERVER environment variable is not set");
+            if (!int.TryParse(Environment.GetEnvironmentVariable("SMTP_PORT"), out _smtpPort))
+            {
+                throw new ArgumentException("SMTP_PORT environment variable is not a valid integer");
+            }
+            _smtpUsername = Environment.GetEnvironmentVariable("SMTP_USERNAME") ?? throw new ArgumentNullException("SMTP_USERNAME environment variable is not set");
+            _smtpPassword = Environment.GetEnvironmentVariable("SMTP_PASSWORD") ?? throw new ArgumentNullException("SMTP_PASSWORD environment variable is not set");
+
         }
 
         public void SendEmail(string to, string subject, string body)

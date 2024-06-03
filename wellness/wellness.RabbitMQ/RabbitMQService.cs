@@ -19,10 +19,7 @@ public class RabbitMQService
     public RabbitMQService()
     {
 
-        foreach (System.Collections.DictionaryEntry env in Environment.GetEnvironmentVariables())
-        {
-            Console.WriteLine($"{env.Key} = {env.Value}");
-        }
+       
         _host = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? throw new ArgumentNullException("RABBITMQ_HOST environment variable is not set");
         _username = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? throw new ArgumentNullException("RABBITMQ_USERNAME environment variable is not set");
         _password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? throw new ArgumentNullException("RABBITMQ_PASSWORD environment variable is not set");

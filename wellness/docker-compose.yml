@@ -7,8 +7,8 @@ services:
     restart: unless-stopped
     environment:
       - ACCEPT_EULA=Y
-      - SA_PASSWORD=Test123@
-      - MSSQL_PID=Developer
+      - SA_PASSWORD=${SQL__PASSWORD}
+      - MSSQL_PID=${SQL__PID}
       - TZ=Europe/Belgrade 
     ports:
       - 1401:1433
@@ -65,7 +65,7 @@ services:
       dockerfile: Dockerfile_payments
     environment:
       - TZ=Europe/Belgrade 
-      - ConnectionStrings__DefaultConnection=Server=wellness-sql,1433;Database=wellness_db;User=sa;Password=Test123@;Trust Server Certificate=true;ConnectRetryCount=0
+      - ConnectionStrings__DefaultConnection=Server=wellness-sql,1433;Database=${SQL__DATABASE};User=${SQL__USER};Password=${SQL__PASSWORD};Trust Server Certificate=true;ConnectRetryCount=0
       - ASPNETCORE_ENVIRONMENT=Development
       - SMTP_SERVER=${SMTP__SERVER}
       - SMTP_PORT=${SMTP__PORT}
@@ -94,7 +94,7 @@ services:
       dockerfile: Dockerfile_api
     environment:
       - TZ=Europe/Belgrade 
-      - ConnectionStrings__DefaultConnection=Server=wellness-sql,1433;Database=wellness_db;User=sa;Password=Test123@;Trust Server Certificate=true;ConnectRetryCount=0
+      - ConnectionStrings__DefaultConnection=Server=wellness-sql,1433;Database=${SQL__DATABASE};User=${SQL__USER};Password=${SQL__PASSWORD};Trust Server Certificate=true;ConnectRetryCount=0
       - ASPNETCORE_ENVIRONMENT=Development
       - AppSettings__Token=${APPSETTINGS__TOKEN}
       - SMTP_SERVER=${SMTP__SERVER}

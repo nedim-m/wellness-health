@@ -15,6 +15,7 @@ public class RabbitMQService
     private readonly string _host;
     private readonly string _username;
     private readonly string _password;
+    private readonly int _hubPort;
 
     public RabbitMQService()
     {
@@ -23,6 +24,10 @@ public class RabbitMQService
         _host = Environment.GetEnvironmentVariable("RABBITMQ_HOST") ?? throw new ArgumentNullException("RABBITMQ_HOST environment variable is not set");
         _username = Environment.GetEnvironmentVariable("RABBITMQ_USERNAME") ?? throw new ArgumentNullException("RABBITMQ_USERNAME environment variable is not set");
         _password = Environment.GetEnvironmentVariable("RABBITMQ_PASSWORD") ?? throw new ArgumentNullException("RABBITMQ_PASSWORD environment variable is not set");
+        if (!int.TryParse(Environment.GetEnvironmentVariable("SIGNAL_R_PORT"), out _hubPort))
+        {
+            throw new ArgumentException("SIGNAL_R_PORT environment variable is not a valid integer");
+        }
 
         var factory = new ConnectionFactory
         {
@@ -36,10 +41,11 @@ public class RabbitMQService
 
         _channel.QueueDeclare(queue: "notifications_queue", durable: true, exclusive: false, autoDelete: false, arguments: null);
 
+        string _hubUrl = $"http://localhost:{_hubPort}/notificationHub";
         try
         {
             _hubConnection = new HubConnectionBuilder()
-                .WithUrl("http://localhost:5630/notificationHub")
+                .WithUrl(_hubUrl)
                 .Build();
 
             _hubConnection.StartAsync().Wait();

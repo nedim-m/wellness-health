@@ -110,7 +110,7 @@ class _HomepageViewState extends State<HomepageView> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   CustomButton(
-                    text: 'Pregled Tretmana',
+                    text: 'Pregled tretmana',
                     navigateTo: status
                         ? const TreatmentOverview()
                         : const MemberShipPageView(),

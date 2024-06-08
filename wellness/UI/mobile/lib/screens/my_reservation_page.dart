@@ -72,20 +72,7 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
         return Card(
           elevation: 3,
           margin: const EdgeInsets.symmetric(vertical: 8.0),
-          child: ListTile(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  reservations[index].treatment,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                _buildStatusIcon(reservations[index].status),
-              ],
-            ),
-            subtitle: Text(
-              'Datum: ${reservations[index].date} u ${reservations[index].time} sati',
-            ),
+          child: InkWell(
             onTap: () {
               Navigator.push(
                 context,
@@ -97,6 +84,46 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
                 ),
               );
             },
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        reservations[index].treatment,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      _buildStatusIcon(reservations[index].status),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Datum: ${reservations[index].date} u ${reservations[index].time} sati',
+                  ),
+                  const SizedBox(height: 4),
+                  const Row(
+                    children: [
+                      Icon(
+                        Icons.arrow_forward,
+                        color: Colors.blue,
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        'Pregledaj detalje rezervacije',
+                        style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
         );
       },

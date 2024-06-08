@@ -30,6 +30,9 @@ namespace wellness.Service.Services
                 .Include(r => r.Treatment)
                 .ToList();
 
+           
+
+
             var userReservationTreatmentIds = userReservations.Select(ur => ur.Treatment.Id).ToList();
 
             var unratedTreatments = _context.Treatments
@@ -53,6 +56,13 @@ namespace wellness.Service.Services
 
                 recommendedTreatments.Add(recommendationTreatment);
             }
+
+            if (userReservations.Count <=0)
+            {
+                recommendedTreatments = recommendedTreatments.OrderByDescending(t => t.AverageRating).ToList();
+                recommendedTreatments = recommendedTreatments.Take(3).ToList();
+            }
+
 
             return recommendedTreatments;
         }
@@ -126,28 +136,38 @@ namespace wellness.Service.Services
 
         private double CalculateCosineSimilarity(Database.Treatment unratedTreatment, List<Database.Reservation> userReservations)
         {
+            if (userReservations.Count == 0)
+            {
+                
+                return 0.5; 
+            }
+
             var unratedTreatmentVector = GetTreatmentVector(unratedTreatment);
+
+            double totalCosineSimilarity = 0.0;
 
             foreach (var userReservation in userReservations)
             {
                 var userTreatmentVector = GetTreatmentVector(userReservation.Treatment);
 
-               
                 double dotProduct = CalculateDotProduct(unratedTreatmentVector, userTreatmentVector);
                 double magnitudeUnrated = CalculateMagnitude(unratedTreatmentVector);
                 double magnitudeUser = CalculateMagnitude(userTreatmentVector);
 
                 double cosineSimilarity = dotProduct / (magnitudeUnrated * magnitudeUser);
 
-                
-                return cosineSimilarity;
+                totalCosineSimilarity += cosineSimilarity;
             }
 
-
-            return 0.0;
+            
+            double averageCosineSimilarity = totalCosineSimilarity / userReservations.Count;
+            return averageCosineSimilarity;
         }
 
-    
+
+
+
+
         private double CalculateDotProduct(List<double> vector1, List<double> vector2)
         {
             if (vector1.Count != vector2.Count)

@@ -51,6 +51,7 @@ namespace wellness.Service.Services
                                                       .ForMember(dest => dest.TreatmentType, opt => opt.MapFrom(src => src.TreatmentType.Name));
 
             CreateMap<Treatment, RecommendationTreatment>();
+           
 
 
 

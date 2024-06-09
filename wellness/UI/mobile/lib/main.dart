@@ -23,6 +23,13 @@ Future<void> main() async {
   Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY']!;
   await Stripe.instance.applySettings();
 
+  var treatmentProvider = TreatmentProvider();
+  try {
+    await treatmentProvider.initialize();
+    print("Preporučeni tretmani su inicijalizirani.");
+  } catch (e) {
+    print("Preporučeni tretmani nisu inicijalizirani.");
+  }
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => TreatmentProvider()),

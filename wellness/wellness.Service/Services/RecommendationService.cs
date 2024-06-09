@@ -21,9 +21,9 @@ namespace wellness.Service.Services
     {
         private readonly DbWellnessContext _context;
         private readonly IMapper _mapper;
-        private ITransformer _model;
+        private static ITransformer _model;
         private MLContext _mlContext;
-
+        static object isLocked = new object();
 
 
 
@@ -33,13 +33,24 @@ namespace wellness.Service.Services
             _mapper = mapper;
             _mlContext = new MLContext();
 
-            LoadModelFromDatabase();
+            InitializeModel();
+        }
+        private void InitializeModel()
+        {
             if (_model == null)
             {
-                TrainAndSaveModel();
+                LoadModelFromDatabase();
+                if (_model == null)
+                {
+                    TrainAndSaveModel();
+                }
             }
         }
 
+        public void InitializeRecommendations()
+        {
+            InitializeModel();
+        }
 
 
         public List<Model.Treatment.RecommendationTreatment> GetRecommendedTreatments(int userId)
@@ -163,17 +174,20 @@ namespace wellness.Service.Services
         }
         private void TrainAndSaveModel()
         {
-            var data = GetDataForTraining();
-            _model = TrainModel(data);
-
-            var mlModel = new MachineLearning
+            lock (isLocked)
             {
-                ModelData = SerializeModel(_model),
-                TrainingTimestamp = DateTime.Now
-            };
+                var data = GetDataForTraining();
+                _model = TrainModel(data);
 
-            _context.MachineLearnings.Add(mlModel);
-            _context.SaveChanges();
+                var mlModel = new MachineLearning
+                {
+                    ModelData = SerializeModel(_model),
+                    TrainingTimestamp = DateTime.Now
+                };
+
+                _context.MachineLearnings.Add(mlModel);
+                _context.SaveChanges();
+            }
         }
         private IEnumerable<TreatmentRating> GetDataForTraining()
         {
@@ -224,15 +238,7 @@ namespace wellness.Service.Services
             }
         }
 
-
-
-
-
-
-
-
-
-
+       
     }
 
     public class TreatmentRating

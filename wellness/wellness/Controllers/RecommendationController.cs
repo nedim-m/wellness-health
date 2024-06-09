@@ -15,12 +15,21 @@ namespace wellness.Controllers
         {
             _recommendationService=recommendationService;
         }
-        [AllowAnonymous]
+     
         [HttpGet("{userId}")]
         public IActionResult GetRecommendedTreatments(int userId)
         {
             var recommendedTreatments = _recommendationService.GetRecommendedTreatments(userId);
             return Ok(recommendedTreatments);
+        }
+
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Initialize()
+        {
+            _recommendationService.InitializeRecommendations();
+            return Ok("Preporučeni tretmani su inicijalizirani.");
         }
     }
 }

@@ -1,6 +1,8 @@
 // ignore_for_file: avoid_print
 
 import 'package:flutter/material.dart';
+import 'package:mobile/models/treatment.dart';
+import 'package:mobile/providers/treatment_provider.dart';
 import 'package:mobile/providers/user_provider.dart';
 import 'package:mobile/screens/login_page.dart';
 import 'package:mobile/screens/my_reservation_page.dart';
@@ -9,9 +11,11 @@ import 'package:mobile/screens/profil_page.dart';
 import 'package:mobile/screens/treatment_overview_page.dart';
 import 'package:mobile/utils/app_constants.dart';
 import 'package:mobile/utils/app_styles.dart';
+import 'package:mobile/utils/recommender_helper.dart';
 import 'package:mobile/utils/user_store.dart';
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/custom_button.dart';
+import 'package:provider/provider.dart';
 import 'package:signalr_netcore/signalr_client.dart';
 
 class HomepageView extends StatefulWidget {
@@ -28,12 +32,22 @@ class _HomepageViewState extends State<HomepageView> {
   final UserProvider _userProvider = UserProvider();
 
   late HubConnection _signalR;
+  late List<Treatment> recommendedtreatmentList;
 
   @override
   void initState() {
     super.initState();
     _initPlatformState();
     getAccess();
+    _getRecommended();
+  }
+
+  Future<void> _getRecommended() async {
+    final treatmentProvider =
+        Provider.of<TreatmentProvider>(context, listen: false);
+    recommendedtreatmentList = await treatmentProvider.recommendation();
+    RecommendedHelper.saveRecommend(recommendedtreatmentList);
+    
   }
 
   Future<void> _initPlatformState() async {

@@ -38,6 +38,7 @@ public partial class DbWellnessContext : DbContext
 
     public virtual DbSet<Report>Reports { get; set; }
     public virtual DbSet<Shift> Shifts { get; set; }
+    public virtual DbSet<MachineLearning> MachineLearnings { get; set; }
 
 
 

@@ -8,6 +8,7 @@ import 'package:mobile/providers/treatment_provider.dart';
 import 'package:mobile/providers/treatment_type_provider.dart';
 import 'package:mobile/screens/treatment_details.dart';
 import 'package:mobile/utils/app_styles.dart';
+import 'package:mobile/utils/recommender_helper.dart';
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/treatment_container.dart';
 
@@ -30,6 +31,7 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
   List<TreatmentType> treatmentTypes = [];
   String? selectedTreatment;
   String? selectedCategory;
+  var recommendedHelper = RecommendedHelper();
 
   @override
   void initState() {
@@ -41,7 +43,10 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
     myData = await _treatmentProvider.get();
     categories = await _categoryProvider.get();
     treatmentTypes = await _treatmentTypeProvider.get();
-    treatments = await _treatmentProvider.recommendation();
+
+    treatments = RecommendedHelper.getRecommendation()!;
+
+    
     setState(() {
       filteredData = myData;
     });

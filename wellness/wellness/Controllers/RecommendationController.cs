@@ -15,7 +15,7 @@ namespace wellness.Controllers
         {
             _recommendationService=recommendationService;
         }
-
+        [AllowAnonymous]
         [HttpGet("{userId}")]
         public IActionResult GetRecommendedTreatments(int userId)
         {

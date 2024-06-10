@@ -1,6 +1,8 @@
-// ignore_for_file: avoid_print
+// ignore_for_file: prefer_const_constructors, library_private_types_in_public_api, avoid_print, deprecated_member_use
 
 import 'package:flutter/material.dart';
+import 'package:mobile/models/treatment.dart';
+import 'package:mobile/providers/treatment_provider.dart';
 import 'package:mobile/providers/user_provider.dart';
 import 'package:mobile/screens/login_page.dart';
 import 'package:mobile/screens/my_reservation_page.dart';
@@ -9,16 +11,17 @@ import 'package:mobile/screens/profil_page.dart';
 import 'package:mobile/screens/treatment_overview_page.dart';
 import 'package:mobile/utils/app_constants.dart';
 import 'package:mobile/utils/app_styles.dart';
+import 'package:mobile/utils/recommender_helper.dart';
 import 'package:mobile/utils/user_store.dart';
 import 'package:mobile/widgets/app_bar.dart';
 import 'package:mobile/widgets/custom_button.dart';
-import 'package:signalr_netcore/signalr_client.dart';
+import 'package:provider/provider.dart';
+import 'package:signalr_netcore/signalr_client.dart' as signalr;
 
 class HomepageView extends StatefulWidget {
   const HomepageView({Key? key}) : super(key: key);
 
   @override
-  // ignore: library_private_types_in_public_api
   _HomepageViewState createState() => _HomepageViewState();
 }
 
@@ -27,17 +30,28 @@ class _HomepageViewState extends State<HomepageView> {
   bool status = false;
   final UserProvider _userProvider = UserProvider();
 
-  late HubConnection _signalR;
+  late signalr.HubConnection _signalR;
+  late Future<List<Treatment>> _recommendedtreatmentListFuture;
 
   @override
   void initState() {
     super.initState();
     _initPlatformState();
     getAccess();
+    _recommendedtreatmentListFuture = _getRecommended();
+  }
+
+  Future<List<Treatment>> _getRecommended() async {
+    final treatmentProvider =
+        Provider.of<TreatmentProvider>(context, listen: false);
+    List<Treatment> recommendedtreatmentList =
+        await treatmentProvider.recommendation();
+    RecommendedHelper.saveRecommend(recommendedtreatmentList);
+    return recommendedtreatmentList;
   }
 
   Future<void> _initPlatformState() async {
-    _signalR = HubConnectionBuilder()
+    _signalR = signalr.HubConnectionBuilder()
         .withUrl(
             "${AppConstants.baseUrl}${AppConstants.signalRPort}/notificationHub")
         .build();
@@ -92,7 +106,6 @@ class _HomepageViewState extends State<HomepageView> {
 
   @override
   Widget build(BuildContext context) {
-    // ignore: deprecated_member_use
     return WillPopScope(
       onWillPop: () async {
         _resetNotifications();
@@ -101,44 +114,57 @@ class _HomepageViewState extends State<HomepageView> {
       child: Scaffold(
         backgroundColor: Styles.bgColor,
         appBar: const AppBarWidget(),
-        body: SingleChildScrollView(
-          child: Container(
-            margin: const EdgeInsets.only(bottom: 100.0),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CustomButton(
-                    text: 'Pregled Tretmana',
-                    navigateTo: status
-                        ? const TreatmentOverview()
-                        : const MemberShipPageView(),
+        body: FutureBuilder<List<Treatment>>(
+          future: _recommendedtreatmentListFuture,
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(child: CircularProgressIndicator());
+            } else if (snapshot.hasError) {
+              return Center(child: Text('Error loading data'));
+            } else if (snapshot.hasData) {
+              return SingleChildScrollView(
+                child: Container(
+                  margin: const EdgeInsets.only(bottom: 100.0),
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomButton(
+                          text: 'Pregled tretmana',
+                          navigateTo: status
+                              ? const TreatmentOverview()
+                              : const MemberShipPageView(),
+                        ),
+                        CustomButton(
+                          text: 'Moje rezervacije',
+                          navigateTo: const MyReservationPageView(),
+                          notificationCount: _numberOfNotifications,
+                          onPressedCustom: () {
+                            _resetNotifications();
+                          },
+                        ),
+                        const CustomButton(
+                          text: 'Članarina',
+                          navigateTo: MemberShipPageView(),
+                        ),
+                        const CustomButton(
+                          text: 'Profil',
+                          navigateTo: ProfilPageView(),
+                        ),
+                        const CustomButton(
+                          text: 'Odjava',
+                          navigateTo: LoginPageView(),
+                        ),
+                      ],
+                    ),
                   ),
-                  CustomButton(
-                    text: 'Moje rezervacije',
-                    navigateTo: const MyReservationPageView(),
-                    notificationCount: _numberOfNotifications,
-                    onPressedCustom: () {
-                      _resetNotifications();
-                    },
-                  ),
-                  const CustomButton(
-                    text: 'Članarina',
-                    navigateTo: MemberShipPageView(),
-                  ),
-                  const CustomButton(
-                    text: 'Profil',
-                    navigateTo: ProfilPageView(),
-                  ),
-                  const CustomButton(
-                    text: 'Odjava',
-                    navigateTo: LoginPageView(),
-                  ),
-                ],
-              ),
-            ),
-          ),
+                ),
+              );
+            } else {
+              return Center(child: Text('No data available'));
+            }
+          },
         ),
       ),
     );

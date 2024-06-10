@@ -82,7 +82,7 @@ class _ReportChartsState extends State<ReportCharts> {
       children: [
         _buildLegendItem(Colors.blue, 'Aktivni'),
         const SizedBox(width: 10),
-        _buildLegendItem(Colors.red, 'Neaktivni'),
+        _buildLegendItem(Colors.red, 'Neaktivni/Istekla'),
         const SizedBox(width: 10),
         _buildLegendItem(Colors.grey, 'Neodgovoreni'),
       ],

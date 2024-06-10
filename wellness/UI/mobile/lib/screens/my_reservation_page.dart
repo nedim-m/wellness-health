@@ -5,8 +5,9 @@ import 'package:mobile/models/reservation.dart';
 import 'package:mobile/models/treatment.dart';
 
 import 'package:mobile/providers/reservation_provider.dart';
-import 'package:mobile/providers/treatment_provider.dart';
+
 import 'package:mobile/utils/app_styles.dart';
+import 'package:mobile/utils/recommender_helper.dart';
 import 'package:mobile/utils/user_store.dart';
 import 'package:mobile/widgets/reservation_page.dart';
 import 'package:mobile/widgets/app_bar.dart';
@@ -22,7 +23,7 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
   List<Reservation> reservations = [];
   List<Treatment> treatments = [];
   final ReservationProvider _reservationProvider = ReservationProvider();
-  final TreatmentProvider _treatmentProvider = TreatmentProvider();
+
   int? _userId;
 
   @override
@@ -39,7 +40,7 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
     });
     print("UserId : $_userId");
 
-    treatments = await _treatmentProvider.recommendation();
+    treatments = RecommendedHelper.getRecommendation()!;
 
     setState(() {
       reservations = fetchedReservations;
@@ -72,20 +73,7 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
         return Card(
           elevation: 3,
           margin: const EdgeInsets.symmetric(vertical: 8.0),
-          child: ListTile(
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  reservations[index].treatment,
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                ),
-                _buildStatusIcon(reservations[index].status),
-              ],
-            ),
-            subtitle: Text(
-              'Datum: ${reservations[index].date} u ${reservations[index].time} sati',
-            ),
+          child: InkWell(
             onTap: () {
               Navigator.push(
                 context,
@@ -97,6 +85,46 @@ class _MyReservationPageViewState extends State<MyReservationPageView> {
                 ),
               );
             },
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        reservations[index].treatment,
+                        style: const TextStyle(
+                            fontWeight: FontWeight.bold, fontSize: 16),
+                      ),
+                      _buildStatusIcon(reservations[index].status),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Datum: ${reservations[index].date} u ${reservations[index].time} sati',
+                  ),
+                  const SizedBox(height: 4),
+                  const Row(
+                    children: [
+                      Icon(
+                        Icons.arrow_forward,
+                        color: Colors.blue,
+                      ),
+                      SizedBox(width: 4),
+                      Text(
+                        'Pregledaj detalje rezervacije',
+                        style: TextStyle(
+                            color: Colors.blue,
+                            fontWeight: FontWeight.bold,
+                            fontSize: 13),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
           ),
         );
       },

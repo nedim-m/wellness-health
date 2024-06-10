@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -23,6 +25,13 @@ Future<void> main() async {
   Stripe.publishableKey = dotenv.env['STRIPE_PUBLISHABLE_KEY']!;
   await Stripe.instance.applySettings();
 
+  var treatmentProvider = TreatmentProvider();
+  try {
+    await treatmentProvider.initialize();
+    print("Model istreniran.");
+  } catch (e) {
+    print("Greška prilikom treniranja modela.");
+  }
   runApp(MultiProvider(
     providers: [
       ChangeNotifierProvider(create: (_) => TreatmentProvider()),

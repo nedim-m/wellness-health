@@ -5,6 +5,7 @@ import 'package:mobile/screens/forgot_password_page.dart';
 import 'package:mobile/screens/home_page.dart';
 import 'package:mobile/screens/register_page.dart';
 import 'package:mobile/utils/app_styles.dart';
+import 'package:mobile/utils/recommender_helper.dart';
 
 import 'package:mobile/utils/user_store.dart';
 
@@ -37,7 +38,7 @@ class _LoginPageViewState extends State<LoginPageView> {
         context,
         MaterialPageRoute(builder: (context) => const HomepageView()),
       );
-
+      RecommendedHelper.removeRecommendation();
       UserManager.removeCredentials();
       UserManager.getFullNameAsync();
     } else {

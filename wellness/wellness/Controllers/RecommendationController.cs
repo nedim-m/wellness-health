@@ -22,5 +22,15 @@ namespace wellness.Controllers
             var recommendedTreatments = _recommendationService.GetRecommendedTreatments(userId);
             return Ok(recommendedTreatments);
         }
+
+
+        [AllowAnonymous]
+        [HttpGet]
+        public IActionResult Initialize()
+        {
+            var date= DateTime.Now;
+            _recommendationService.InitializeRecommendations(date);
+            return Ok("Preporučeni tretmani su inicijalizirani.");
+        }
     }
 }

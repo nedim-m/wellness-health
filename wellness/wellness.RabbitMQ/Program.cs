@@ -1,12 +1,22 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Org.BouncyCastle.Security;
 using wellness.RabbitMQ;
 
 partial class Program
 {
     static void Main()
     {
-        var host = CreateWebHostBuilder().Build();
+        string portEnv = Environment.GetEnvironmentVariable("SIGNAL_R_PORT") ?? "5630";
+
+        int _hubPort;
+
+        if (!int.TryParse(portEnv, out _hubPort))
+        {
+            throw new ArgumentException("SIGNAL_R_PORT environment variable is not a valid integer");
+        }
+
+        var host = CreateWebHostBuilder(_hubPort).Build();
         host.Start();
 
         var rabbitMQService = new RabbitMQService();
@@ -20,12 +30,11 @@ partial class Program
         host.StopAsync().Wait();
     }
 
-    private static IWebHostBuilder CreateWebHostBuilder() =>
+    private static IWebHostBuilder CreateWebHostBuilder(int port) =>
         WebHost.CreateDefaultBuilder()
             .UseStartup<Startup>()
             .UseKestrel(options =>
             {
-                
-                options.Listen(System.Net.IPAddress.IPv6Any, 5630);
+                options.Listen(System.Net.IPAddress.IPv6Any, port);
             });
 }

@@ -14,6 +14,7 @@ class TreatmentProvider extends BaseProvider<Treatment> {
 
   Future<List<Treatment>> recommendation() async {
     int id = int.parse(UserManager.getUserId()!);
+
     var url = "${baseUrl}Recommendation/$id";
     var uri = Uri.parse(url);
     var headers = createJwtHeaders(token!);
@@ -24,6 +25,19 @@ class TreatmentProvider extends BaseProvider<Treatment> {
       var data = jsonDecode(response.body);
 
       return data.map((x) => fromJson(x)).cast<Treatment>().toList();
+    } else {
+      throw Exception("Unknown error");
+    }
+  }
+
+  Future<void> initialize() async {
+    var url = "${baseUrl}Recommendation/";
+    var uri = Uri.parse(url);
+
+    var response = await http!.get(uri);
+
+    if (isValidResponse(response)) {
+      return;
     } else {
       throw Exception("Unknown error");
     }

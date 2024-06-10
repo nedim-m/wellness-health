@@ -8,7 +8,9 @@ import 'package:mobile/providers/treatment_provider.dart';
 import 'package:mobile/providers/treatment_type_provider.dart';
 import 'package:mobile/screens/treatment_details.dart';
 import 'package:mobile/utils/app_styles.dart';
+import 'package:mobile/utils/recommender_helper.dart';
 import 'package:mobile/widgets/app_bar.dart';
+import 'package:mobile/widgets/treatment_container.dart';
 
 class TreatmentOverview extends StatefulWidget {
   const TreatmentOverview({Key? key}) : super(key: key);
@@ -24,10 +26,12 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
 
   List<Treatment> filteredData = [];
   List<Treatment> myData = [];
+  List<Treatment> treatments = [];
   List<Category> categories = [];
   List<TreatmentType> treatmentTypes = [];
   String? selectedTreatment;
   String? selectedCategory;
+  var recommendedHelper = RecommendedHelper();
 
   @override
   void initState() {
@@ -40,6 +44,9 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
     categories = await _categoryProvider.get();
     treatmentTypes = await _treatmentTypeProvider.get();
 
+    treatments = RecommendedHelper.getRecommendation()!;
+
+    
     setState(() {
       filteredData = myData;
     });
@@ -121,41 +128,117 @@ class _TreatmentOverviewState extends State<TreatmentOverview> {
               ),
             ),
             const SizedBox(height: 20),
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
+            Container(
+              width: MediaQuery.of(context).size.width * 0.9,
+              padding: const EdgeInsets.all(10),
               child: DataTable(
+                headingRowColor: MaterialStateColor.resolveWith(
+                    (states) => Colors.blue.shade100),
+                dataRowColor:
+                    MaterialStateColor.resolveWith((states) => Styles.bgColor),
                 columns: const [
                   DataColumn(
-                    label: Text(
-                      "Tretmani",
-                      style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16,
+                    label: Expanded(
+                      child: Text(
+                        "Tretmani",
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 18,
+                          color: Colors.black,
+                        ),
+                        textAlign: TextAlign.center,
                       ),
-                      textAlign: TextAlign.center,
                     ),
                   ),
                 ],
                 rows: filteredData
                     .map(
                       (data) => DataRow(
+                        color: MaterialStateColor.resolveWith(
+                          (states) {
+                            if (states.contains(MaterialState.hovered)) {
+                              return Colors.grey;
+                            }
+                            return Colors.transparent;
+                          },
+                        ),
                         cells: [
                           DataCell(
-                            Center(child: Text(data.name)),
-                            onTap: () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                  builder: (context) => TreatmentDetails(
-                                    data: data,
+                            InkWell(
+                              mouseCursor: SystemMouseCursors.click,
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => TreatmentDetails(
+                                      data: data,
+                                    ),
+                                  ),
+                                );
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(
+                                    vertical: 10, horizontal: 5),
+                                decoration: BoxDecoration(
+                                  border: Border(
+                                    bottom:
+                                        BorderSide(color: Colors.grey.shade300),
                                   ),
                                 ),
-                              );
-                            },
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        data.name,
+                                        style: const TextStyle(
+                                            fontSize: 16,
+                                            color: Colors.black87),
+                                      ),
+                                    ),
+                                    const Icon(Icons.arrow_forward),
+                                  ],
+                                ),
+                              ),
+                            ),
                           ),
                         ],
                       ),
                     )
+                    .toList(),
+              ),
+            ),
+            const SizedBox(height: 30),
+            const Center(
+              child: Text(
+                'Preporučeni tretmani',
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.blue,
+                ),
+              ),
+            ),
+            const Gap(20),
+            SingleChildScrollView(
+              padding: const EdgeInsets.only(left: 20),
+              scrollDirection: Axis.horizontal,
+              child: Row(
+                children: treatments
+                    .map((singleTreatment) => GestureDetector(
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => TreatmentDetails(
+                                  data: singleTreatment,
+                                ),
+                              ),
+                            );
+                          },
+                          child: TreatmentRecomendationView(
+                            treatment: singleTreatment,
+                          ),
+                        ))
                     .toList(),
               ),
             ),

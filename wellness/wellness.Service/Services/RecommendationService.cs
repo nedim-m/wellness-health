@@ -1,14 +1,19 @@
 ﻿using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.ML;
+using Microsoft.ML.Data;
+using Microsoft.ML.Trainers;
+using MimeKit.Cryptography;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using wellness.Model;
 using wellness.Model.Reservation;
 using wellness.Model.Treatment;
 using wellness.Service.Database;
 using wellness.Service.IServices;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace wellness.Service.Services
 {
@@ -16,42 +21,107 @@ namespace wellness.Service.Services
     {
         private readonly DbWellnessContext _context;
         private readonly IMapper _mapper;
+        private static ITransformer _model;
+        private MLContext _mlContext;
+        static object isLocked = new object();
+        private static DateTime _lastTraining;
+        private readonly int _daysToTrainMl;
+
+
 
         public RecommendationService(DbWellnessContext context, IMapper mapper)
         {
             _context = context;
             _mapper = mapper;
+            _mlContext = new MLContext();
+
+            if (!int.TryParse(Environment.GetEnvironmentVariable("DAYS_TO_TRAIN_ML"), out _daysToTrainMl))
+            {
+                throw new ArgumentException("DAYS_TO_TRAIN_ML environment variable is not a valid integer");
+            }
+
+
+            InitializeModel();
         }
+        private void InitializeModel()
+        {
+          
+
+            if (_model == null)
+            {
+                LoadModelFromDatabase();
+                if (_model == null)
+                {
+                    
+                    TrainAndSaveModel();
+                }
+            }
+        }
+
+        public void InitializeRecommendations(DateTime date)
+        {
+            InitializeModel();
+
+            if ((date - _lastTraining).TotalDays>=_daysToTrainMl)
+            {
+                TrainAndSaveModel();
+            }
+        }
+
 
         public List<Model.Treatment.RecommendationTreatment> GetRecommendedTreatments(int userId)
         {
+           
             var userReservations = _context.Reservations
                 .Where(r => r.UserId == userId)
                 .Include(r => r.Treatment)
                 .ToList();
 
+         
             var userReservationTreatmentIds = userReservations.Select(ur => ur.Treatment.Id).ToList();
 
+           
             var unratedTreatments = _context.Treatments
                 .Where(t => !userReservationTreatmentIds.Contains(t.Id))
                 .ToList();
 
-            var similarTreatments = CalculateItemSimilarity(unratedTreatments, userReservations);
-
             var recommendedTreatments = new List<Model.Treatment.RecommendationTreatment>();
 
-            foreach (var similarTreatment in similarTreatments)
+            
+            foreach (var treatment in unratedTreatments)
             {
-                var treatment = similarTreatment.Treatment;
+                var mappedTreatment = _mapper.Map<Model.Treatment.Treatment>(treatment);
+                mappedTreatment.TreatmentType = GetTreatmentTypeById(treatment.TreatmentTypeId);
+                mappedTreatment.Category = GetCategoryById(treatment.CategoryId);
 
-               
-                var averageRating = AverageRating(treatment.Id);
+                double prediction;
 
-                var recommendationTreatment = _mapper.Map<Model.Treatment.RecommendationTreatment>(treatment);
-                recommendationTreatment.AverageRating = averageRating;
-               
+                if (userReservations.Count > 0)
+                {
+                    
+                    prediction = PredictRating(userId, treatment.Id);
+                }
+                else
+                {
+                   
+                    prediction = AverageRating(treatment.Id);
+                }
 
-                recommendedTreatments.Add(recommendationTreatment);
+                if (prediction > 2.2)
+                {
+                    var averageRating = AverageRating(treatment.Id);
+                    var treatmentToModel = _mapper.Map<Model.Treatment.Treatment>(treatment);
+                    var recommendationTreatment = _mapper.Map<Model.Treatment.RecommendationTreatment>(treatmentToModel);
+                    recommendationTreatment.AverageRating = averageRating;
+                    recommendedTreatments.Add(recommendationTreatment);
+                }
+            }
+
+            
+            if (userReservations.Count <= 0)
+            {
+                recommendedTreatments = recommendedTreatments.OrderByDescending(t => t.AverageRating).ToList();
+                recommendedTreatments = recommendedTreatments.Take(5).ToList(); 
             }
 
             return recommendedTreatments;
@@ -88,30 +158,16 @@ namespace wellness.Service.Services
             return averageRating;
         }
 
-
-
-
-        private List<SimilarTreatment> CalculateItemSimilarity(List<Database.Treatment> unratedTreatments, List<Database.Reservation> userReservations)
+        private float PredictRating(int userId, int treatmentId)
         {
-            var similarTreatments = new List<SimilarTreatment>();
-
-            foreach (var unratedTreatment in unratedTreatments)
-            {
-                double similarity = CalculateCosineSimilarity(unratedTreatment, userReservations);
-                var mappedTreatmen = _mapper.Map<Model.Treatment.Treatment>(unratedTreatment);
-                mappedTreatmen.TreatmentType=GetTreatmentTypeById(unratedTreatment.TreatmentTypeId);
-                mappedTreatmen.Category=GetCategoryById(unratedTreatment.CategoryId);
-                
-
-                similarTreatments.Add(new SimilarTreatment { Treatment = mappedTreatmen, Similarity = similarity });
-            }
-
-            return similarTreatments;
+            var predictionEngine = _mlContext.Model.CreatePredictionEngine<TreatmentRating, TreatmentPrediction>(_model);
+            var treatmentRating = new TreatmentRating { userId = (uint)userId, treatmentId = (uint)treatmentId };
+            var prediction = predictionEngine.Predict(treatmentRating);
+            return prediction.Score;
         }
-
         private string GetTreatmentTypeById(int treatmentTypeId)
         {
-            
+
             var treatmentType = _context.TreatmentTypes.FirstOrDefault(tt => tt.Id == treatmentTypeId);
             return treatmentType?.Name ?? string.Empty;
         }
@@ -121,73 +177,106 @@ namespace wellness.Service.Services
             var category = _context.Categories.FirstOrDefault(c => c.Id == categoryId);
             return category?.Name ?? string.Empty;
         }
-
-
-
-        private double CalculateCosineSimilarity(Database.Treatment unratedTreatment, List<Database.Reservation> userReservations)
+        private void LoadModelFromDatabase()
         {
-            var unratedTreatmentVector = GetTreatmentVector(unratedTreatment);
-
-            foreach (var userReservation in userReservations)
+            var mlModel =  _context.MachineLearnings.OrderByDescending(m => m.TrainingTimestamp).FirstOrDefault();
+            if (mlModel != null)
             {
-                var userTreatmentVector = GetTreatmentVector(userReservation.Treatment);
-
-               
-                double dotProduct = CalculateDotProduct(unratedTreatmentVector, userTreatmentVector);
-                double magnitudeUnrated = CalculateMagnitude(unratedTreatmentVector);
-                double magnitudeUser = CalculateMagnitude(userTreatmentVector);
-
-                double cosineSimilarity = dotProduct / (magnitudeUnrated * magnitudeUser);
-
-                
-                return cosineSimilarity;
+                using (var stream = new MemoryStream(mlModel.ModelData))
+                {
+                    _model = _mlContext.Model.Load(stream, out var _);
+                }
             }
-
-
-            return 0.0;
         }
-
-    
-        private double CalculateDotProduct(List<double> vector1, List<double> vector2)
+        private void TrainAndSaveModel()
         {
-            if (vector1.Count != vector2.Count)
-                throw new ArgumentException("Vektori moraju biti iste duljine.");
-
-            double dotProduct = 0.0;
-
-            for (int i = 0; i < vector1.Count; i++)
+            lock (isLocked)
             {
-                dotProduct += vector1[i] * vector2[i];
+                var data = GetDataForTraining();
+                _model = TrainModel(data);
+
+                var mlModel = new MachineLearning
+                {
+                    ModelData = SerializeModel(_model),
+                    TrainingTimestamp = DateTime.Now
+                };
+                _lastTraining=DateTime.Now;
+                _context.MachineLearnings.Add(mlModel);
+                _context.SaveChanges();
             }
-
-            return dotProduct;
         }
-
-
-        private double CalculateMagnitude(List<double> vector)
+        private IEnumerable<TreatmentRating> GetDataForTraining()
         {
-            double magnitude = 0.0;
+            var data = _context.Reservations
+                .Where(r => r.Status == true && _context.Ratings.Any(rt => rt.ReservationId == r.Id))
+                .Select(r => new TreatmentRating
+                {
+                    userId = (uint)r.UserId,
+                    treatmentId = (uint)r.TreatmentId,
+                    Label = _context.Ratings.FirstOrDefault(rt => rt.ReservationId == r.Id).StarRating
+                })
+                .ToList();
 
-            foreach (var component in vector)
-            {
-                magnitude += Math.Pow(component, 2);
-            }
-
-            return Math.Sqrt(magnitude);
+            return data;
         }
-
-
-        private List<double> GetTreatmentVector(Database.Treatment treatment)
+        private ITransformer TrainModel(IEnumerable<TreatmentRating> data)
         {
-           
-            return new List<double>
+            var mlData = _mlContext.Data.LoadFromEnumerable(data);
+            var dataSplit = _mlContext.Data.TrainTestSplit(mlData, testFraction: 0.2);
+            var trainData = dataSplit.TrainSet;
+            var testData = dataSplit.TestSet;
+
+            var options = new MatrixFactorizationTrainer.Options
             {
-                treatment.CategoryId,
-                treatment.TreatmentTypeId,
-              
+                MatrixColumnIndexColumnName = nameof(TreatmentRating.userId),
+                MatrixRowIndexColumnName = nameof(TreatmentRating.treatmentId),
+                LabelColumnName = nameof(TreatmentRating.Label),
+                NumberOfIterations = 20,
+                ApproximationRank = 100
             };
+
+            var estimator = _mlContext.Recommendation().Trainers.MatrixFactorization(options);
+            var model = estimator.Fit(trainData);
+
+            var prediction = model.Transform(testData);
+            var metrics = _mlContext.Regression.Evaluate(prediction);
+            Console.WriteLine($"R^2: {metrics.RSquared}");
+            Console.WriteLine($"RMSE: {metrics.RootMeanSquaredError}");
+
+            return model;
         }
+        private byte[] SerializeModel(ITransformer model)
+        {
+            using (var stream = new MemoryStream())
+            {
+                _mlContext.Model.Save(model, null, stream);
+                return stream.ToArray();
+            }
+        }
+
+       
     }
 
-  
+    public class TreatmentRating
+    {
+        [LoadColumn(0)]
+        [KeyType(count: 1000000)] 
+        public uint userId;
+
+        [LoadColumn(1)]
+        [KeyType(count: 1000000)] 
+        public uint treatmentId;
+
+        [LoadColumn(2)]
+        public float Label;  
+    }
+
+
+
+
+    public class TreatmentPrediction
+    {
+        public float Label;
+        public float Score;
+    }
 }

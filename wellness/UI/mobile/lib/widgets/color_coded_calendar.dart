@@ -37,12 +37,16 @@ class _ColorCodedCalendarState extends State<ColorCodedCalendar> {
   void _addReservation() async {
     if (selectedHour != null) {
       final provider = Provider.of<ReservationProvider>(context, listen: false);
+      var hourTosend = '$selectedHour:00';
+      if (selectedHour == 9) {
+        hourTosend = '0$selectedHour:00';
+      }
 
       try {
         await provider.addReservation(
           _userId!,
           formatter.format(widget.selectedDate),
-          '$selectedHour:00',
+          hourTosend,
           widget.treatmentId,
         );
 
@@ -80,6 +84,20 @@ class _ColorCodedCalendarState extends State<ColorCodedCalendar> {
           ),
         );
       }
+    } else {
+      showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+          title: const Text('Greška'),
+          content: const Text('Molim vas izaberite satnicu.'),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.pop(context),
+              child: const Text('OK'),
+            ),
+          ],
+        ),
+      );
     }
   }
 
@@ -261,6 +279,9 @@ class HourRow extends StatelessWidget {
     }
 
     bool isTaken = reservations.any((reservation) {
+      if (hour == 9) {
+        return reservation.time == '0$hour:00';
+      }
       return reservation.time == '$hour:00';
     });
 

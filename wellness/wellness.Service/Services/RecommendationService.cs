@@ -25,6 +25,7 @@ namespace wellness.Service.Services
         private MLContext _mlContext;
         static object isLocked = new object();
         private static DateTime _lastTraining;
+        private readonly int _daysToTrainMl;
 
 
 
@@ -34,28 +35,37 @@ namespace wellness.Service.Services
             _mapper = mapper;
             _mlContext = new MLContext();
 
+            if (!int.TryParse(Environment.GetEnvironmentVariable("DAYS_TO_TRAIN_ML"), out _daysToTrainMl))
+            {
+                throw new ArgumentException("DAYS_TO_TRAIN_ML environment variable is not a valid integer");
+            }
+
+
             InitializeModel();
         }
         private void InitializeModel()
         {
-            if((DateTime.Now - _lastTraining).TotalDays>=2)
-            {
-                TrainAndSaveModel();
-            }
+          
 
             if (_model == null)
             {
                 LoadModelFromDatabase();
                 if (_model == null)
                 {
+                    
                     TrainAndSaveModel();
                 }
             }
         }
 
-        public void InitializeRecommendations()
+        public void InitializeRecommendations(DateTime date)
         {
             InitializeModel();
+
+            if ((date - _lastTraining).TotalDays>=_daysToTrainMl)
+            {
+                TrainAndSaveModel();
+            }
         }
 
 

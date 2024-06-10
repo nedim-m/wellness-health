@@ -15,7 +15,7 @@ namespace wellness.Controllers
         {
             _recommendationService=recommendationService;
         }
-     
+
         [HttpGet("{userId}")]
         public IActionResult GetRecommendedTreatments(int userId)
         {
@@ -28,7 +28,8 @@ namespace wellness.Controllers
         [HttpGet]
         public IActionResult Initialize()
         {
-            _recommendationService.InitializeRecommendations();
+            var date= DateTime.Now;
+            _recommendationService.InitializeRecommendations(date);
             return Ok("Preporučeni tretmani su inicijalizirani.");
         }
     }

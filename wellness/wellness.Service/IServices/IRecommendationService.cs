@@ -10,7 +10,7 @@ namespace wellness.Service.IServices
     public interface IRecommendationService
     {
         List<RecommendationTreatment> GetRecommendedTreatments(int userId);
-        void InitializeRecommendations();
+        void InitializeRecommendations(DateTime DateTimeNow);
 
     }
 }

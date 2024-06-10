@@ -62,6 +62,12 @@ namespace wellness.Service.Services
         {
             InitializeModel();
 
+            var mlModel = _context.MachineLearnings.OrderByDescending(m => m.TrainingTimestamp).FirstOrDefault();
+            if(mlModel != null)
+            {
+                _lastTraining= mlModel.TrainingTimestamp;
+            }
+
             if ((date - _lastTraining).TotalDays>=_daysToTrainMl)
             {
                 TrainAndSaveModel();

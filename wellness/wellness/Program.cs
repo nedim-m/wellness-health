@@ -5,6 +5,7 @@ using Microsoft.OpenApi.Models;
 using Org.BouncyCastle.Pkix;
 using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using wellness.Controllers;
 using wellness.RabbitMQ;
 using wellness.Service.Database;
 using wellness.Service.IServices;
@@ -70,6 +71,7 @@ builder.Services.AddTransient<IReportService, ReportService>();
 builder.Services.AddTransient<RabbitMQService>();
 builder.Services.AddTransient<MailService>();
 builder.Services.AddTransient<IShiftService, ShiftService>();
+builder.Services.AddTransient<RecommendationController>();
 
 
 
@@ -102,7 +104,18 @@ app.MapControllers();
 using (var scope = app.Services.CreateScope())
 {
     var dataContext = scope.ServiceProvider.GetRequiredService<DbWellnessContext>();
-    dataContext.Database.Migrate();
+
+    
+    var pendingMigrations = dataContext.Database.GetPendingMigrations().Any();
+
+    if (pendingMigrations)
+    {
+       
+        dataContext.Database.Migrate();
+
+        var _controller = scope.ServiceProvider.GetRequiredService<RecommendationController>();
+        _controller.Initialize();
+    }
 }
 
 app.Run();

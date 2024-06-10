@@ -129,9 +129,43 @@ namespace wellness.Service.Services
                 recommendedTreatments = recommendedTreatments.OrderByDescending(t => t.AverageRating).ToList();
                 recommendedTreatments = recommendedTreatments.Take(5).ToList(); 
             }
+            if(recommendedTreatments.Count == 0) {
+                recommendedTreatments.AddRange(DefaultTreatments(5));
+            }
 
             return recommendedTreatments;
         }
+
+        private List<Model.Treatment.RecommendationTreatment> DefaultTreatments(int count)
+        {
+            var allTreatments = _context.Treatments.ToList();
+
+            var averageRatings = allTreatments
+                .Select(treatment => new
+                {
+                    Treatment = treatment,
+                    AverageRating = AverageRating(treatment.Id)
+                })
+                .GroupBy(item => item.Treatment.Id) 
+                .Select(group => group.First()) 
+                .OrderByDescending(item => item.AverageRating)
+                .Take(count)
+                .ToList();
+
+            var recommendedTreatments = averageRatings.Select(item =>
+            {
+                var mappedTreatment = _mapper.Map<Model.Treatment.Treatment>(item.Treatment);
+                mappedTreatment.TreatmentType = GetTreatmentTypeById(item.Treatment.TreatmentTypeId);
+                mappedTreatment.Category = GetCategoryById(item.Treatment.CategoryId);
+                var recommendationTreatment = _mapper.Map<Model.Treatment.RecommendationTreatment>(mappedTreatment);
+                recommendationTreatment.AverageRating = item.AverageRating;
+                return recommendationTreatment;
+            }).ToList();
+
+            return recommendedTreatments;
+        }
+         
+
 
 
 

@@ -70,7 +70,7 @@ namespace wellness.Service.Database
                 Id = 1,
                 Name = "Relaksaciona masaža",
                 TreatmentTypeId = 1,
-                CategoryId = 1, 
+                CategoryId = 1,
                 Description = "Masaža koja opušta telo i um.",
                 Duration = 60,
                 Price = 80,
@@ -81,22 +81,22 @@ namespace wellness.Service.Database
             {
                 Id = 2,
                 Name = "Tretman lica sa hidratacijom",
-                TreatmentTypeId = 2, 
-                CategoryId = 2, 
+                TreatmentTypeId = 2,
+                CategoryId = 2,
                 Description = "Tretman za hidrataciju kože lica.",
                 Duration = 45,
                 Price = 60,
                 Picture = ConvertImageToByteArray("wwwroot", "tretman-lica-hidratacija.jpg")
             });
 
-       
+
 
             modelBuilder.Entity<Treatment>().HasData(new Treatment
             {
                 Id = 3,
                 Name = "Anticelulit tretman",
                 TreatmentTypeId = 3,
-                CategoryId = 3, 
+                CategoryId = 3,
                 Description = "Tretman koji cilja na smanjenje celulita.",
                 Duration = 60,
                 Price = 100,
@@ -107,8 +107,8 @@ namespace wellness.Service.Database
             {
                 Id = 4,
                 Name = "Mediteranski piling",
-                TreatmentTypeId = 4, 
-                CategoryId = 4, 
+                TreatmentTypeId = 4,
+                CategoryId = 4,
                 Description = "Piling sa sastojcima inspirisanim mediteranskom kuhinjom.",
                 Duration = 45,
                 Price = 75,
@@ -119,8 +119,8 @@ namespace wellness.Service.Database
             {
                 Id = 5,
                 Name = "Aromaterapija",
-                TreatmentTypeId = 5, 
-                CategoryId = 4, 
+                TreatmentTypeId = 5,
+                CategoryId = 4,
                 Description = "Tretman sa mirisnim uljima za potpunu relaksaciju.",
                 Duration = 90,
                 Price = 120,
@@ -132,7 +132,7 @@ namespace wellness.Service.Database
                 Id = 6,
                 Name = "Manikir i pedikir",
                 TreatmentTypeId = 6,
-                CategoryId = 5, 
+                CategoryId = 5,
                 Description = "Kompletna nega noktiju na rukama i nogama.",
                 Duration = 75,
                 Price = 70,
@@ -143,15 +143,15 @@ namespace wellness.Service.Database
             {
                 Id = 7,
                 Name = "Yoga sesija",
-                TreatmentTypeId = 7, 
-                CategoryId = 6, 
+                TreatmentTypeId = 7,
+                CategoryId = 6,
                 Description = "Sesija joge za fizičko i mentalno blagostanje.",
                 Duration = 60,
                 Price = 50,
                 Picture = ConvertImageToByteArray("wwwroot", "yoga-sesija.jpg")
             });
 
-           
+
 
 
 
@@ -209,10 +209,10 @@ namespace wellness.Service.Database
                 Status = true,
                 RoleId = 4,
                 ShiftId=3,
-      
+
             });
 
- 
+
 
             modelBuilder.Entity<User>().HasData(new User
             {
@@ -358,7 +358,7 @@ namespace wellness.Service.Database
                 ShiftId=1,
             });
 
-            
+
             modelBuilder.Entity<User>().HasData(new User
             {
                 Id = 12,
@@ -376,7 +376,7 @@ namespace wellness.Service.Database
                 RoleId = 3,
                 ShiftId=1,
             });
-          
+
             modelBuilder.Entity<User>().HasData(new User
             {
                 Id = 13,
@@ -559,7 +559,7 @@ namespace wellness.Service.Database
                 UserId=5,
                 Date="30.05.2024",
                 Time="09:00",
-                Status=null,
+                Status=false,
                 TreatmentId=2
 
             });
@@ -569,7 +569,7 @@ namespace wellness.Service.Database
                 UserId=5,
                 Date="24.05.2024",
                 Time="18:00",
-                Status=null,
+                Status=false,
                 TreatmentId=3
 
             });
@@ -579,7 +579,7 @@ namespace wellness.Service.Database
                 UserId=5,
                 Date="04.06.2024",
                 Time="13:00",
-                Status=null,
+                Status=true,
                 TreatmentId=2
 
             });
@@ -698,7 +698,7 @@ namespace wellness.Service.Database
                 Status = false,
                 TreatmentId = 5
             });
-            
+
             modelBuilder.Entity<Reservation>().HasData(new Reservation
             {
                 Id = 15,
@@ -760,7 +760,7 @@ namespace wellness.Service.Database
 
 
             //Ratings
-            modelBuilder.Entity<Rating>().HasData(new Rating { Id=1,ReservationId=11,StarRating=4 });
+            modelBuilder.Entity<Rating>().HasData(new Rating { Id=1, ReservationId=11, StarRating=4 });
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=2, ReservationId=10, StarRating=5 });
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=3, ReservationId=9, StarRating=3 });
             modelBuilder.Entity<Rating>().HasData(new Rating { Id=4, ReservationId=15, StarRating=3 });
@@ -777,22 +777,22 @@ namespace wellness.Service.Database
             modelBuilder.Entity<Report>().HasData(new Report
             {
                 Id = 1,
-                DateFrom = new DateTime(2024, 3, 1),  
-                DateTo = new DateTime(2024, 3, 30),    
+                DateFrom = new DateTime(2024, 3, 1),
+                DateTo = new DateTime(2024, 3, 30),
                 EarnedMoney = 1500.00m,
                 TotalUsers = 3,
-                Timestamp = DateTime.Now,  
+                Timestamp = DateTime.Now,
                 MemberShipTypeId = 4
             });
 
             modelBuilder.Entity<Report>().HasData(new Report
             {
                 Id = 2,
-                DateFrom = new DateTime(2024, 3, 1), 
-                DateTo = new DateTime(2024, 3, 30),    
+                DateFrom = new DateTime(2024, 3, 1),
+                DateTo = new DateTime(2024, 3, 30),
                 EarnedMoney = 599.99m,
                 TotalUsers = 2,
-                Timestamp = DateTime.Now, 
+                Timestamp = DateTime.Now,
                 MemberShipTypeId = 3
             });
 

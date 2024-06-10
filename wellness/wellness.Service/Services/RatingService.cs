@@ -44,7 +44,7 @@ namespace wellness.Service.Services
 
 
 
-            DateTime currentDate = DateTime.UtcNow;
+            DateTime currentDate = DateTime.Now;
 
 
 

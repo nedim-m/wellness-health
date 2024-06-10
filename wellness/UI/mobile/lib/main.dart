@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -26,9 +28,9 @@ Future<void> main() async {
   var treatmentProvider = TreatmentProvider();
   try {
     await treatmentProvider.initialize();
-    print("Preporučeni tretmani su inicijalizirani.");
+    print("Model istreniran.");
   } catch (e) {
-    print("Preporučeni tretmani nisu inicijalizirani.");
+    print("Greška prilikom treniranja modela.");
   }
   runApp(MultiProvider(
     providers: [

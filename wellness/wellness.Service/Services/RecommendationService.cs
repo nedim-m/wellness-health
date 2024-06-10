@@ -24,6 +24,7 @@ namespace wellness.Service.Services
         private static ITransformer _model;
         private MLContext _mlContext;
         static object isLocked = new object();
+        private static DateTime _lastTraining;
 
 
 
@@ -37,6 +38,11 @@ namespace wellness.Service.Services
         }
         private void InitializeModel()
         {
+            if((DateTime.Now - _lastTraining).TotalDays>=2)
+            {
+                TrainAndSaveModel();
+            }
+
             if (_model == null)
             {
                 LoadModelFromDatabase();
@@ -163,7 +169,7 @@ namespace wellness.Service.Services
         }
         private void LoadModelFromDatabase()
         {
-            var mlModel = _context.MachineLearnings.FirstOrDefault();
+            var mlModel =  _context.MachineLearnings.OrderByDescending(m => m.TrainingTimestamp).FirstOrDefault();
             if (mlModel != null)
             {
                 using (var stream = new MemoryStream(mlModel.ModelData))
@@ -184,7 +190,7 @@ namespace wellness.Service.Services
                     ModelData = SerializeModel(_model),
                     TrainingTimestamp = DateTime.Now
                 };
-
+                _lastTraining=DateTime.Now;
                 _context.MachineLearnings.Add(mlModel);
                 _context.SaveChanges();
             }

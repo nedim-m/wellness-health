@@ -64,6 +64,7 @@ class _ReservationPageState extends State<ReservationPage> {
       );
 
       await _ratingProvider.insert(newRating);
+      rated = true;
     } catch (error) {
       print('Error during rating post: $error');
       showError();
